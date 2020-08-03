@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>3号列车</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://aoshuqiu.top/"/>
+  <updated>2020-08-02T10:28:24.442Z</updated>
+  <id>https://aoshuqiu.top/</id>
+  
+  <author>
+    <name>三儿</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>paper</title>
+    <link href="https://aoshuqiu.top/2020/08/02/paper/"/>
+    <id>https://aoshuqiu.top/2020/08/02/paper/</id>
+    <published>2020-08-02T10:28:24.000Z</published>
+    <updated>2020-08-02T10:28:24.442Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>第一篇博客</title>
+    <link href="https://aoshuqiu.top/2020/08/01/hello-world/"/>
+    <id>https://aoshuqiu.top/2020/08/01/hello-world/</id>
+    <published>2020-08-01T14:25:20.167Z</published>
+    <updated>2020-08-02T10:46:24.019Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;测试&quot;&gt;&lt;a href=&quot;#测试&quot; class=&quot;headerlink&quot; title=&quot;测试&quot;&gt;&lt;/a&gt;测试&lt;/h2&gt;
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+</feed>
