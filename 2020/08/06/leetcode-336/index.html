@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ss.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ss.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="回文对问题题目 给定一组 互不相同 的单词， 找出所有不同 的索引对(i, j)，使得列表中的两个单词， words[i] + words[j] ，可拼接成回文串。 示例 1： 123&gt;输入：[&quot;abcd&quot;,&quot;dcba&quot;,&quot;lls&quot;,&quot;s&quot;,&quot;sssll&quot;]&gt;输出：[[0,1],[1,0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode 336 回文对">
+<meta property="og:url" content="https://aoshuqiu.top/2020/08/06/leetcode-336/index.html">
+<meta property="og:site_name" content="3号列车">
+<meta property="og:description" content="回文对问题题目 给定一组 互不相同 的单词， 找出所有不同 的索引对(i, j)，使得列表中的两个单词， words[i] + words[j] ，可拼接成回文串。 示例 1： 123&gt;输入：[&quot;abcd&quot;,&quot;dcba&quot;,&quot;lls&quot;,&quot;s&quot;,&quot;sssll&quot;]&gt;输出：[[0,1],[1,0">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-06T12:26:17.000Z">
+<meta property="article:modified_time" content="2020-08-06T13:17:09.124Z">
+<meta property="article:author" content="三儿">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aoshuqiu.top/2020/08/06/leetcode-336/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>leetcode 336 回文对 | 3号列车</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="3号列车" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">3号列车</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aoshuqiu.top/2020/08/06/leetcode-336/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode 336 回文对
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-06 20:26:17 / 修改时间：21:17:09" itemprop="dateCreated datePublished" datetime="2020-08-06T20:26:17+08:00">2020-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="回文对问题"><a href="#回文对问题" class="headerlink" title="回文对问题"></a>回文对问题</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4><p>给定一组 <strong>互不相同</strong> 的单词， 找出所有<strong>不同</strong> 的索引对<code>(i, j)</code>，使得列表中的两个单词， <code>words[i] + words[j]</code> ，可拼接成回文串。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[&quot;abcd&quot;,&quot;dcba&quot;,&quot;lls&quot;,&quot;s&quot;,&quot;sssll&quot;]</span><br><span class="line">&gt;输出：[[0,1],[1,0],[3,2],[2,4]] </span><br><span class="line">&gt;解释：可拼接成的回文串为 [&quot;dcbaabcd&quot;,&quot;abcddcba&quot;,&quot;slls&quot;,&quot;llssssll&quot;]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[&quot;bat&quot;,&quot;tab&quot;,&quot;cat&quot;]</span><br><span class="line">&gt;输出：[[0,1],[1,0]] </span><br><span class="line">&gt;解释：可拼接成的回文串为 [&quot;battab&quot;,&quot;tabbat&quot;]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="暴力做法"><a href="#暴力做法" class="headerlink" title="暴力做法"></a>暴力做法</h2><p>两重循环枚举字符串组合，判断是否能构成回文串。时间复杂度为 $O(n^2\times m)$ ，其中n为字符串数量，m为字符串平均长度。测试用例中的字符串数目都很多，因此这个时间复杂度不能满足题目要求。</p>
+<h2 id="枚举前缀与后缀"><a href="#枚举前缀与后缀" class="headerlink" title="枚举前缀与后缀"></a>枚举前缀与后缀</h2><p>**思路及算法 **</p>
+<p>如果两个字符串$ s_1 $和$s_2$，$s_1 + s_2$是一个回文串，那么对于其中较长的字符串$ s$可以分为两个部分，一部分是一个回文串，另一部分是较短的字符串的翻转。其中空串也为回文串。</p>
+<p>也就是说，枚举每一个字符串$k$令其为$s_1$,$s_2$中较长的那一个，枚举字符串k的包括空串的每一个前缀与后缀，判断其是否为回文串，如果是回文串，就判断剩余部分的翻转是否在字符串序列中。</p>
+<p>其中字符串搜索有两种方式：字典树与哈希表</p>
+<p>**字典树 **</p>
+<p>一个树型结构，每个字符输入对应一个有向边，每个节点对应一个字符串。根节点为空串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#树的节点，ch代表节点接收一个字符的出边，值为指向的节点序号</span></span><br><span class="line"><span class="comment">#flag: 节点代表的字符串的索引</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.ch = [<span class="number">0</span>] * <span class="number">26</span></span><br><span class="line">        self.flag = <span class="number">-1</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">palindromePairs</span>(<span class="params">self, words: List[str]</span>) -&gt; List[List[int]]:</span></span><br><span class="line">        <span class="comment">#初始化字典树</span></span><br><span class="line">        tree = [Node()]</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#s:要插入的字符串</span></span><br><span class="line">        <span class="comment">#index: s对应的索引</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">insert</span>(<span class="params">s: str, index: int</span>):</span></span><br><span class="line">            length = len(s)</span><br><span class="line">            add = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">                x = ord(s[i]) - ord(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">                <span class="comment">#不存在这个字符的子节点:新建一个节点并指向它</span></span><br><span class="line">                <span class="keyword">if</span> tree[add].ch[x] == <span class="number">0</span>:</span><br><span class="line">                    tree.append(Node())</span><br><span class="line">                    tree[add].ch[x] = len(tree) - <span class="number">1</span></span><br><span class="line">                <span class="comment">#移动到下一个节点继续搜寻</span></span><br><span class="line">                add = tree[add].ch[x]</span><br><span class="line">            tree[add].flag = index</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#s:要寻找的字符串</span></span><br><span class="line">        <span class="comment">#left:s最左字符索引</span></span><br><span class="line">        <span class="comment">#right:s最右字符索引</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">findWord</span>(<span class="params">s: str, left: int, right: int</span>) -&gt; int:</span></span><br><span class="line">            add = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(right, left - <span class="number">1</span>, <span class="number">-1</span>):</span><br><span class="line">                x = ord(s[i]) - ord(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> tree[add].ch[x] == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">                add = tree[add].ch[x]</span><br><span class="line">            <span class="keyword">return</span> tree[add].flag</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">isPalindrome</span>(<span class="params">s: str, left: int, right: int</span>) -&gt; bool:</span></span><br><span class="line">            length = right - left + <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> length &lt; <span class="number">0</span> <span class="keyword">or</span> all(s[left + i] == s[right - i] <span class="keyword">for</span> i <span class="keyword">in</span> range(length // <span class="number">2</span>))</span><br><span class="line">        </span><br><span class="line">        n = len(words)</span><br><span class="line">        <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(words):</span><br><span class="line">            insert(word, i)</span><br><span class="line">        </span><br><span class="line">        ret = list()</span><br><span class="line">        <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(words):</span><br><span class="line">            m = len(word)</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(m + <span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> isPalindrome(word, j, m - <span class="number">1</span>):</span><br><span class="line">                    leftId = findWord(word, <span class="number">0</span>, j - <span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">if</span> leftId != <span class="number">-1</span> <span class="keyword">and</span> leftId != i:</span><br><span class="line">                        ret.append([i, leftId])</span><br><span class="line">                <span class="keyword">if</span> j <span class="keyword">and</span> isPalindrome(word, <span class="number">0</span>, j - <span class="number">1</span>):</span><br><span class="line">                    rightId = findWord(word, j, m - <span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">if</span> rightId != <span class="number">-1</span> <span class="keyword">and</span> rightId != i:</span><br><span class="line">                        ret.append([rightId, i])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+
+
+
+<p>**哈希表 **</p>
+<p>python中通过dict类型作为哈希表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">palindromePairs</span>(<span class="params">self, words: List[str]</span>) -&gt; List[List[int]]:</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">findWord</span>(<span class="params">s: str, left: int, right: int</span>) -&gt; int:</span></span><br><span class="line">            <span class="keyword">return</span> indices.get(s[left:right+<span class="number">1</span>], <span class="number">-1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">isPalindrome</span>(<span class="params">s: str, left: int, right: int</span>) -&gt; bool:</span></span><br><span class="line">            <span class="keyword">return</span> (sub := s[left:right+<span class="number">1</span>]) == sub[::<span class="number">-1</span>]</span><br><span class="line">        </span><br><span class="line">        n = len(words)</span><br><span class="line">        indices = &#123;word[::<span class="number">-1</span>]: i <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(words)&#125;</span><br><span class="line">        </span><br><span class="line">        ret = list()</span><br><span class="line">        <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(words):</span><br><span class="line">            m = len(word)</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(m + <span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> isPalindrome(word, j, m - <span class="number">1</span>):</span><br><span class="line">                    leftId = findWord(word, <span class="number">0</span>, j - <span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">if</span> leftId != <span class="number">-1</span> <span class="keyword">and</span> leftId != i:</span><br><span class="line">                        ret.append([i, leftId])</span><br><span class="line">                <span class="keyword">if</span> j <span class="keyword">and</span> isPalindrome(word, <span class="number">0</span>, j - <span class="number">1</span>):</span><br><span class="line">                    rightId = findWord(word, j, m - <span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">if</span> rightId != <span class="number">-1</span> <span class="keyword">and</span> rightId != i:</span><br><span class="line">                        ret.append([rightId, i])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>复杂度分析</strong></p>
+<p>时间复杂度为$O(n \times m^2)$，其中需要$O(m^2)$来判断一个字符串所有的前缀与后缀是否是回文串，并且$O(m^2)$地判断剩余部分是否在字符串序列中出现。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/" rel="prev" title="课程表问题">
+      <i class="fa fa-chevron-left"></i> 课程表问题
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9E%E6%96%87%E5%AF%B9%E9%97%AE%E9%A2%98"><span class="nav-text">回文对问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E5%81%9A%E6%B3%95"><span class="nav-text">暴力做法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E5%89%8D%E7%BC%80%E4%B8%8E%E5%90%8E%E7%BC%80"><span class="nav-text">枚举前缀与后缀</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="三儿"
+      src="/images/afei.png">
+  <p class="site-author-name" itemprop="name">三儿</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aoshuqiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aoshuqiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/3255787703" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;3255787703" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=119020305" title="网易云音乐 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;119020305" rel="noopener" target="_blank"><i class="fa fa-music fa-fw"></i>网易云音乐</a>
+      </span>
+  </div>
+
+
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=399222&auto=1&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三儿</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
