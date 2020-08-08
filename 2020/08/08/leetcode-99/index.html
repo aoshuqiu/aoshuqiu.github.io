@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ss.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ss.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Morris中序遍历中序遍历二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。 这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树遍历-Morris中序遍历">
+<meta property="og:url" content="https://aoshuqiu.top/2020/08/08/leetcode-99/index.html">
+<meta property="og:site_name" content="3号列车">
+<meta property="og:description" content="Morris中序遍历中序遍历二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。 这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-08T09:42:36.000Z">
+<meta property="article:modified_time" content="2020-08-08T10:29:21.397Z">
+<meta property="article:author" content="三儿">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aoshuqiu.top/2020/08/08/leetcode-99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>二叉树遍历-Morris中序遍历 | 3号列车</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="3号列车" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">3号列车</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aoshuqiu.top/2020/08/08/leetcode-99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          二叉树遍历-Morris中序遍历
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-08 17:42:36 / 修改时间：18:29:21" itemprop="dateCreated datePublished" datetime="2020-08-08T17:42:36+08:00">2020-08-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Morris中序遍历"><a href="#Morris中序遍历" class="headerlink" title="Morris中序遍历"></a>Morris中序遍历</h2><h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。</p>
+<p>这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点）。</p>
+<p>然而，存在一个<strong>常数空间</strong>算法来解决这个问题：</p>
+<h3 id="Morris-遍历"><a href="#Morris-遍历" class="headerlink" title="Morris 遍历"></a>Morris 遍历</h3><a id="more"></a>
+
+<p>Morris遍历算法只需要维护一个节点$pred$，它代表最终遍历序列中的前序节点。</p>
+<p>算法的整体步骤如下：（假设当前遍历到的节点为$x$）</p>
+<ul>
+<li>若$x$无左孩子，则可以将$x$输出，即$pred = x$,之后遍历$x$的右孩子。</li>
+<li>若$x$有左孩子，则先寻找x左子树上的最右节点（也就是$x$在中序遍历中的前序节点），记为$predecessor$。其中：<ul>
+<li>若$predecessor$的右孩子为空，则将它的右孩子指向$x$,之后遍历$x$的左孩子。</li>
+<li>若$predecessor$的右孩子不为空，它只能为$x$，则说明此时是第二次遍历节点$x$（即之前进行过上一步）, 因此将$predecessor$的右孩子置为空，输出$x$即$pred=x$，之后遍历$x$的右孩子</li>
+</ul>
+</li>
+<li>重复上述操作，直至访问完整棵树</li>
+</ul>
+<p><strong>算法理解：</strong></p>
+<p>改变$predecessor$的右孩子，使其指向$x$，便于遍历左子树后能遍历回节点$x$。每次条件判断后只遍历一个子节点，相当于将树形结构变成了线性结构，通过遍历每个节点2次来降低算法的空间复杂度。</p>
+<p>时间复杂度：$O(2N) = O(N)$</p>
+<p>空间复杂度：$O(1)$</p>
+<h3 id="leetcode-99-恢复二叉搜索树"><a href="#leetcode-99-恢复二叉搜索树" class="headerlink" title="leetcode 99 恢复二叉搜索树"></a>leetcode 99 恢复二叉搜索树</h3><p>二叉搜索树中的两个节点被错误地交换。</p>
+<p>请在不改变其结构的情况下，恢复这棵树。</p>
+<p>示例 1:</p>
+<p>输入: [1,3,null,null,2]</p>
+<p>   1<br>  /<br> 3<br>  <br>   2</p>
+<p>输出: [3,1,null,null,2]</p>
+<p>   3<br>  /<br> 1<br>  <br>   2</p>
+<p>示例 2:</p>
+<p>输入: [3,1,4,null,null,2]</p>
+<p>  3<br> / <br>1   4<br>   /<br>  2</p>
+<p>输出: [2,1,4,null,null,3]</p>
+<p>  2<br> / <br>1   4<br>   /<br>  3</p>
+<p>进阶:</p>
+<ul>
+<li>使用 O(n) 空间复杂度的解法很容易实现。</li>
+<li>你能想出一个只使用常数空间的解决方案吗？</li>
+</ul>
+<p>写的时候有点着急，代码有点乱</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recoverTree</span>(<span class="params">self, root: TreeNode</span>) -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Do not return anything, modify root in-place instead.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        wrongNode=[]</span><br><span class="line">        pred = <span class="literal">None</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">morrisInorder</span>(<span class="params">root</span>):</span></span><br><span class="line">            <span class="keyword">nonlocal</span> pred</span><br><span class="line">            <span class="keyword">if</span> root.left:</span><br><span class="line">                predecessor = root.left</span><br><span class="line">                <span class="keyword">while</span> predecessor.right <span class="keyword">and</span> predecessor.right!=root: predecessor = predecessor.right</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> predecessor.right:</span><br><span class="line">                    predecessor.right = root</span><br><span class="line">                    morrisInorder(root.left)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> pred <span class="keyword">and</span> pred.val &gt; root.val:</span><br><span class="line">                        wrongNode.append([pred,root])</span><br><span class="line">                    predecessor.right = <span class="literal">None</span></span><br><span class="line">                    pred=root</span><br><span class="line">                    <span class="keyword">if</span> root.right:</span><br><span class="line">                        morrisInorder(root.right)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> pred <span class="keyword">and</span> pred.val &gt; root.val:</span><br><span class="line">                    wrongNode.append([pred,root])</span><br><span class="line">                pred=root</span><br><span class="line">                <span class="keyword">if</span> root.right:</span><br><span class="line">                    morrisInorder(root.right)    </span><br><span class="line">        morrisInorder(root)</span><br><span class="line">        <span class="keyword">if</span> len(wrongNode)==<span class="number">1</span>:</span><br><span class="line">            temp = wrongNode[<span class="number">0</span>][<span class="number">1</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">1</span>].val = wrongNode[<span class="number">0</span>][<span class="number">0</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">0</span>].val = temp</span><br><span class="line">        <span class="keyword">if</span> len(wrongNode)==<span class="number">2</span>:</span><br><span class="line">            temp = wrongNode[<span class="number">0</span>][<span class="number">0</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">0</span>].val = wrongNode[<span class="number">1</span>][<span class="number">1</span>].val</span><br><span class="line">            wrongNode[<span class="number">1</span>][<span class="number">1</span>].val = temp</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"># 二叉树</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/06/leetcode-336/" rel="prev" title="leetcode 336 回文对">
+      <i class="fa fa-chevron-left"></i> leetcode 336 回文对
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Morris%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">Morris中序遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Morris-%E9%81%8D%E5%8E%86"><span class="nav-text">Morris 遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#leetcode-99-%E6%81%A2%E5%A4%8D%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-text">leetcode 99 恢复二叉搜索树</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="三儿"
+      src="/images/afei.png">
+  <p class="site-author-name" itemprop="name">三儿</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aoshuqiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aoshuqiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/3255787703" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;3255787703" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=119020305" title="网易云音乐 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;119020305" rel="noopener" target="_blank"><i class="fa fa-music fa-fw"></i>网易云音乐</a>
+      </span>
+  </div>
+
+
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=399222&auto=1&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三儿</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
