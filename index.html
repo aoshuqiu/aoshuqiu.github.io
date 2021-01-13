@@ -186,7 +186,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-01-13 14:23:10 / 修改时间：14:23:23" itemprop="dateCreated datePublished" datetime="2021-01-13T14:23:10+08:00">2021-01-13</time>
+              <time title="创建时间：2021-01-13 14:23:10 / 修改时间：14:27:52" itemprop="dateCreated datePublished" datetime="2021-01-13T14:23:10+08:00">2021-01-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -215,74 +215,17 @@
 <li>化学空间离散，分子性质对微小的结构改变也很敏感</li>
 </ol>
 <h2 id="GCPN-1"><a href="#GCPN-1" class="headerlink" title="GCPN"></a>GCPN</h2><ol>
-<li><p>图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间</p>
-</li>
-<li><p>图表示+强化学习+对抗训练</p>
-</li>
+<li>图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间</li>
+<li>图表示+强化学习+对抗训练</li>
 </ol>
-<h2 id="图表示"><a href="#图表示" class="headerlink" title="图表示"></a>图表示</h2><ol>
-<li>部分图代表子结构 部分字符代表不了</li>
-<li>生成过程中可以进行化学检查</li>
-</ol>
-<h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><h4 id="1-期望分子性质与约束复杂且不可微"><a href="#1-期望分子性质与约束复杂且不可微" class="headerlink" title="1. 期望分子性质与约束复杂且不可微"></a>1. 期望分子性质与约束复杂且不可微</h4><p> 为什么？ </p>
-<p>​            <strong>分子性质对微小的结构改变也很敏感</strong>，</p>
-<p>​            可微：相似分子性质相似</p>
-<p>​            事实：同分异构体都可能有完全相反的性质</p>
-<p>​    导致？</p>
-<p>​            不能直接通过目标函数表示这些性质</p>
-<p>​    生成模型通过生成器生成策略（序列生成）来解决</p>
-<p>​    强化学习用动态性质与奖励函数表示：不需要性质可微</p>
-<h4 id="2-强化学习可以主动探索"><a href="#2-强化学习可以主动探索" class="headerlink" title="2.强化学习可以主动探索"></a>2.强化学习可以主动探索</h4><p>​    探索训练集之外的化学空间（怎么探索的？）</p>
-<h4 id="3-直接优化"><a href="#3-直接优化" class="headerlink" title="3. 直接优化"></a>3. 直接优化</h4><p>​    VAE间接优化潜在嵌入空间的分子性质</p>
-<p>​    直接优化分子图的分子性质（什么性质？）</p>
-<h2 id="对抗训练"><a href="#对抗训练" class="headerlink" title="对抗训练"></a>对抗训练</h2><p>多属性预测困难</p>
-<p>对抗性训练一个可学习的判别器</p>
-<h2 id="分子生成环境"><a href="#分子生成环境" class="headerlink" title="分子生成环境"></a>分子生成环境</h2><p><strong>1. 状态空间</strong></p>
-<p>分子图$ G(A,E,F)$,$A \in \{0,1\}^{n\times n}$是邻接矩阵，$F \in \mathbb{R}^{n \times d}$为每个节点的特征（假设有d个特征，这里是d个原子或子结构），$ E \in \{0,1\}^{b \times n \times n}$为边的种类与邻接矩阵。（A与E不重复吗？）</p>
-<p><strong>2.动作空间</strong></p>
-<p>在当前分子图上加上一堆待连的分子和子结构（脚手架），动作类似链路预测</p>
-<p><strong>3.转移动态</strong></p>
-<p>体现化学领域规则</p>
-<p><strong>4.奖励设计</strong></p>
-<p>中间奖励+最终奖励</p>
-<p>中间奖励：有效性奖励+对抗奖励</p>
-<p>最终奖励：化学领域奖励（QED）+对抗奖励</p>
-<h2 id="GCN"><a href="#GCN" class="headerlink" title="GCN"></a>GCN</h2><h3 id="计算结点嵌入"><a href="#计算结点嵌入" class="headerlink" title="计算结点嵌入"></a>计算结点嵌入</h3><p>l+1层的结点嵌入 $H^{(l+1)} \in \mathbb R^{(n+c)\times k}$ </p>
-<p>n是图中结点数，c是脚手架结点数，k是嵌入后结点表示维数</p>
-<p>$H^{(l+1)}=AGG(ReLU(\{\tilde{D_i}^{-\tfrac{1}{2}}\tilde E_{i}\tilde{D_i}^{-\tfrac{1}{2}}H^{(l)}W_{i}^{(l)}\},\forall i \in (1,…,b)))$</p>
-<p>$E_i$是第i类边的邻接矩阵，$\tilde E_i = E_i + I$是考虑到自身结点信息的修改后的邻接矩阵，$\tilde D_i = \sum_{k}\tilde E_{ijk}$ 是修改后的度矩阵。</p>
-<p>$\tilde{D_i}^{-\tfrac{1}{2}}\tilde E_{i}\tilde{D_i}^{-\tfrac{1}{2}}$类似一个归一化的拉普拉斯矩阵$L^{norm}$，其中引入自身度矩阵来解决自传递问题，对邻接矩阵通过度矩阵进行归一化，来防止度对结点权重的影响（也就是说10条边的结点比1条边的结点影响大的情况）</p>
-<p>$L^{norm}H^{(l)}$相当于叠加结点自身与邻居结点的特征，通过多层$l$来利用更多层次邻居（邻居的邻居）的信息。</p>
-<h3 id="动作预测"><a href="#动作预测" class="headerlink" title="动作预测"></a>动作预测</h3><p>链路预测</p>
-<p>动作：四个组成 两个端点、边类型预测、终止预测</p>
-<p>$ a_t = CONCAT(a_{first},a_{second},a_{edge},a_{stop})$</p>
-<p>$f_{first}(s_{t}) = SOFTMAX(m_f(X)),\quad \quad \quad a_{first} \sim f_{first}(s_t) \in \{0,1\}^{n}$</p>
-<p>$f_{second}(s_{t}) = SOFTMAX(m_s(X_{a_{first}},X)),\quad \quad a_{second} \sim f_{second}(s_t) \in \{0,1\}^{n+c}$</p>
-<p>$f_{edge}(s_{t}) = SOFTMAX(m_e(X_{a_{first}},X_{a_{second}})),\quad \quad a_{edge} \sim f_{edge}(s_t) \in \{0,1\}^{b}$</p>
-<p>$f_{stop}(s_{t}) = SOFTMAX(m_t(AGG(X))),\quad \quad a_{stop} \sim f_{stop}(s_t) \in \{0,1\}$</p>
-<h3 id="ppo？"><a href="#ppo？" class="headerlink" title="ppo？"></a>ppo？</h3><h4 id="策略梯度方法推导"><a href="#策略梯度方法推导" class="headerlink" title="策略梯度方法推导"></a>策略梯度方法推导</h4><p>轨迹$\tau = (s_{0},a_{0},…,s_{h},a_{h})$</p>
-<p>目标：找到最优神经网络参数$\theta^{*}$最大化收益关于轨迹分布的期望</p>
-<p>$\theta^{*}=\mathop{\arg\max}\limits_{\theta} \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_{t},a_{t})\bigg]$</p>
-<p>目标函数 $J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_t,a_t)\bigg]$</p>
-<p>定义轨迹收益$r(\tau)=\sum\limits_t r(s_t,a_t)$，目标函数变成$J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}[r(\tau)]$</p>
-<p>假设$\tau$的分布函数$p_{\theta}(\tau)$是可微的，拆开期望： $J(\theta)=\int p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>对两边求梯度：$\nabla_{\theta} J(\theta)=\int \nabla_{\theta} p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>其中等式$\nabla_{\theta}p_{\theta}(\tau) = p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)$成立</p>
-<p>因此</p>
-<script type="math/tex; mode=display">
-\begin{aligned} 
-\nabla_{\theta} J(\theta)&=\int p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)r(\tau)\,{\rm d}\tau\\
-&= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)r(\tau)\bigg]\end{aligned}</script><p>其中$p_{\theta}(\tau)=p(s_1)\prod\limits_{t=1}^{T}\pi_{\theta}(a_t,s_t)p(s_{t+1})$</p>
-<p>则$\nabla_\theta logp_\theta(\tau) = \nabla_\theta \sum \limits_{t=1}^{T}log\pi_{\theta}(a_t,s_t)$</p>
-<p>$\nabla_{\theta} J(\theta) = \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_t,s_t)\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_t,a_t)\bigg)\bigg]$</p>
-<p>实际抽样时用平均来进行估算</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N} \bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_{i,t},a_{i,t})\bigg)\bigg]$</p>
-<p>之后用 $\theta \gets \theta + \nabla_{\theta} J(\theta)$更新参数$\theta$</p>
-<h5 id="解决高方差问题"><a href="#解决高方差问题" class="headerlink" title="解决高方差问题"></a>解决高方差问题</h5><h6 id="改变因果关系"><a href="#改变因果关系" class="headerlink" title="改变因果关系"></a>改变因果关系</h6><p>当前时间策略只能影响之后的奖励</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N}\sum \limits_{t=1}^{T} \bigg[\bigg( \nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t’=t}^{T}r(s_{i,t’},a_{i,t’})\bigg)\bigg]$</p>
-<h6 id="引入基线"><a href="#引入基线" class="headerlink" title="引入基线"></a>引入基线</h6><p>$\nabla_{\theta} J(\theta)= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)(r(\tau)-b)\bigg]$</p>
-<p>eg： $b_t = \frac{1}{N} \sum \limits_{i} Q^\pi(s_{i,t},a_{i,t})$</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/13/GCPN/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -326,7 +269,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-01-13 14:20:10 / 修改时间：14:23:27" itemprop="dateCreated datePublished" datetime="2021-01-13T14:20:10+08:00">2021-01-13</time>
+              <time title="创建时间：2021-01-13 14:20:10 / 修改时间：14:28:25" itemprop="dateCreated datePublished" datetime="2021-01-13T14:20:10+08:00">2021-01-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -354,44 +297,14 @@
 <p>$\theta^{*}=\mathop{\arg\max}\limits_{\theta} \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_{t},a_{t})\bigg]$</p>
 <p>目标函数 $J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_t,a_t)\bigg]$</p>
 <p>定义轨迹收益$r(\tau)=\sum\limits_t r(s_t,a_t)$，目标函数变成$J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}[r(\tau)]$</p>
-<p>假设$\tau$的分布函数$p_{\theta}(\tau)$是可微的，拆开期望： $J(\theta)=\int p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>对两边求梯度：$\nabla_{\theta} J(\theta)=\int \nabla_{\theta} p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>其中等式$\nabla_{\theta}p_{\theta}(\tau) = p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)$成立</p>
-<p>因此</p>
-<script type="math/tex; mode=display">
-\begin{align} 
-\nabla_{\theta} J(\theta)&=\int p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)r(\tau)\,{\rm d}\tau\\
-&= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)r(\tau)\bigg]\end{align}</script><p>其中$p_{\theta}(\tau)=p(s_1)\prod\limits_{t=1}^{T}\pi_{\theta}(a_t,s_t)p(s_{t+1})$</p>
-<p>则$\nabla_\theta logp_\theta(\tau) = \nabla_\theta \sum \limits_{t=1}^{T}log\pi_{\theta}(a_t,s_t)$</p>
-<p>$\nabla_{\theta} J(\theta) = \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_t,s_t)\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_t,a_t)\bigg)\bigg]$</p>
-<p>实际抽样时用平均来进行估算</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N} \bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_{i,t},a_{i,t})\bigg)\bigg]$</p>
-<p>之后用 $\theta \gets \theta + \nabla_{\theta} J(\theta)$更新参数$\theta$</p>
-<h2 id="解决高方差问题"><a href="#解决高方差问题" class="headerlink" title="解决高方差问题"></a>解决高方差问题</h2><h3 id="改变因果关系"><a href="#改变因果关系" class="headerlink" title="改变因果关系"></a>改变因果关系</h3><p>当前时间策略只能影响之后的奖励</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N}\sum \limits_{t=1}^{T} \bigg[\bigg( \nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t’=t}^{T}r(s_{i,t’},a_{i,t’})\bigg)\bigg]$</p>
-<h3 id="引入基线"><a href="#引入基线" class="headerlink" title="引入基线"></a>引入基线</h3><p>$\nabla_{\theta} J(\theta)= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)(r(\tau)-b)\bigg]$</p>
-<p>eg： $b_t = \frac{1}{N} \sum \limits_{i} Q^\pi(s_{i,t},a_{i,t})$</p>
-<h2 id="解决样本效率问题"><a href="#解决样本效率问题" class="headerlink" title="解决样本效率问题"></a>解决样本效率问题</h2><p>问题：<strong>每次更新参数$\theta$ 都要重新进行采样，数据利用率低，会影响到收敛的速度</strong>  怎么利用之前的样本？</p>
-<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3><p>原理：</p>
-<p>$\mathbb{E}_{x \sim p(x)}[f(x)] = \int p(x)f(x)\, {\rm d}x = \int q(x)\frac{p(x)}{q(x)}f(x)\,{\rm d}x = \mathbb{E}_{x \sim q(x)}[\frac{p(x)}{q(x)}f(x)] $</p>
-<p>从q(x)中采样来替代从p(x)中采样</p>
-<p><strong>修改：</strong></p>
-<p>应用到目标函数</p>
-<p>$ J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}[r(\tau)] = \mathbb{E}_{\tau \sim p_{\theta^{old}}(\tau)}\bigg[\frac{p_{\theta}(\tau)}{p_{\theta^{old}}(\tau)}\bigg]$</p>
-<p>比值项</p>
-<p>$\frac{p_{\theta}(\tau)}{p_{\theta^{old}}(\tau)} = \frac{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})}{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})} = \frac{\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})}{\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})}$</p>
-<p>得出</p>
-<p>$\nabla_{\theta}J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum \limits_{t=1}^{T} \nabla_{\theta} log \pi_{\theta}(a_t|s_t)\bigg(\prod \limits_{t’=1}^{t} \frac{\pi_{\theta}(a_{t’}|s_{t’})}{\pi_{\theta^{old}}(a_{t’}|s_{t’})}\bigg)\bigg(\sum \limits_{t’ =t}^{T}r(s_{t’},a_{t’})-b\bigg)\bigg]$</p>
-<p>连乘可能趋于0’</p>
-<p>修改</p>
-<p><img src="policy gradient/image-20210101221252416.png" alt="image-20210101221252416"></p>
-<p>最终</p>
-<p><img src="policy gradient/image-20210101220947618.png" alt="image-20210101220947618"></p>
-<p><img src="policy gradient/image-20210101221325924.png" alt="image-20210101221325924"></p>
-<p>近似1</p>
-<p>可以拿出去加基线</p>
-<p>新参数可以利用旧采样，一段时间后再重新采样？</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/13/policy%20gradient/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
