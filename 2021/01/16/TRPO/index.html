@@ -22,22 +22,27 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="《Graph Convolutional Policy Network for Goal-Directed Molecular Graph Generation》 GCPN应用目标导向 分子空间大：$10^{60}$ 化学空间离散，分子性质对微小的结构改变也很敏感  GCPN 图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间 图表示+强化学习+对抗训练">
+  <meta name="description" content="TRPO重要性采样原理： $\mathbb{E}_{x \sim p(x)}[f(x)] &#x3D; \int p(x)f(x)\, {\rm d}x &#x3D; \int q(x)\frac{p(x)}{q(x)}f(x)\,{\rm d}x &#x3D; \mathbb{E}_{x \sim q(x)}[\frac{p(x)}{q(x)}f(x)] $ 从q(x)中采样来替代从p(x)中采样 修改： 应用到目标函数 $">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GCPN">
-<meta property="og:url" content="https://www.aoshuqiu.top/2021/01/13/GCPN/index.html">
+<meta property="og:title" content="TRPO">
+<meta property="og:url" content="https://www.aoshuqiu.top/2021/01/16/TRPO/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="《Graph Convolutional Policy Network for Goal-Directed Molecular Graph Generation》 GCPN应用目标导向 分子空间大：$10^{60}$ 化学空间离散，分子性质对微小的结构改变也很敏感  GCPN 图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间 图表示+强化学习+对抗训练">
+<meta property="og:description" content="TRPO重要性采样原理： $\mathbb{E}_{x \sim p(x)}[f(x)] &#x3D; \int p(x)f(x)\, {\rm d}x &#x3D; \int q(x)\frac{p(x)}{q(x)}f(x)\,{\rm d}x &#x3D; \mathbb{E}_{x \sim q(x)}[\frac{p(x)}{q(x)}f(x)] $ 从q(x)中采样来替代从p(x)中采样 修改： 应用到目标函数 $">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-01-13T06:23:10.000Z">
-<meta property="article:modified_time" content="2021-01-13T06:27:52.588Z">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/q与v.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/TRPO和PPO/image-20210116190815243.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/TRPO和PPO/image-20210116190833276.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/TRPO和PPO/aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzRlYzk5YTEwNDIzMTRlMDJiMGMyZTU4NTM4YTMzNjBiLmpwZWc">
+<meta property="article:published_time" content="2021-01-16T13:34:10.000Z">
+<meta property="article:modified_time" content="2021-01-16T13:40:45.261Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="强化学习">
-<meta property="article:tag" content="图表示">
+<meta property="article:tag" content="TRPO">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/q与v.png">
 
-<link rel="canonical" href="https://www.aoshuqiu.top/2021/01/13/GCPN/">
+<link rel="canonical" href="https://www.aoshuqiu.top/2021/01/16/TRPO/">
 
 
 <script id="page-configurations">
@@ -50,7 +55,7 @@
   };
 </script>
 
-  <title>GCPN | 3号列车</title>
+  <title>TRPO | 3号列车</title>
   
 
 
@@ -172,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/13/GCPN/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/16/TRPO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -185,7 +190,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          GCPN
+          TRPO
         </h1>
 
         <div class="post-meta">
@@ -196,7 +201,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-01-13 14:23:10 / 修改时间：14:27:52" itemprop="dateCreated datePublished" datetime="2021-01-13T14:23:10+08:00">2021-01-13</time>
+              <time title="创建时间：2021-01-16 21:34:10 / 修改时间：21:40:45" itemprop="dateCreated datePublished" datetime="2021-01-16T21:34:10+08:00">2021-01-16</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,78 +224,74 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>《Graph Convolutional Policy Network for Goal-Directed Molecular Graph Generation》</p>
-<h2 id="GCPN"><a href="#GCPN" class="headerlink" title="GCPN"></a>GCPN</h2><h3 id="应用目标导向"><a href="#应用目标导向" class="headerlink" title="应用目标导向"></a>应用目标导向</h3><ol>
-<li>分子空间大：$10^{60}$</li>
-<li>化学空间离散，分子性质对微小的结构改变也很敏感</li>
-</ol>
-<h2 id="GCPN-1"><a href="#GCPN-1" class="headerlink" title="GCPN"></a>GCPN</h2><ol>
-<li>图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间</li>
-<li>图表示+强化学习+对抗训练</li>
-</ol>
-<a id="more"></a>
-<h2 id="图表示"><a href="#图表示" class="headerlink" title="图表示"></a>图表示</h2><ol>
-<li>部分图代表子结构 部分字符代表不了</li>
-<li>生成过程中可以进行化学检查</li>
-</ol>
-<h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><h4 id="1-期望分子性质与约束复杂且不可微"><a href="#1-期望分子性质与约束复杂且不可微" class="headerlink" title="1. 期望分子性质与约束复杂且不可微"></a>1. 期望分子性质与约束复杂且不可微</h4><p> 为什么？ </p>
-<p>​            <strong>分子性质对微小的结构改变也很敏感</strong>，</p>
-<p>​            可微：相似分子性质相似</p>
-<p>​            事实：同分异构体都可能有完全相反的性质</p>
-<p>​    导致？</p>
-<p>​            不能直接通过目标函数表示这些性质</p>
-<p>​    生成模型通过生成器生成策略（序列生成）来解决</p>
-<p>​    强化学习用动态性质与奖励函数表示：不需要性质可微</p>
-<h4 id="2-强化学习可以主动探索"><a href="#2-强化学习可以主动探索" class="headerlink" title="2.强化学习可以主动探索"></a>2.强化学习可以主动探索</h4><p>​    探索训练集之外的化学空间（怎么探索的？）</p>
-<h4 id="3-直接优化"><a href="#3-直接优化" class="headerlink" title="3. 直接优化"></a>3. 直接优化</h4><p>​    VAE间接优化潜在嵌入空间的分子性质</p>
-<p>​    直接优化分子图的分子性质（什么性质？）</p>
-<h2 id="对抗训练"><a href="#对抗训练" class="headerlink" title="对抗训练"></a>对抗训练</h2><p>多属性预测困难</p>
-<p>对抗性训练一个可学习的判别器</p>
-<h2 id="分子生成环境"><a href="#分子生成环境" class="headerlink" title="分子生成环境"></a>分子生成环境</h2><p><strong>1. 状态空间</strong></p>
-<p>分子图$ G(A,E,F)$,$A \in \{0,1\}^{n\times n}$是邻接矩阵，$F \in \mathbb{R}^{n \times d}$为每个节点的特征（假设有d个特征，这里是d个原子或子结构），$ E \in \{0,1\}^{b \times n \times n}$为边的种类与邻接矩阵。（A与E不重复吗？）</p>
-<p><strong>2.动作空间</strong></p>
-<p>在当前分子图上加上一堆待连的分子和子结构（脚手架），动作类似链路预测</p>
-<p><strong>3.转移动态</strong></p>
-<p>体现化学领域规则</p>
-<p><strong>4.奖励设计</strong></p>
-<p>中间奖励+最终奖励</p>
-<p>中间奖励：有效性奖励+对抗奖励</p>
-<p>最终奖励：化学领域奖励（QED）+对抗奖励</p>
-<h2 id="GCN"><a href="#GCN" class="headerlink" title="GCN"></a>GCN</h2><h3 id="计算结点嵌入"><a href="#计算结点嵌入" class="headerlink" title="计算结点嵌入"></a>计算结点嵌入</h3><p>l+1层的结点嵌入 $H^{(l+1)} \in \mathbb R^{(n+c)\times k}$ </p>
-<p>n是图中结点数，c是脚手架结点数，k是嵌入后结点表示维数</p>
-<p>$H^{(l+1)}=AGG(ReLU(\{\tilde{D_i}^{-\tfrac{1}{2}}\tilde E_{i}\tilde{D_i}^{-\tfrac{1}{2}}H^{(l)}W_{i}^{(l)}\},\forall i \in (1,…,b)))$</p>
-<p>$E_i$是第i类边的邻接矩阵，$\tilde E_i = E_i + I$是考虑到自身结点信息的修改后的邻接矩阵，$\tilde D_i = \sum_{k}\tilde E_{ijk}$ 是修改后的度矩阵。</p>
-<p>$\tilde{D_i}^{-\tfrac{1}{2}}\tilde E_{i}\tilde{D_i}^{-\tfrac{1}{2}}$类似一个归一化的拉普拉斯矩阵$L^{norm}$，其中引入自身度矩阵来解决自传递问题，对邻接矩阵通过度矩阵进行归一化，来防止度对结点权重的影响（也就是说10条边的结点比1条边的结点影响大的情况）</p>
-<p>$L^{norm}H^{(l)}$相当于叠加结点自身与邻居结点的特征，通过多层$l$来利用更多层次邻居（邻居的邻居）的信息。</p>
-<h3 id="动作预测"><a href="#动作预测" class="headerlink" title="动作预测"></a>动作预测</h3><p>链路预测</p>
-<p>动作：四个组成 两个端点、边类型预测、终止预测</p>
-<p>$ a_t = CONCAT(a_{first},a_{second},a_{edge},a_{stop})$</p>
-<p>$f_{first}(s_{t}) = SOFTMAX(m_f(X)),\quad \quad \quad a_{first} \sim f_{first}(s_t) \in \{0,1\}^{n}$</p>
-<p>$f_{second}(s_{t}) = SOFTMAX(m_s(X_{a_{first}},X)),\quad \quad a_{second} \sim f_{second}(s_t) \in \{0,1\}^{n+c}$</p>
-<p>$f_{edge}(s_{t}) = SOFTMAX(m_e(X_{a_{first}},X_{a_{second}})),\quad \quad a_{edge} \sim f_{edge}(s_t) \in \{0,1\}^{b}$</p>
-<p>$f_{stop}(s_{t}) = SOFTMAX(m_t(AGG(X))),\quad \quad a_{stop} \sim f_{stop}(s_t) \in \{0,1\}$</p>
-<h3 id="ppo？"><a href="#ppo？" class="headerlink" title="ppo？"></a>ppo？</h3><h4 id="策略梯度方法推导"><a href="#策略梯度方法推导" class="headerlink" title="策略梯度方法推导"></a>策略梯度方法推导</h4><p>轨迹$\tau = (s_{0},a_{0},…,s_{h},a_{h})$</p>
-<p>目标：找到最优神经网络参数$\theta^{*}$最大化收益关于轨迹分布的期望</p>
-<p>$\theta^{*}=\mathop{\arg\max}\limits_{\theta} \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_{t},a_{t})\bigg]$</p>
-<p>目标函数 $J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_t,a_t)\bigg]$</p>
-<p>定义轨迹收益$r(\tau)=\sum\limits_t r(s_t,a_t)$，目标函数变成$J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}[r(\tau)]$</p>
-<p>假设$\tau$的分布函数$p_{\theta}(\tau)$是可微的，拆开期望： $J(\theta)=\int p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>对两边求梯度：$\nabla_{\theta} J(\theta)=\int \nabla_{\theta} p_{\theta}(\tau)r(\tau)\,{\rm d}\tau$</p>
-<p>其中等式$\nabla_{\theta}p_{\theta}(\tau) = p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)$成立</p>
-<p>因此</p>
+        <h1 id="TRPO"><a href="#TRPO" class="headerlink" title="TRPO"></a>TRPO</h1><h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3><p>原理：</p>
+<p>$\mathbb{E}_{x \sim p(x)}[f(x)] = \int p(x)f(x)\, {\rm d}x = \int q(x)\frac{p(x)}{q(x)}f(x)\,{\rm d}x = \mathbb{E}_{x \sim q(x)}[\frac{p(x)}{q(x)}f(x)] $</p>
+<p>从q(x)中采样来替代从p(x)中采样</p>
+<p><strong>修改：</strong></p>
+<p>应用到目标函数</p>
+<p>$ J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}[r(\tau)] = \mathbb{E}_{\tau \sim p_{\theta^{old}}(\tau)}\bigg[\frac{p_{\theta}(\tau)}{p_{\theta^{old}}(\tau) }r(\tau)\bigg]$</p>
+<p>比值项</p>
+<p>$\frac{p_{\theta}(\tau)}{p_{\theta^{old}}(\tau)} = \frac{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})}{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})} = \frac{\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})}{\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})}$</p>
+<p>得出</p>
+<p>$\nabla_{\theta}J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum \limits_{t=1}^{T} \nabla_{\theta} log \pi_{\theta}(a_t|s_t)\bigg(\prod \limits_{t’=1}^{t} \frac{\pi_{\theta}(a_{t’}|s_{t’})}{\pi_{\theta^{old}}(a_{t’}|s_{t’})}\bigg)\bigg(\sum \limits_{t’ =t}^{T}r(s_{t’},a_{t’})-b\bigg)\bigg]$</p>
+<p>连乘可能趋于0’<br><a id="more"></a></p>
+<h2 id="MM"><a href="#MM" class="headerlink" title="MM"></a>MM</h2><p>Majorize-Minimization 最小化上界函数</p>
+<p>Minorize-Maximization 最大化下界函数</p>
+<h2 id="Surrogate-function"><a href="#Surrogate-function" class="headerlink" title="Surrogate function"></a>Surrogate function</h2><p>原目标函数非凸，很难优化，求解逼近于目标函数的替代函数，不断迭代替代函数。</p>
+<p>目标函数：策略的期望折扣奖励</p>
+<p>替代函数：是目标函数的下界函数，可用于估计当前策略的期望奖励，易于优化</p>
+<h2 id="TRPO-1"><a href="#TRPO-1" class="headerlink" title="TRPO"></a>TRPO</h2><p>策略梯度中，参数的更新为$\theta_{new} = \theta_{old}+\alpha \nabla_{\theta}J$</p>
+<p>这种方法对于步长$\alpha$的选取很难控制，如果步长不合适，可能会导致目标函数反而越来越差。</p>
+<p><strong>目标</strong>： 找到一个合适的步长，使每次更新时目标函数都单调递增。</p>
+<p><strong>方法</strong>：希望目标函数（期望回报函数）单调递增，那么可以将新策略的期望回报函数分解成原有策略回报函数加一个永远为正的项。</p>
+<p>得到等式</p>
+<p>$\eta(\tilde{\pi})=\eta(\pi)+\mathbb{E}_{\tau \in \tilde{\pi}}\bigg[\sum \limits^{\infty}_{t=0}A_\pi(s_t,a_t)\bigg]$</p>
+<p>其中</p>
+<p><img src="q与v.png" alt="q与v" style="zoom:33%;" /></p>
+<p>$A_\pi(s,a)=Q_\pi(s,a) - V_\pi(s)=\mathbb{E}_{s’\sim P(s’|s,a)}[r(s)+\gamma V^\pi(s’)-V^\pi(s)]$</p>
+<p>其中r(s) 即为R(s,a,s’)</p>
+<p>公式证明：</p>
 <script type="math/tex; mode=display">
-\begin{aligned} 
-\nabla_{\theta} J(\theta)&=\int p_{\theta}(\tau)\nabla_\theta logp_\theta(\tau)r(\tau)\,{\rm d}\tau\\
-&= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)r(\tau)\bigg]\end{aligned}</script><p>其中$p_{\theta}(\tau)=p(s_1)\prod\limits_{t=1}^{T}\pi_{\theta}(a_t,s_t)p(s_{t+1})$</p>
-<p>则$\nabla_\theta logp_\theta(\tau) = \nabla_\theta \sum \limits_{t=1}^{T}log\pi_{\theta}(a_t,s_t)$</p>
-<p>$\nabla_{\theta} J(\theta) = \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_t,s_t)\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_t,a_t)\bigg)\bigg]$</p>
-<p>实际抽样时用平均来进行估算</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N} \bigg[\bigg( \sum \limits_{t=1}^{T}\nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t=1}^{T}r(s_{i,t},a_{i,t})\bigg)\bigg]$</p>
-<p>之后用 $\theta \gets \theta + \nabla_{\theta} J(\theta)$更新参数$\theta$</p>
-<h5 id="解决高方差问题"><a href="#解决高方差问题" class="headerlink" title="解决高方差问题"></a>解决高方差问题</h5><h6 id="改变因果关系"><a href="#改变因果关系" class="headerlink" title="改变因果关系"></a>改变因果关系</h6><p>当前时间策略只能影响之后的奖励</p>
-<p>$\nabla_{\theta} J(\theta) \approx \frac{1}{N} \sum \limits_{i=1}^{N}\sum \limits_{t=1}^{T} \bigg[\bigg( \nabla_\theta log\pi_{\theta}(a_{i,t},s_{i,t})\bigg)\bigg(\sum \limits_{t’=t}^{T}r(s_{i,t’},a_{i,t’})\bigg)\bigg]$</p>
-<h6 id="引入基线"><a href="#引入基线" class="headerlink" title="引入基线"></a>引入基线</h6><p>$\nabla_{\theta} J(\theta)= \mathbb{E}_{\tau\sim p_\theta(\tau)}\bigg[\nabla_\theta logp_\theta(\tau)(r(\tau)-b)\bigg]$</p>
-<p>eg： $b_t = \frac{1}{N} \sum \limits_{i} Q^\pi(s_{i,t},a_{i,t})$</p>
+\begin{align*}
+&\mathbb{E}_{\tau \sim \tilde{\pi}}\bigg[\sum \limits^\infty_{t=0} \gamma^tA^\pi(s_t,a_t)\bigg]\\
+&= \mathbb{E}_{\tau \sim \tilde{\pi}}\bigg[\sum \limits^\infty_{t=0} \gamma^t(R(s_t,a_t,s_{t+1})+\gamma V^\pi(s_{t+1})-V^\pi(s_t))\bigg]\\
+&=\eta(\tilde{\pi})+\mathbb{E}_{\tau \sim \tilde{\pi}}\bigg[(\sum \limits^\infty_{t=0} \gamma^{t+1} V^\pi(s_{t+1})-\sum \limits^\infty_{t=0} \gamma^tV^\pi(s_t))\bigg]\\
+&=\eta(\tilde{\pi})+\mathbb{E}_{\tau \sim \tilde{\pi}}\bigg[(\sum \limits^\infty_{t=1} \gamma^{t} V^\pi(s_{t})-\sum \limits^\infty_{t=0} \gamma^tV^\pi(s_t))\bigg]\\
+&=\eta(\tilde{\pi})-\mathbb{E}_{\tau \sim \tilde{\pi}}\bigg[V^\pi(s_0)\bigg]\\
+&= \eta(\tilde{\pi})-\eta(\pi)
+\end{align*}</script><p>将公式写开得到：</p>
+<p>$\eta(\tilde{\pi})=\eta(\pi)+\sum \limits^{\infty}_{t=0} \sum \limits_{s}P(s_t = s|\tilde{\pi})\sum \limits_{a}\tilde{\pi}(a|s)\gamma^tA_\pi(s,a)$</p>
+<p>进一步变形:</p>
+<p>$\eta(\tilde{\pi})=\eta(\pi)+ \sum \limits_{s}\rho_{\tilde{\pi}}(s)\sum \limits_{a}\tilde{\pi}(a|s)\gamma^tA_\pi(s,a)$</p>
+<p>$\rho_\pi(s)=P(s_0=s)+\gamma P(s_1=s)+\gamma^2P(s_2=s)+…+\gamma^t(s_t=s)$</p>
+<p>其中$\rho_{\tilde{\pi}}(s)$是新策略下的动态特性，但新策略此时还未知，且旧策略与新策略之间改动不大，因此用旧策略$\rho_{\pi}(s)$代替新策略。</p>
+<p>在动作分布上利用重要性采样</p>
+<p>$\sum \limits_{a} \tilde{\pi}_{\theta}(a|s_n)A_{\theta_{old}}(s_n,a)=\mathbb{E}_{a \sim q_{old}}\bigg[\frac{\tilde\pi_\theta(a|s_n) }{\\pi_{\theta_{old}}(a|s_n) }A_{\theta_{old}(s_n,a)}\bigg]$</p>
+<p>q为旧参数下的动作分布</p>
+<p>记</p>
+<p>$L_\pi(\tilde{\pi})=\eta(\pi)+\mathbb{E}_{s \sim \rho_{\theta_{old}},a \sim \pi_{\theta_{old}}}\bigg[\frac{\tilde\pi_\theta(a|s_n) }{\pi_{\theta_{old}}(a|s_n) }A_{\theta_{old}(s_n,a)}\bigg]$</p>
+<p>引入不等式来取目标回报函数的下界，之后最大化下界</p>
+<p>$\eta(\tilde \pi) \ge L_\pi(\tilde \pi) - CD^{max}_{KL}(\pi,\tilde \pi)$</p>
+<p>其中$C = \frac {4 \in \gamma}{(1-\gamma)^2}$</p>
+<p>$D^{max}_{KL}(\pi,\tilde \pi)$为固定状态下动作分布kl散度的最大值</p>
+<p>但很难在每个策略下找到KL散度的最大值，因此使用KL散度的均值</p>
+<p>$\bar{D}^{\rho_{\theta_{old}}}_{KL}(\pi,\tilde \pi) = \mathbb{E}_{s \sim \rho}[D_{KL}(\pi(\cdot|s)||\tilde\pi(\cdot|s))]$</p>
+<p>记$M_i(\pi) = L_{\pi_i}(\tilde \pi)-C\bar{D}^{\rho_{\theta_{old}}}_{KL}(\pi,\tilde \pi)$</p>
+<p>容易得到 $\eta(\pi_{i+1}) \ge M_i(\pi_{i+1})$且$\eta(\pi_i)=M_i(\pi_i)$</p>
+<p>则 $\eta(\pi_{i+1})-\eta(\pi_{i}) \ge M_i(\pi_{i+1})-M_i(\pi_{i})$</p>
+<p>那么，寻找使Mi最大的策略即可以保证策略的期望回报单调递增，那么寻找策略的过程就是一个不断寻找Mi最大值的过程</p>
+<p>$\max \limits_{\theta}[L_{\theta_{old}}-C\bar{D}^{\rho_{\theta_{old}}}_{KL}(\theta_{old},\theta)]$</p>
+<p><strong>最终得到</strong></p>
+<p>为了使问题更加可解，将问题等效为</p>
+<p>$\max \limits_{\theta}\mathbb{E}_{s \sim \rho_{\theta_{old}},a \sim \pi_{\theta_{old}}}\bigg[\frac{\tilde\pi_\theta(a|s_n) }{\pi_{\theta_{old}}(a|s_n) }A_{\theta_{old}(s_n,a)}\bigg]$ 满足约束$\bar{D}^{\rho_{\theta_{old}}}_{KL}(\theta_{old},\theta) \le \eta$</p>
+<p><strong>理解</strong></p>
+<p>在不断更新$\theta$的同时，替代函数也在不断逼近目标函数，最终会达到一个局部最优解</p>
+<p><img src="TRPO和PPO/image-20210116190815243.png" alt="image-20210116190815243" style="zoom:33%;" /><img src="TRPO和PPO/image-20210116190833276.png" alt="image-20210116190815243" style="zoom:33%;" /></p>
+<p>迭代更新过程</p>
+<p><img src="TRPO和PPO/aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzRlYzk5YTEwNDIzMTRlMDJiMGMyZTU4NTM4YTMzNjBiLmpwZWc" alt="img"></p>
+<p>参考博客：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tanjia6999/article/details/99716133">https://blog.csdn.net/tanjia6999/article/details/99716133</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41679411/article/details/82421121">https://blog.csdn.net/weixin_41679411/article/details/82421121</a></p>
 
     </div>
 
@@ -321,7 +322,7 @@
           <div class="post-tags">
               <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
               <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag"># 强化学习</a>
-              <a href="/tags/%E5%9B%BE%E8%A1%A8%E7%A4%BA/" rel="tag"># 图表示</a>
+              <a href="/tags/TRPO/" rel="tag"># TRPO</a>
           </div>
 
         
@@ -330,13 +331,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/13/policy%20gradient/" rel="prev" title="策略梯度方法推导">
-      <i class="fa fa-chevron-left"></i> 策略梯度方法推导
+    <a href="/2021/01/13/GCPN/" rel="prev" title="GCPN">
+      <i class="fa fa-chevron-left"></i> GCPN
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/01/16/TRPO/" rel="next" title="TRPO">
-      TRPO <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -395,7 +393,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GCPN"><span class="nav-text">GCPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%9B%AE%E6%A0%87%E5%AF%BC%E5%90%91"><span class="nav-text">应用目标导向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCPN-1"><span class="nav-text">GCPN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E8%A1%A8%E7%A4%BA"><span class="nav-text">图表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-text">强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9C%9F%E6%9C%9B%E5%88%86%E5%AD%90%E6%80%A7%E8%B4%A8%E4%B8%8E%E7%BA%A6%E6%9D%9F%E5%A4%8D%E6%9D%82%E4%B8%94%E4%B8%8D%E5%8F%AF%E5%BE%AE"><span class="nav-text">1. 期望分子性质与约束复杂且不可微</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%AF%E4%BB%A5%E4%B8%BB%E5%8A%A8%E6%8E%A2%E7%B4%A2"><span class="nav-text">2.强化学习可以主动探索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%9B%B4%E6%8E%A5%E4%BC%98%E5%8C%96"><span class="nav-text">3. 直接优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%8A%97%E8%AE%AD%E7%BB%83"><span class="nav-text">对抗训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%AD%90%E7%94%9F%E6%88%90%E7%8E%AF%E5%A2%83"><span class="nav-text">分子生成环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCN"><span class="nav-text">GCN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E7%BB%93%E7%82%B9%E5%B5%8C%E5%85%A5"><span class="nav-text">计算结点嵌入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C%E9%A2%84%E6%B5%8B"><span class="nav-text">动作预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ppo%EF%BC%9F"><span class="nav-text">ppo？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95%E6%8E%A8%E5%AF%BC"><span class="nav-text">策略梯度方法推导</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%AB%98%E6%96%B9%E5%B7%AE%E9%97%AE%E9%A2%98"><span class="nav-text">解决高方差问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB"><span class="nav-text">改变因果关系</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E5%9F%BA%E7%BA%BF"><span class="nav-text">引入基线</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TRPO"><span class="nav-text">TRPO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-text">重要性采样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MM"><span class="nav-text">MM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Surrogate-function"><span class="nav-text">Surrogate function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TRPO-1"><span class="nav-text">TRPO</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
