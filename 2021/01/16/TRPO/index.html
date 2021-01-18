@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/image-20210116190833276.png">
 <meta property="og:image" content="https://www.aoshuqiu.top/2021/01/16/TRPO/aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzRlYzk5YTEwNDIzMTRlMDJiMGMyZTU4NTM4YTMzNjBiLmpwZWc">
 <meta property="article:published_time" content="2021-01-16T13:34:10.000Z">
-<meta property="article:modified_time" content="2021-01-18T09:23:23.264Z">
+<meta property="article:modified_time" content="2021-01-18T09:36:40.100Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="强化学习">
@@ -207,7 +207,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 17:23:23" itemprop="dateModified" datetime="2021-01-18T17:23:23+08:00">2021-01-18</time>
+                <time title="修改时间：2021-01-18 17:36:40" itemprop="dateModified" datetime="2021-01-18T17:36:40+08:00">2021-01-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -253,7 +253,7 @@
 <p>得到等式</p>
 <p>$\eta(\tilde{\pi})=\eta(\pi)+\mathbb{E}_{\tau \in \tilde{\pi}}\bigg[\sum \limits^{\infty}_{t=0}A_\pi(s_t,a_t)\bigg]$</p>
 <p>其中</p>
-<p><img src="./q与v.png" alt="q与v" style="zoom:33%;" /></p>
+<p><img src="q与v.png" alt="q与v" style="zoom:33%;" /></p>
 <p>$A_\pi(s,a)=Q_\pi(s,a) - V_\pi(s)=\mathbb{E}_{s’\sim P(s’|s,a)}[r(s)+\gamma V^\pi(s’)-V^\pi(s)]$</p>
 <p>其中r(s) 即为R(s,a,s’)</p>
 <p>公式证明：</p>
@@ -292,9 +292,9 @@
 <p>$\max \limits_{\theta}\mathbb{E}_{s \sim \rho_{\theta_{old}},a \sim \pi_{\theta_{old}}}\bigg[\frac{\tilde\pi_\theta(a|s_n) }{\pi_{\theta_{old}}(a|s_n) }A_{\theta_{old}(s_n,a)}\bigg]$ 满足约束$\bar{D}^{\rho_{\theta_{old}}}_{KL}(\theta_{old},\theta) \le \eta$</p>
 <p><strong>理解</strong></p>
 <p>在不断更新$\theta$的同时，替代函数也在不断逼近目标函数，最终会达到一个局部最优解</p>
-<p><img src="./image-20210116190815243.png" alt="image-20210116190815243" style="zoom:33%;" /><img src="./image-20210116190833276.png" alt="image-20210116190815243" style="zoom:33%;" /></p>
+<p><img src="image-20210116190815243.png" alt="image-20210116190815243" style="zoom:33%;" /><img src="image-20210116190833276.png" alt="image-20210116190815243" style="zoom:33%;" /></p>
 <p>迭代更新过程</p>
-<p><img src="./aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzRlYzk5YTEwNDIzMTRlMDJiMGMyZTU4NTM4YTMzNjBiLmpwZWc" alt="img"></p>
+<p><img src="aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzRlYzk5YTEwNDIzMTRlMDJiMGMyZTU4NTM4YTMzNjBiLmpwZWc" alt="img"></p>
 <p>参考博客：</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tanjia6999/article/details/99716133">https://blog.csdn.net/tanjia6999/article/details/99716133</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41679411/article/details/82421121">https://blog.csdn.net/weixin_41679411/article/details/82421121</a></p>
