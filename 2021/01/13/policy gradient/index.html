@@ -29,16 +29,16 @@
 <meta property="og:site_name" content="3号列车">
 <meta property="og:description" content="策略梯度方法推导轨迹$\tau &#x3D; (s_{0},a_{0},…,s_{h},a_{h})$ 目标：找到最优神经网络参数$\theta^{*}$最大化收益关于轨迹分布的期望 $\theta^{*}&#x3D;\mathop{\arg\max}\limits_{\theta} \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_{t}">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/policy%20gradient/image-20210101221252416.png">
-<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/policy%20gradient/image-20210101220947618.png">
-<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/policy%20gradient/image-20210101221325924.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/image-20210101221252416.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/image-20210101220947618.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/image-20210101221325924.png">
 <meta property="article:published_time" content="2021-01-13T06:20:10.000Z">
-<meta property="article:modified_time" content="2021-01-13T06:28:25.247Z">
+<meta property="article:modified_time" content="2021-01-18T09:24:20.474Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="强化学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/policy%20gradient/image-20210101221252416.png">
+<meta name="twitter:image" content="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/image-20210101221252416.png">
 
 <link rel="canonical" href="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/">
 
@@ -197,10 +197,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-13 14:20:10 / 修改时间：14:28:25" itemprop="dateCreated datePublished" datetime="2021-01-13T14:20:10+08:00">2021-01-13</time>
+              <time title="创建时间：2021-01-13 14:20:10" itemprop="dateCreated datePublished" datetime="2021-01-13T14:20:10+08:00">2021-01-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 17:24:20" itemprop="dateModified" datetime="2021-01-18T17:24:20+08:00">2021-01-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -258,10 +264,10 @@
 <p>$\nabla_{\theta}J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum \limits_{t=1}^{T} \nabla_{\theta} log \pi_{\theta}(a_t|s_t)\bigg(\prod \limits_{t’=1}^{t} \frac{\pi_{\theta}(a_{t’}|s_{t’})}{\pi_{\theta^{old}}(a_{t’}|s_{t’})}\bigg)\bigg(\sum \limits_{t’ =t}^{T}r(s_{t’},a_{t’})-b\bigg)\bigg]$</p>
 <p>连乘可能趋于0’</p>
 <p>修改</p>
-<p><img src="policy gradient/image-20210101221252416.png" alt="image-20210101221252416"></p>
+<p><img src="./image-20210101221252416.png" alt="image-20210101221252416"></p>
 <p>最终</p>
-<p><img src="policy gradient/image-20210101220947618.png" alt="image-20210101220947618"></p>
-<p><img src="policy gradient/image-20210101221325924.png" alt="image-20210101221325924"></p>
+<p><img src="./image-20210101220947618.png" alt="image-20210101220947618"></p>
+<p><img src="./image-20210101221325924.png" alt="image-20210101221325924"></p>
 <p>近似1</p>
 <p>可以拿出去加基线</p>
 <p>新参数可以利用旧采样，一段时间后再重新采样？</p>
