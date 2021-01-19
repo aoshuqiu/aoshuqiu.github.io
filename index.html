@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-01-19 21:34:10 / 修改时间：11:18:16" itemprop="dateCreated datePublished" datetime="2021-01-19T21:34:10+08:00">2021-01-19</time>
+              <time title="创建时间：2021-01-19 16:50:21 / 修改时间：18:25:39" itemprop="dateCreated datePublished" datetime="2021-01-19T16:50:21+08:00">2021-01-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -212,67 +212,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="image-20210119110652217.png" alt="image-20210119110652217"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/19/PPO1-md/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/19/PPO1-md/" class="post-title-link" itemprop="url">:PPO1.md</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-01-19 11:29:25 / 修改时间：11:44:52" itemprop="dateCreated datePublished" datetime="2021-01-19T11:29:25+08:00">2021-01-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/.top//image-20210119110652217.png" alt="image-20210119110652217"></p>
-
+          <h1 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h1><p>TRPO的最终替代函数为：</p>
+<script type="math/tex; mode=display">L^{CPI}(\theta)=\mathbb{E}_t\bigg[ \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }A_t\bigg]</script><p>因为用到了重要性采样，保留了之前策略的动作与状态分布，CPI（Conservation Policy Iteration）保留策略迭代。</p>
+<p>记概率比值$r_t(\theta) = \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }$，得到$L^{CPI}(\theta)=\mathbb{E}_t\big[ r_t(\theta)A_t\big]$</p>
+<p><strong>问题</strong></p>
+<p>没有约束条件的话，最大化$L^{CPI}$会导致大幅度的策略更新，因此要想办法通过改变目标函数，来对那些$r_t(\theta)$项离1很远的情况进行惩罚。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/19/PPO/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -322,7 +274,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-19 10:58:28" itemprop="dateModified" datetime="2021-01-19T10:58:28+08:00">2021-01-19</time>
+                <time title="修改时间：2021-01-19 17:21:27" itemprop="dateModified" datetime="2021-01-19T17:21:27+08:00">2021-01-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -355,7 +307,7 @@
 <p>$\frac{p_{\theta}(\tau)}{p_{\theta^{old}}(\tau)} = \frac{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})}{p(s_{1})\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})p(s_{t+1}|s_{t},a_{t})} = \frac{\prod \limits_{t=1}^{T}\pi_{\theta}(a_{t}|s_{t})}{\prod \limits_{t=1}^{T}\pi_{\theta^{old}}(a_{t}|s_{t})}$</p>
 <p>得出</p>
 <p>$\nabla_{\theta}J(\theta) = \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum \limits_{t=1}^{T} \nabla_{\theta} log \pi_{\theta}(a_t|s_t)\bigg(\prod \limits_{t’=1}^{t} \frac{\pi_{\theta}(a_{t’}|s_{t’})}{\pi_{\theta^{old}}(a_{t’}|s_{t’})}\bigg)\bigg(\sum \limits_{t’ =t}^{T}r(s_{t’},a_{t’})-b\bigg)\bigg]$</p>
-<p>连乘可能趋于0’<br>
+<p>连乘可能趋于0’<br></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/01/16/TRPO/#more" rel="contents">
@@ -683,7 +635,7 @@
 
       
           <h1 id="回文对问题"><a href="#回文对问题" class="headerlink" title="回文对问题"></a>回文对问题</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
-<h4 id=""><a href="#" class="headerlink" title=" "></a> </h4><p>给定一组 <strong>互不相同</strong> 的单词， 找出所有<strong>不同</strong> 的索引对<code>(i, j)</code>，使得列表中的两个单词， <code>words[i] + words[j]</code> ，可拼接成回文串。</p>
+<h4 id><a href="#" class="headerlink" title=" "></a> </h4><p>给定一组 <strong>互不相同</strong> 的单词， 找出所有<strong>不同</strong> 的索引对<code>(i, j)</code>，使得列表中的两个单词， <code>words[i] + words[j]</code> ，可拼接成回文串。</p>
 <p><strong>示例 1：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[&quot;abcd&quot;,&quot;dcba&quot;,&quot;lls&quot;,&quot;s&quot;,&quot;sssll&quot;]</span><br><span class="line">&gt;输出：[[0,1],[1,0],[3,2],[2,4]] </span><br><span class="line">&gt;解释：可拼接成的回文串为 [&quot;dcbaabcd&quot;,&quot;abcddcba&quot;,&quot;slls&quot;,&quot;llssssll&quot;]</span><br></pre></td></tr></table></figure>
 <p><strong>示例 2：</strong></p>
@@ -766,7 +718,7 @@
           <h1 id="leetcode-207-课程表"><a href="#leetcode-207-课程表" class="headerlink" title="leetcode 207 课程表"></a>leetcode 207 课程表</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
 <p>你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
 <p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
-<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p>
+<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p></blockquote>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/#more" rel="contents">
@@ -1009,7 +961,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

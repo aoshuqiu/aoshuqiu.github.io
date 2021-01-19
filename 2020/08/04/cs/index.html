@@ -366,9 +366,9 @@
 <h2 id="2-2在Ubuntu下预处理的命令"><a href="#2-2在Ubuntu下预处理的命令" class="headerlink" title="2.2在Ubuntu下预处理的命令"></a>2.2在Ubuntu下预处理的命令</h2><p>gcc -E hello.c -o hello.i</p>
 <p>​    <img src="https://img-blog.csdnimg.cn/20181231223233808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzQ3NzQz,size_16,color_FFFFFF,t_70" alt="img"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"><img src="https://img-blog.csdnimg.cn/20181231223233806.png" alt="img"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
 <h2 id="2-3-Hello的预处理结果解析"><a href="#2-3-Hello的预处理结果解析" class="headerlink" title="2.3 Hello的预处理结果解析"></a>2.3 Hello的预处理结果解析</h2><p>Hello.c经预处理后变为hello.i ,实际是一个搜罗各家武功最后另成一派的过程。hello.c中的预处理指令是</p>
-<p>#include <stdio.h></p>
-<p>#include <unistd.h></p>
-<p>#include <stdlib.h></p>
+<p>#include <stdio.h></stdio.h></p>
+<p>#include <unistd.h></unistd.h></p>
+<p>#include <stdlib.h></stdlib.h></p>
 <p>而之后程序使用的函数，均是这三个库里的内容，预处理就是把程序具体引用库函数的代码与c文件合在一起。</p>
 <h2 id="2-4-本章小结"><a href="#2-4-本章小结" class="headerlink" title="2.4 本章小结"></a>2.4 本章小结</h2><p>预处理在编译前开始，这个过程并不对程序的源代码进行解析，但它把源代码分割或处理成为特定的单位——预处理记号。</p>
 <p>c语言的预处理会展开以#起始的行，试图解释为预处理指令，预处理指令一般被用来使源代码在不同的执行环境中被方便的修改或者编译。</p>
@@ -773,7 +773,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

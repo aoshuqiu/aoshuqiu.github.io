@@ -238,7 +238,7 @@
 <p>首先分析题目，先决条件就是要想学0，必须先学1，因此可以用一个有向图来表示课程关系。若此有向图为无环有向图，则存在一个拓扑序列满足这个先决条件。</p>
 <h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><p>一开始想用邻接矩阵与numpy库中的点乘来得到图的到达节点矩阵，但是dot()函数花费太大了，导致时间过长。</p>
 <h2 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h2><h3 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h3><p>对图中的每个节点，用一个单向链表列出从该节点出发的所有弧，链表中每个单元对应一条出弧，单元中还可以包含弧上的权作为数据域。</p>
-<p><img src="2011050620362625.png" alt="img"></p>
+<p><img src="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/2011050620362625.png" alt="img"></p>
 <h3 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h3><p>对于一个节点 u，如果它的所有相邻节点都已经搜索完成，那么在搜索回溯到 u 的时候，u 本身也会变成一个已经搜索完成的节点。这里的「相邻节点」指的是从 u 出发通过一条有向边可以到达的所有节点。</p>
 <p>对于图中的任意一个节点，它在搜索的过程中有三种状态，即：</p>
 <ul>
@@ -393,7 +393,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
