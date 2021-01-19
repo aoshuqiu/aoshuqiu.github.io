@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.aoshuqiu.top/"/>
-  <updated>2021-01-19T02:58:28.384Z</updated>
+  <updated>2021-01-19T03:06:56.575Z</updated>
   <id>https://www.aoshuqiu.top/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>TRPO</title>
+    <link href="https://www.aoshuqiu.top/2021/01/19/PPO/"/>
+    <id>https://www.aoshuqiu.top/2021/01/19/PPO/</id>
+    <published>2021-01-19T13:34:10.000Z</published>
+    <updated>2021-01-19T03:06:56.575Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/image-20210119110652217.png" alt="image-20210119110652217"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;/image-20210119110652217.png&quot; alt=&quot;image-20210119110652217&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="学习" scheme="https://www.aoshuqiu.top/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="机器学习" scheme="https://www.aoshuqiu.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="强化学习" scheme="https://www.aoshuqiu.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="TRPO" scheme="https://www.aoshuqiu.top/tags/TRPO/"/>
+    
+  </entry>
   
   <entry>
     <title>TRPO</title>
