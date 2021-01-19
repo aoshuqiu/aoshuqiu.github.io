@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.aoshuqiu.top/"/>
-  <updated>2021-01-19T03:06:56.575Z</updated>
+  <updated>2021-01-19T03:12:09.570Z</updated>
   <id>https://www.aoshuqiu.top/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>TRPO</title>
+    <title>PPO</title>
     <link href="https://www.aoshuqiu.top/2021/01/19/PPO/"/>
     <id>https://www.aoshuqiu.top/2021/01/19/PPO/</id>
     <published>2021-01-19T13:34:10.000Z</published>
-    <updated>2021-01-19T03:06:56.575Z</updated>
+    <updated>2021-01-19T03:12:09.570Z</updated>
     
     <content type="html"><![CDATA[<p><img src="/image-20210119110652217.png" alt="image-20210119110652217"></p>]]></content>
     
