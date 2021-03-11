@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+
+<meta name="google-site-verification" content="dbpwuLYVFXbb0TpPpFAzrQzI57R9GIkTP6KlpmuCExU" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ss.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ss.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="GCPN中的GANGANGenerative Adversarial Network 目标：训练高水平的判别器与生成器 整个过程可以用文物鉴定来理解，判别器对应着鉴定机构，生成器对应造假团伙，样本对应着各种“文物”。这些“文物”中存在着真品国宝与赝品，鉴定机构对这些”文物”也有两种判定：真品与赝品。其中所有国宝都是已经存在的古人的作品是相对静态的，而赝品则由造假团伙源源不断地制作是动态的。feed">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3号列车">
+<meta property="og:url" content="https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/index.html">
+<meta property="og:site_name" content="3号列车">
+<meta property="og:description" content="GCPN中的GANGANGenerative Adversarial Network 目标：训练高水平的判别器与生成器 整个过程可以用文物鉴定来理解，判别器对应着鉴定机构，生成器对应造假团伙，样本对应着各种“文物”。这些“文物”中存在着真品国宝与赝品，鉴定机构对这些”文物”也有两种判定：真品与赝品。其中所有国宝都是已经存在的古人的作品是相对静态的，而赝品则由造假团伙源源不断地制作是动态的。feed">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-27T12:29:04.850Z">
+<meta property="article:modified_time" content="2021-02-27T16:00:25.011Z">
+<meta property="article:author" content="三儿">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | 3号列车</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="3号列车" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <script src="https://cdn.jsdelivr.net/gh/aoshuqiu/live2d-widget@latest/autoload.js"></script>
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">3号列车</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-27 20:29:04" itemprop="dateCreated datePublished" datetime="2021-02-27T20:29:04+08:00">2021-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 00:00:25" itemprop="dateModified" datetime="2021-02-28T00:00:25+08:00">2021-02-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="GCPN中的GAN"><a href="#GCPN中的GAN" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h1><h2 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h2><p>Generative Adversarial Network</p>
+<p><strong>目标：训练高水平的判别器与生成器</strong></p>
+<p>整个过程可以用文物鉴定来理解，判别器对应着鉴定机构，生成器对应造假团伙，样本对应着各种“文物”。这些“文物”中存在着真品国宝与赝品，鉴定机构对这些”文物”也有两种判定：真品与赝品。其中所有国宝都是已经存在的古人的作品是相对静态的，而赝品则由造假团伙源源不断地制作是动态的。feedback: 在鉴定完成后，造假团伙会根据鉴定机构的结果改变策略来生成更以假乱真的作品，鉴定机构也会通过得知文物来自造假团伙来更新自己的判断依据。</p>
+<p>国宝：<script type="math/tex">\{x_i\}^{N}_{i=1}</script> 满足分布<script type="math/tex">P_{data}</script></p>
+<p>赝品：<script type="math/tex">P_g(x:\theta_g)</script> 通常是一个神经网络，x可能来自一个噪声<script type="math/tex">z \sim P_z(z)</script>     ，<script type="math/tex">x=G(z:\theta_g)</script></p>
+<p>因此，训练过程：</p>
+<ul>
+<li><p>鉴定机构：</p>
+<ul>
+<li><p>if x is from <script type="math/tex">P_{data}</script> , then <script type="math/tex">D(x)\uparrow</script>  same as <script type="math/tex">log D(x)\uparrow</script></p>
+</li>
+<li><p>if x is from <script type="math/tex">P_g</script>(z is from <script type="math/tex">P_z</script>) , then <script type="math/tex">D(x)\downarrow</script> same as <script type="math/tex">log(1- D(G(z)))\uparrow</script></p>
+</li>
+<li>therefore <script type="math/tex">\max\limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+<li><p>造假团伙：</p>
+<ul>
+<li>if x is from <script type="math/tex">P_g</script>   , then <script type="math/tex">D(G(z))\uparrow</script>  same as <script type="math/tex">log(1-D(G(z)))\downarrow</script></li>
+<li><script type="math/tex; mode=display">\min \limits_{G} \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+<li><p>总目标：</p>
+<ul>
+<li><script type="math/tex; mode=display">\min \limits_{G} \max \limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+</ul>
+<p>最终的最优情况下 <script type="math/tex">P_g = P_d , D_G = 1/2</script> 造假团队水平和古人一样，鉴定机构对造假团队失去鉴定能力。</p>
+<h2 id="GCPN中的GAN-1"><a href="#GCPN中的GAN-1" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h2><h3 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h3><p>GCPN中的生成器是一个图卷积策略生成器，也就是gcn_policy.py中的GCNPolicy类。</p>
+<p>首先将图中结点经过一个嵌入层计算结点嵌入，并进行降维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#嵌入层</span></span><br><span class="line">ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>],<span class="number">8</span>,activation=<span class="literal">None</span>,use_bias=<span class="literal">False</span>,name=<span class="string">&#x27;emb&#x27;</span>) <span class="comment"># embedding layer</span></span><br></pre></td></tr></table></figure>
+<p>之后经过三层GCN层，将邻接矩阵中的边信息加入到结点嵌入中，得到了能代表整个图的结点嵌入。在这个结点嵌入去掉无效结点并加入聚合所有结点的代表整图的一行嵌入，得到emb_node，图嵌入。</p>
+<p>emb_node变成了图的代表，然后只需根据emb_node生成GCPN环境中动作的四元素分布：[是否停止，第一点，第二点，边类型]，</p>
+<p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_stop</p>
+<p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_first 采样得出emb_first</p>
+<p>concat(emb_first,emb_node) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_second 采样得出emb_second</p>
+<p>concat(emb_first,emb_second) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_edge </p>
+<p>从而得出动作分布的logits</p>
+<h3 id="判别器"><a href="#判别器" class="headerlink" title="判别器"></a>判别器</h3><p>判别网络同样在gcn_policy.py中： discriminator_net方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">discriminator_net</span>(<span class="params">ob,args,name=<span class="string">&#x27;d_net&#x27;</span></span>):</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(name,reuse=tf.AUTO_REUSE):</span><br><span class="line">        ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>], <span class="number">8</span>, activation=<span class="literal">None</span>, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;emb&#x27;</span>)  <span class="comment"># embedding layer</span></span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            ob_node = tf.layers.batch_normalization(ob_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], ob_node, args.emb_size, name=<span class="string">&#x27;gcn1&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(args.layer_num_d - <span class="number">2</span>):</span><br><span class="line">            <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">                emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">            emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, name=<span class="string">&#x27;gcn1_&#x27;</span>+str(i+<span class="number">1</span>),aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, is_act=<span class="literal">False</span>, is_normalize=(args.bn == <span class="number">0</span>), name=<span class="string">&#x27;gcn2&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        <span class="comment"># emb_graph = tf.reduce_max(tf.squeeze(emb_node2, axis=1),axis=1)  # B*f</span></span><br><span class="line">        emb_node = tf.layers.dense(emb_node, args.emb_size, activation=tf.nn.relu, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;linear1&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> args.gate_sum_d==<span class="number">1</span>:</span><br><span class="line">            emb_node_gate = tf.layers.dense(emb_node,<span class="number">1</span>,activation=tf.nn.sigmoid,name=<span class="string">&#x27;gate&#x27;</span>)</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node*emb_node_gate, axis=<span class="number">1</span>),axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node, axis=<span class="number">1</span>), axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        logit = tf.layers.dense(emb_graph, <span class="number">1</span>, activation=<span class="literal">None</span>, name=<span class="string">&#x27;linear2&#x27;</span>)</span><br><span class="line">        pred = tf.sigmoid(logit)</span><br><span class="line">        <span class="comment"># pred = tf.layers.dense(emb_graph, 1, activation=None, name=&#x27;linear1&#x27;)</span></span><br><span class="line">        <span class="keyword">return</span> pred,logit</span><br></pre></td></tr></table></figure>
+<p>GCPN中有两个判别器，可以理解为过程判别器与结果判别器，这两个判别器是分别训练的。</p>
+<p>与生成器类似将分子图经过三层GCN后，在经过两层网络得到logits，即判别器结果分布。</p>
+<h3 id="Feedback"><a href="#Feedback" class="headerlink" title="Feedback"></a>Feedback</h3><p>在pposgd_simple_gcn.py的traj_segment_generator()中，这个方法是生成一段状态、动作、奖励、价值序列。</p>
+<p>在GAN的公式中已经可以体现出D与G两者是互相影响的，在训练D网络的同时已经利用了来自G生成的数据，GCPN在生成动作时将<script type="math/tex">- \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script>作为生成过程中的一项奖励，也就是说在执行完一个动作后，得到的奖励为：环境奖励（写在gym内的关于化学性质的）+ 过程判别器奖励 + 结果判别器奖励（如果状态结束了） </p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/03/sicko%20mode/" rel="prev" title="SICKO MODE歌词翻译">
+      <i class="fa fa-chevron-left"></i> SICKO MODE歌词翻译
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="next" title="GCPN源码分析">
+      GCPN源码分析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GCPN%E4%B8%AD%E7%9A%84GAN"><span class="nav-text">GCPN中的GAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GAN"><span class="nav-text">GAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GCPN%E4%B8%AD%E7%9A%84GAN-1"><span class="nav-text">GCPN中的GAN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-text">生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E5%88%AB%E5%99%A8"><span class="nav-text">判别器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feedback"><span class="nav-text">Feedback</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="三儿"
+      src="/images/afei.png">
+  <p class="site-author-name" itemprop="name">三儿</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aoshuqiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aoshuqiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/3255787703" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;3255787703" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=119020305" title="网易云音乐 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;119020305" rel="noopener" target="_blank"><i class="fa fa-music fa-fw"></i>网易云音乐</a>
+      </span>
+  </div>
+
+
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=399222&auto=1&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三儿</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

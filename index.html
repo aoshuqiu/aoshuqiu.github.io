@@ -164,6 +164,200 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">GCPN源码分析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-11 11:00:00 / 修改时间：11:03:08" itemprop="dateCreated datePublished" datetime="2021-03-11T11:00:00+08:00">2021-03-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="GCPN源码分析"><a href="#GCPN源码分析" class="headerlink" title="GCPN源码分析"></a>GCPN源码分析</h1><h2 id="run-molecule-py"><a href="#run-molecule-py" class="headerlink" title="run_molecule.py"></a>run_molecule.py</h2><p>整个程序的入口，主要任务是确定调用时参数、连接各模块</p>
+<ul>
+<li><p>train(args, seed, writer=none)</p>
+<ul>
+<li><p>创建环境：<code>env = gym.make(&#39;molecule-v0&#39;)</code>  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入<code>pip install -e.</code>进行安装，在代码开头需要import gym_molecule 来使用 molecule-v0 环境。</p>
+</li>
+<li><p>定义得出策略方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义用于从观测中得出策略的函数#</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">policy_fn</span>(<span class="params">name, ob_space, ac_space</span>):</span></span><br><span class="line">    <span class="keyword">return</span> gcn_policy.GCNPolicy(name=name, ob_space=ob_space, ac_space=ac_space, atom_type_num=env.atom_type_num,args=args)</span><br></pre></td></tr></table></figure>
+<p>policy_fn，输入name（用于tf scope命名），ob_space，ac_space ，直接返回一个策略类</p>
+</li>
+<li><p>调用pposgd_simple_gcn.learn()开始训练</p></li></ul></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-27 20:29:04" itemprop="dateCreated datePublished" datetime="2021-02-27T20:29:04+08:00">2021-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 00:00:25" itemprop="dateModified" datetime="2021-02-28T00:00:25+08:00">2021-02-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="GCPN中的GAN"><a href="#GCPN中的GAN" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h1><h2 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h2><p>Generative Adversarial Network</p>
+<p><strong>目标：训练高水平的判别器与生成器</strong></p>
+<p>整个过程可以用文物鉴定来理解，判别器对应着鉴定机构，生成器对应造假团伙，样本对应着各种“文物”。这些“文物”中存在着真品国宝与赝品，鉴定机构对这些”文物”也有两种判定：真品与赝品。其中所有国宝都是已经存在的古人的作品是相对静态的，而赝品则由造假团伙源源不断地制作是动态的。feedback: 在鉴定完成后，造假团伙会根据鉴定机构的结果改变策略来生成更以假乱真的作品，鉴定机构也会通过得知文物来自造假团伙来更新自己的判断依据。</p>
+<p>国宝：<script type="math/tex">\{x_i\}^{N}_{i=1}</script> 满足分布<script type="math/tex">P_{data}</script></p>
+<p>赝品：<script type="math/tex">P_g(x:\theta_g)</script> 通常是一个神经网络，x可能来自一个噪声<script type="math/tex">z \sim P_z(z)</script>     ，<script type="math/tex">x=G(z:\theta_g)</script></p>
+<p>因此，训练过程：</p>
+<ul>
+<li><p>鉴定机构：</p>
+<ul>
+<li><p>if x is from <script type="math/tex">P_{data}</script> , then <script type="math/tex">D(x)\uparrow</script>  same as <script type="math/tex">log D(x)\uparrow</script></p>
+</li>
+<li><p>if x is from <script type="math/tex">P_g</script>(z is from <script type="math/tex">P_z</script>) , then <script type="math/tex">D(x)\downarrow</script> same as <script type="math/tex">log(1- D(G(z)))\uparrow</script></p>
+</li>
+<li>therefore <script type="math/tex">\max\limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+<li><p>造假团伙：</p>
+<ul>
+<li>if x is from <script type="math/tex">P_g</script>   , then <script type="math/tex">D(G(z))\uparrow</script>  same as <script type="math/tex">log(1-D(G(z)))\downarrow</script></li>
+<li><script type="math/tex; mode=display">\min \limits_{G} \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+<li><p>总目标：</p>
+<ul>
+<li><script type="math/tex; mode=display">\min \limits_{G} \max \limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li>
+</ul>
+</li>
+</ul>
+<p>最终的最优情况下 <script type="math/tex">P_g = P_d , D_G = 1/2</script> 造假团队水平和古人一样，鉴定机构对造假团队失去鉴定能力。</p>
+<h2 id="GCPN中的GAN-1"><a href="#GCPN中的GAN-1" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h2><h3 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h3><p>GCPN中的生成器是一个图卷积策略生成器，也就是gcn_policy.py中的GCNPolicy类。</p>
+<p>首先将图中结点经过一个嵌入层计算结点嵌入，并进行降维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#嵌入层</span></span><br><span class="line">ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>],<span class="number">8</span>,activation=<span class="literal">None</span>,use_bias=<span class="literal">False</span>,name=<span class="string">&#x27;emb&#x27;</span>) <span class="comment"># embedding layer</span></span><br></pre></td></tr></table></figure>
+<p>之后经过三层GCN层，将邻接矩阵中的边信息加入到结点嵌入中，得到了能代表整个图的结点嵌入。在这个结点嵌入去掉无效结点并加入聚合所有结点的代表整图的一行嵌入，得到emb_node，图嵌入。</p>
+<p>emb_node变成了图的代表，然后只需根据emb_node生成GCPN环境中动作的四元素分布：[是否停止，第一点，第二点，边类型]，</p>
+<p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_stop</p>
+<p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_first 采样得出emb_first</p>
+<p>concat(emb_first,emb_node) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_second 采样得出emb_second</p>
+<p>concat(emb_first,emb_second) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_edge </p>
+<p>从而得出动作分布的logits</p>
+<h3 id="判别器"><a href="#判别器" class="headerlink" title="判别器"></a>判别器</h3><p>判别网络同样在gcn_policy.py中： discriminator_net方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">discriminator_net</span>(<span class="params">ob,args,name=<span class="string">&#x27;d_net&#x27;</span></span>):</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(name,reuse=tf.AUTO_REUSE):</span><br><span class="line">        ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>], <span class="number">8</span>, activation=<span class="literal">None</span>, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;emb&#x27;</span>)  <span class="comment"># embedding layer</span></span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            ob_node = tf.layers.batch_normalization(ob_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], ob_node, args.emb_size, name=<span class="string">&#x27;gcn1&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(args.layer_num_d - <span class="number">2</span>):</span><br><span class="line">            <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">                emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">            emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, name=<span class="string">&#x27;gcn1_&#x27;</span>+str(i+<span class="number">1</span>),aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, is_act=<span class="literal">False</span>, is_normalize=(args.bn == <span class="number">0</span>), name=<span class="string">&#x27;gcn2&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        <span class="comment"># emb_graph = tf.reduce_max(tf.squeeze(emb_node2, axis=1),axis=1)  # B*f</span></span><br><span class="line">        emb_node = tf.layers.dense(emb_node, args.emb_size, activation=tf.nn.relu, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;linear1&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> args.gate_sum_d==<span class="number">1</span>:</span><br><span class="line">            emb_node_gate = tf.layers.dense(emb_node,<span class="number">1</span>,activation=tf.nn.sigmoid,name=<span class="string">&#x27;gate&#x27;</span>)</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node*emb_node_gate, axis=<span class="number">1</span>),axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node, axis=<span class="number">1</span>), axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        logit = tf.layers.dense(emb_graph, <span class="number">1</span>, activation=<span class="literal">None</span>, name=<span class="string">&#x27;linear2&#x27;</span>)</span><br><span class="line">        pred = tf.sigmoid(logit)</span><br><span class="line">        <span class="comment"># pred = tf.layers.dense(emb_graph, 1, activation=None, name=&#x27;linear1&#x27;)</span></span><br><span class="line">        <span class="keyword">return</span> pred,logit</span><br></pre></td></tr></table></figure>
+<p>GCPN中有两个判别器，可以理解为过程判别器与结果判别器，这两个判别器是分别训练的。</p>
+<p>与生成器类似将分子图经过三层GCN后，在经过两层网络得到logits，即判别器结果分布。</p>
+<h3 id="Feedback"><a href="#Feedback" class="headerlink" title="Feedback"></a>Feedback</h3><p>在pposgd_simple_gcn.py的traj_segment_generator()中，这个方法是生成一段状态、动作、奖励、价值序列。</p>
+<p>在GAN的公式中已经可以体现出D与G两者是互相影响的，在训练D网络的同时已经利用了来自G生成的数据，GCPN在生成动作时将<script type="math/tex">- \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script>作为生成过程中的一项奖励，也就是说在执行完一个动作后，得到的奖励为：环境奖励（写在gym内的关于化学性质的）+ 过程判别器奖励 + 结果判别器奖励（如果状态结束了） </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/02/03/sicko%20mode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,7 +389,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-04 00:44:00" itemprop="dateModified" datetime="2021-02-04T00:44:00+08:00">2021-02-04</time>
+                <time title="修改时间：2021-03-11 11:02:23" itemprop="dateModified" datetime="2021-03-11T11:02:23+08:00">2021-03-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,65 +450,15 @@
 <li><p>Young LaFlame, he in sicko mode</p>
 </li>
 <li><p>Travis Scott已经进入狂暴模式了</p>
-<p>LaFlame是Travis Scott的别名</p>
-</li>
-</ul>
-<p>【part II】</p>
-<ul>
-<li><p>Woo, made this here with all the ice on in the booth</p>
-</li>
-<li><p>钻石满身在录歌房录歌，就达到了今天的成就</p>
-</li>
-<li><p>At the gate outside, when they pull up, they get me loose</p>
-</li>
-<li><p>在大门外看到哥几个过来，我就变成了脱缰的马肆无忌惮</p>
-<p>（MV里Travis骑着马也太帅了）</p>
-</li>
-<li><p>Yeah, Jump Out boys, that’s Nike boys, hoppin’ out coupes</p>
-</li>
-<li><p>跳下跑车吧，穿着耐克的小伙们</p>
-</li>
-<li><p>This shit way too big, when we pull up give me the loot</p>
-</li>
-<li><p>这家伙事够大，我们到了就麻溜把东西拿来</p>
-</li>
-<li><p>(Gimme the loot!)</p>
-</li>
-<li><p>把东西拿来！</p>
-<p>这段采样自Biggy的Gimme the loot,</p>
-</li>
-<li><p>Was off the Remy, had a Papoose</p>
-</li>
-<li><p>喝完人头马，更加为所欲为</p>
-<p>Remy Ma 和 Papoose是一对儿夫妻</p>
-</li>
-<li><p>Had to hit my old town to duck the news</p>
-</li>
-<li><p>必须回老家去避避风头</p>
-</li>
-<li><p>Two-four hour on lockdown, we make no moves</p>
-</li>
-<li><p>24小时封锁日程，我们什么都不做</p>
-</li>
-<li><p>Now it’s 4AM and I’m back up poppin’ with the crew</p>
-</li>
-<li><p>现在已经是凌晨四点了，我回去和团队弟兄们继续作乐</p>
-</li>
-<li><p>I just landed in, Chase B mixes pop like Jamba juice</p>
-</li>
-<li><p>闪亮登场，Chase B 做音乐就像喝饮料般简单</p>
-</li>
-<li><p>Different colored chains, see my jeweler really sellin’ fruits</p>
-</li>
-<li><p>我的珠宝链子五光十色，我的珠宝商只卖像水果般的珍品</p>
-</li>
-<li><p>And they chokin’, man, know the crackers wish it was a noose</p>
-</li>
-<li><p>我们都飞高了，那些白人希望我们被扼住脖颈</p>
-<p>chokin 本来有窒息的意思，也有飞叶子的意思，crackers指某些种族主义白人，那些crakers希望他们是因为绳套（noose）而chokin。</p>
-</li>
-</ul>
-
+<p>LaFlame是Travis Scott的别名</p></li></ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/03/sicko%20mode/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -917,161 +1061,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/" class="post-title-link" itemprop="url">课程表问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-06 11:36:47 / 修改时间：13:16:25" itemprop="dateCreated datePublished" datetime="2020-08-06T11:36:47+08:00">2020-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="leetcode-207-课程表"><a href="#leetcode-207-课程表" class="headerlink" title="leetcode 207 课程表"></a>leetcode 207 课程表</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
-<p>你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
-<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
-<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p></blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/04/cs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/04/cs/" class="post-title-link" itemprop="url">计算机系统大作业——Hello的一生</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-04 12:42:24 / 修改时间：15:22:53" itemprop="dateCreated datePublished" datetime="2020-08-04T12:42:24+08:00">2020-08-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="计算机系统大作业——Hello的一生"><a href="#计算机系统大作业——Hello的一生" class="headerlink" title="计算机系统大作业——Hello的一生"></a>计算机系统大作业——Hello的一生</h1><p><strong>摘 要</strong></p>
-<p>  本文以hello.c为例，探寻程序由代码一步步经过预处理、编译、链接、之后成为进程，并被系统进行管理的过程。从而窥探程序由出生到死去的过程中，计算机系统各个部分是如何协调工作的，随着hello.c的一步步变化逐渐理解机器的运行机制。</p>
-<p><strong>关键词：</strong>计算机系统；P2P；程序运行全过程；             </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/04/cs/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1143,7 +1132,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1156,7 +1145,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

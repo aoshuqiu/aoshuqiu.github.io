@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.aoshuqiu.top/"/>
-  <updated>2021-02-03T16:44:00.421Z</updated>
+  <updated>2021-03-11T03:03:08.169Z</updated>
   <id>https://www.aoshuqiu.top/</id>
   
   <author>
@@ -17,25 +17,114 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>SICKO MODE歌词翻译</title>
-    <link href="https://www.aoshuqiu.top/2021/02/03/sicko%20mode/"/>
-    <id>https://www.aoshuqiu.top/2021/02/03/sicko%20mode/</id>
-    <published>2021-02-03T15:26:37.000Z</published>
-    <updated>2021-02-03T16:44:00.421Z</updated>
+    <title>GCPN源码分析</title>
+    <link href="https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    <id>https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</id>
+    <published>2021-03-11T03:00:00.000Z</published>
+    <updated>2021-03-11T03:03:08.169Z</updated>
     
-    <content type="html"><![CDATA[<p>【<strong>Part I</strong>】</p><ul><li><p><strong>Astro, yeah </strong></p></li><li><p><strong>欢迎来到Astroworld</strong></p><p>这首歌出自Travis Scott专辑AstroWorld，名字来自休斯顿的一座废弃主题乐园，他本人也来自休斯顿。</p></li><li><p><strong>Sun is down, freezin’ cold </strong></p></li><li><p><strong>That’s how we already know winter’s here</strong></p></li><li><p><strong>日落西山，冷冽刺骨</strong></p></li><li><p><strong>才知冬日已至</strong></p></li><li><p><strong>My dawg would prolly do it for a Louis belt</strong></p></li><li><p>我的哥们可能只是在为一条LV腰带做事</p></li><li><p>That’s just all he know, he don’t know nothin’ else</p></li><li><p>他眼里那就是一切，别无他物</p></li><li><p>I tried to show ‘em, yeah</p></li><li><p>我试过告诉他更多</p></li><li><p>I tried to show ‘em, yeah, yeah</p></li><li><p>我试过告诉他们更多</p></li><li><p>Gone on you with the pick and roll</p></li><li><p>我一记挡拆掩护Scott顺下</p></li><li><p>Young LaFlame, he in sicko mode</p></li><li><p>Travis Scott已经进入狂暴模式了</p><p>LaFlame是Travis Scott的别名</p></li></ul><p>【part II】</p><ul><li><p>Woo, made this here with all the ice on in the booth</p></li><li><p>钻石满身在录歌房录歌，就达到了今天的成就</p></li><li><p>At the gate outside, when they pull up, they get me loose</p></li><li><p>在大门外看到哥几个过来，我就变成了脱缰的马肆无忌惮</p><p>（MV里Travis骑着马也太帅了）</p></li><li><p>Yeah, Jump Out boys, that’s Nike boys, hoppin’ out coupes</p></li><li><p>跳下跑车吧，穿着耐克的小伙们</p></li><li><p>This shit way too big, when we pull up give me the loot</p></li><li><p>这家伙事够大，我们到了就麻溜把东西拿来</p></li><li><p>(Gimme the loot!)</p></li><li><p>把东西拿来！</p><p>这段采样自Biggy的Gimme the loot,</p></li><li><p>Was off the Remy, had a Papoose</p></li><li><p>喝完人头马，更加为所欲为</p><p>Remy Ma 和 Papoose是一对儿夫妻</p></li><li><p>Had to hit my old town to duck the news</p></li><li><p>必须回老家去避避风头</p></li><li><p>Two-four hour on lockdown, we make no moves</p></li><li><p>24小时封锁日程，我们什么都不做</p></li><li><p>Now it’s 4AM and I’m back up poppin’ with the crew</p></li><li><p>现在已经是凌晨四点了，我回去和团队弟兄们继续作乐</p></li><li><p>I just landed in, Chase B mixes pop like Jamba juice</p></li><li><p>闪亮登场，Chase B 做音乐就像喝饮料般简单</p></li><li><p>Different colored chains, see my jeweler really sellin’ fruits</p></li><li><p>我的珠宝链子五光十色，我的珠宝商只卖像水果般的珍品</p></li><li><p>And they chokin’, man, know the crackers wish it was a noose</p></li><li><p>我们都飞高了，那些白人希望我们被扼住脖颈</p><p>chokin 本来有窒息的意思，也有飞叶子的意思，crackers指某些种族主义白人，那些crakers希望他们是因为绳套（noose）而chokin。</p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="GCPN源码分析"><a href="#GCPN源码分析" class="headerlink" title="GCPN源码分析"></a>GCPN源码分析</h1><h2 id="run-molecule-py"><a href="#run-molecule-py" class="headerlink" title="run_molecule.py"></a>run_molecule.py</h2><p>整个程序的入口，主要任务是确定调用时参数、连接各模块</p><ul><li><p>train(args, seed, writer=none)</p><ul><li><p>创建环境：<code>env = gym.make(&#39;molecule-v0&#39;)</code>  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入<code>pip install -e.</code>进行安装，在代码开头需要import gym_molecule 来使用 molecule-v0 环境。</p></li><li><p>定义得出策略方法：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义用于从观测中得出策略的函数#</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">policy_fn</span>(<span class="params">name, ob_space, ac_space</span>):</span></span><br><span class="line">    <span class="keyword">return</span> gcn_policy.GCNPolicy(name=name, ob_space=ob_space, ac_space=ac_space, atom_type_num=env.atom_type_num,args=args)</span><br></pre></td></tr></table></figure><p>policy_fn，输入name（用于tf scope命名），ob_space，ac_space ，直接返回一个策略类</p></li><li><p>调用pposgd_simple_gcn.learn()开始训练</p><a id="more"></a></li></ul></li><li><p>arg_parser()</p><p>​    定义一个新的argparser对象</p></li><li><p>molecule_arg_parser()</p><p>​    在创建的argparser中加入一系列参数，例如’—dataset’，’—has_d_step’。</p></li><li><p>main()</p><p>​    入口函数，排列参数后调用train（）进行训练</p></li></ul><h2 id="gcn-policy-py"><a href="#gcn-policy-py" class="headerlink" title="gcn_policy.py"></a>gcn_policy.py</h2><ul><li><p>GCN_batch(adj, node_feature, out_channels, is_act=True, is_normalize=False, name=’gcn_simple’, aggregate=”sum”)</p><ul><li>定义具体一个GCN层</li><li>adj: 拉普拉斯规范化邻接矩阵，规范化部分是在gym-molecule环境内完成的 (B,e,n,n) B:batchsize, e:edgesize, n: nodesize</li><li>node_feature: 结点特征矩阵 (B,1,n,d) d:feature dimension</li><li>out_channels: 输出特征维度</li><li>is_act: 要不要用激活函数</li><li>is_normalize: 结果要不要规范化</li><li>name: 本层中trainable变量所在scope名称，相当于一个gcn层的名字</li><li>aggregate: 最终输出要对边类型进行聚合，聚合方式：[sum,mean,concat]</li><li>return: node_embedding (B,1,n,f) gcn后结点嵌入</li></ul></li><li><p>discriminator_net(ob,args,name=’d_net’)</p><ul><li><p>判别网络对gym观测进行判别，判别网络也是先经过三层gcn，之后降维到一维，用逻辑斯特分布判断是否为过程/结果分子。</p></li><li><p>ob: 观测返回的ob，含有adj与node矩阵</p></li><li><p>args：调用程序时的参数，主要用于判断每层后是否要用batch_normalization</p></li><li><p>name: scope name</p></li><li><p>return:     pred:sigmoid分布，logit：逻辑斯特分布中的x</p></li></ul></li></ul><p>class <em>GCNPolicy(object)</em>:</p><ul><li><p>scope: 策略中所有trainable变量所在scope名称</p></li><li><p>_init(self, ob_space, ac_space, kind, atom_type_num, args)</p><ul><li><p>初始化策略类，所有动作生成过程都在这个函数中，最终会生成一个从分布中采样的动作。</p></li><li><p>ob_space,ac_space: env返回的东西，ac_space没用到因为ac是作者指定的</p></li><li>kind: 没用到 </li><li>atom_type_num:  可用原子个数，主要用于蒙版蒙掉脚手架上原子来从已有原子中选边的第一个结点</li><li>args：参数</li></ul></li><li><p>act(self, stochastic, ob):</p><ul><li><p>通过观测ob返回一个采样的动作</p></li><li><p>stochastic： 随机？ 干嘛的 代码中没有调用过, 是一个多余的变量，但他调用act时都将它置为true</p></li></ul></li></ul><h2 id="pposgd-simple-gcn-py"><a href="#pposgd-simple-gcn-py" class="headerlink" title="pposgd_simple_gcn.py"></a>pposgd_simple_gcn.py</h2><ul><li><p>traj_segment_generator(args, pi, env, horizon, stochastic, d_step_func, d_final_func)</p><ul><li>顾名思义，生成一段动作，这一段动作不一定是生成同一个分子的过程，但是都是连续的时间段中的动作，且一开始都是从头生成。</li><li>args: 运行是输入的参数，这个函数中主要用来定义得到判别步骤的奖励的方法。</li><li>pi: 一个GCNPolicy类，待采样的策略</li><li>env: gym环境，这里是molecule-v0</li><li>horizon: 时间段的长度，也就是返回结果中列表的大小</li><li>stochastic: 用于act的参数，同样调用的时候都是true</li><li>d_step_func: 计算中间产物判别奖励的方法</li><li>d_final_func: 计算最终产物判别奖励的方法</li><li>返回用的是yield以便多次生成: horizon：时间段长度，N: episode个数<ul><li>ob_adj: 当前分子图邻接矩阵 horizon</li><li>ob_node: 当前分子图结点特征 horizon</li><li>ac : 在当前分子图条件下的动作 horizon</li><li>prevac: 得到当前分子图之前的动作 horizon</li><li>rew:  当前ob执行ac后得到的奖励 horizon</li><li>vpred: 当前ob的V horizon</li><li>nextvpred: 当前ob执行ac后的ob的V horizon</li><li>news:  如果为true证明该分子图是个新生成的分子 horizon</li><li>ob_adj_final: 这个时间段中最终生成分子的邻接矩阵 N</li><li>ob_node_final: 这个时间段中最终生成分子的结点特征 N</li><li>ep_rets: 时间段中完整episode的奖励return N</li><li>ep_lens: 时间段中完整episode的动作长度 N</li><li>ep_lens_valid: 时间段中完整episode的有效动作长度 N</li><li>ep_final_rew: 时间段中完整episode的进入最终状态的奖励 N</li><li>ep_final_rew_stat：时间段中完整episode的进入最终状态信息 N</li><li>ep_rets_env：时间段中完整episode的环境奖励return N</li><li>ep_rets_d_step： 时间段中完整episode的中间判别奖励return N</li><li>ep_rets_d_final：时间段中完整episode的最终判别奖励return N</li></ul></li></ul></li><li><p>add_vtarg_and_adv(seg, gamma, lam)</p><ul><li>给之前返回的时间段添加vtarg与adv，在此步骤中通过gae评估v与q与adv</li><li>seg: 时间段</li><li>gamma：衰减系数</li><li>lam: GAE参数 在0-1之间</li><li>seg[“adv”]: advantage (Q(ob,ac)-V(ob))</li><li>seg[“tdlamret”]: Q(ob,ac)</li></ul></li><li><p>learn(args, env, policy_fn, timesteps_per_actorbatch, clip_param, entcoeff, optim_epochs, optim_stepsize, optim_batchsize, gamma, lam, max_timesteps=0, max_episodes=0, max_iters=0, max_seconds=0, callback=None, adam_epsilon=1e-5,schedule=’constant’,writer = None)</p><ul><li>主要函数，开始训练，并输出最终生成分子</li><li>args: 运行参数</li><li>env: gym环境</li><li>policy_fn: 策略生成函数</li><li>clip_param: PPO超参裁剪参数</li><li>entcoeff: 在PPOloss计算中要用到pi分布的熵，系统希望actor可以有更多的选择，因此熵越大越好，但这个熵也有限度，通过entcoeff(熵权系数)来控制熵的影响程度。</li><li>optim_epochs: 优化epoch数</li><li>optim_stepsize: 优化梯度方向步长</li><li>optim_batchsize: 优化batch大小</li><li>gamma, lam: 用于adv评估，上一个函数的参数</li><li>max_timesteps=0, max_episodes=0, max_iters=0, max_seconds=0  时间控制</li><li>callback: 回调函数</li><li>adam_epsilon=1e-5 :  变量adam优化系数</li><li>schedule: 决定步长是常量还是随着时间递减</li><li>writer：输出信息</li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;GCPN源码分析&quot;&gt;&lt;a href=&quot;#GCPN源码分析&quot; class=&quot;headerlink&quot; title=&quot;GCPN源码分析&quot;&gt;&lt;/a&gt;GCPN源码分析&lt;/h1&gt;&lt;h2 id=&quot;run-molecule-py&quot;&gt;&lt;a href=&quot;#run-molecule-py&quot; class=&quot;headerlink&quot; title=&quot;run_molecule.py&quot;&gt;&lt;/a&gt;run_molecule.py&lt;/h2&gt;&lt;p&gt;整个程序的入口，主要任务是确定调用时参数、连接各模块&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;train(args, seed, writer=none)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;创建环境：&lt;code&gt;env = gym.make(&amp;#39;molecule-v0&amp;#39;)&lt;/code&gt;  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入&lt;code&gt;pip install -e.&lt;/code&gt;进行安装，在代码开头需要import gym_molecule 来使用 molecule-v0 环境。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;定义得出策略方法：&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#定义用于从观测中得出策略的函数#&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;policy_fn&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;name, ob_space, ac_space&lt;/span&gt;):&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; gcn_policy.GCNPolicy(name=name, ob_space=ob_space, ac_space=ac_space, atom_type_num=env.atom_type_num,args=args)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;policy_fn，输入name（用于tf scope命名），ob_space，ac_space ，直接返回一个策略类&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;调用pposgd_simple_gcn.learn()开始训练&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="学习" scheme="https://www.aoshuqiu.top/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="算法" scheme="https://www.aoshuqiu.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="毕设" scheme="https://www.aoshuqiu.top/tags/%E6%AF%95%E8%AE%BE/"/>
+    
+      <category term="GCPN" scheme="https://www.aoshuqiu.top/tags/GCPN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title></title>
+    <link href="https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/"/>
+    <id>https://www.aoshuqiu.top/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/</id>
+    <published>2021-02-27T12:29:04.850Z</published>
+    <updated>2021-02-27T16:00:25.011Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="GCPN中的GAN"><a href="#GCPN中的GAN" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h1><h2 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h2><p>Generative Adversarial Network</p><p><strong>目标：训练高水平的判别器与生成器</strong></p><p>整个过程可以用文物鉴定来理解，判别器对应着鉴定机构，生成器对应造假团伙，样本对应着各种“文物”。这些“文物”中存在着真品国宝与赝品，鉴定机构对这些”文物”也有两种判定：真品与赝品。其中所有国宝都是已经存在的古人的作品是相对静态的，而赝品则由造假团伙源源不断地制作是动态的。feedback: 在鉴定完成后，造假团伙会根据鉴定机构的结果改变策略来生成更以假乱真的作品，鉴定机构也会通过得知文物来自造假团伙来更新自己的判断依据。</p><p>国宝：<script type="math/tex">\{x_i\}^{N}_{i=1}</script> 满足分布<script type="math/tex">P_{data}</script></p><p>赝品：<script type="math/tex">P_g(x:\theta_g)</script> 通常是一个神经网络，x可能来自一个噪声<script type="math/tex">z \sim P_z(z)</script>     ，<script type="math/tex">x=G(z:\theta_g)</script></p><p>因此，训练过程：</p><ul><li><p>鉴定机构：</p><ul><li><p>if x is from <script type="math/tex">P_{data}</script> , then <script type="math/tex">D(x)\uparrow</script>  same as <script type="math/tex">log D(x)\uparrow</script></p></li><li><p>if x is from <script type="math/tex">P_g</script>(z is from <script type="math/tex">P_z</script>) , then <script type="math/tex">D(x)\downarrow</script> same as <script type="math/tex">log(1- D(G(z)))\uparrow</script></p></li><li>therefore <script type="math/tex">\max\limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li></ul></li><li><p>造假团伙：</p><ul><li>if x is from <script type="math/tex">P_g</script>   , then <script type="math/tex">D(G(z))\uparrow</script>  same as <script type="math/tex">log(1-D(G(z)))\downarrow</script></li><li><script type="math/tex; mode=display">\min \limits_{G} \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script></li></ul></li><li><p>总目标：</p><ul><li><script type="math/tex; mode=display">\min \limits_{G} \max \limits_{D} \mathbb E_{x \sim P_{data}}[logD(x)]+\mathbb E_{z\sim P_z}[log(1-D(G(z)))]</script></li></ul></li></ul><p>最终的最优情况下 <script type="math/tex">P_g = P_d , D_G = 1/2</script> 造假团队水平和古人一样，鉴定机构对造假团队失去鉴定能力。</p><h2 id="GCPN中的GAN-1"><a href="#GCPN中的GAN-1" class="headerlink" title="GCPN中的GAN"></a>GCPN中的GAN</h2><h3 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h3><p>GCPN中的生成器是一个图卷积策略生成器，也就是gcn_policy.py中的GCNPolicy类。</p><p>首先将图中结点经过一个嵌入层计算结点嵌入，并进行降维</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#嵌入层</span></span><br><span class="line">ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>],<span class="number">8</span>,activation=<span class="literal">None</span>,use_bias=<span class="literal">False</span>,name=<span class="string">&#x27;emb&#x27;</span>) <span class="comment"># embedding layer</span></span><br></pre></td></tr></table></figure><p>之后经过三层GCN层，将邻接矩阵中的边信息加入到结点嵌入中，得到了能代表整个图的结点嵌入。在这个结点嵌入去掉无效结点并加入聚合所有结点的代表整图的一行嵌入，得到emb_node，图嵌入。</p><p>emb_node变成了图的代表，然后只需根据emb_node生成GCPN环境中动作的四元素分布：[是否停止，第一点，第二点，边类型]，</p><p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_stop</p><p>emb_node <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_first 采样得出emb_first</p><p>concat(emb_first,emb_node) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_second 采样得出emb_second</p><p>concat(emb_first,emb_second) <script type="math/tex">\rightarrow</script> 两层网络 <script type="math/tex">\rightarrow</script> logits_edge </p><p>从而得出动作分布的logits</p><h3 id="判别器"><a href="#判别器" class="headerlink" title="判别器"></a>判别器</h3><p>判别网络同样在gcn_policy.py中： discriminator_net方法：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">discriminator_net</span>(<span class="params">ob,args,name=<span class="string">&#x27;d_net&#x27;</span></span>):</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(name,reuse=tf.AUTO_REUSE):</span><br><span class="line">        ob_node = tf.layers.dense(ob[<span class="string">&#x27;node&#x27;</span>], <span class="number">8</span>, activation=<span class="literal">None</span>, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;emb&#x27;</span>)  <span class="comment"># embedding layer</span></span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            ob_node = tf.layers.batch_normalization(ob_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], ob_node, args.emb_size, name=<span class="string">&#x27;gcn1&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(args.layer_num_d - <span class="number">2</span>):</span><br><span class="line">            <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">                emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">            emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, name=<span class="string">&#x27;gcn1_&#x27;</span>+str(i+<span class="number">1</span>),aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        emb_node = GCN_batch(ob[<span class="string">&#x27;adj&#x27;</span>], emb_node, args.emb_size, is_act=<span class="literal">False</span>, is_normalize=(args.bn == <span class="number">0</span>), name=<span class="string">&#x27;gcn2&#x27;</span>,aggregate=args.gcn_aggregate)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line">        <span class="comment"># emb_graph = tf.reduce_max(tf.squeeze(emb_node2, axis=1),axis=1)  # B*f</span></span><br><span class="line">        emb_node = tf.layers.dense(emb_node, args.emb_size, activation=tf.nn.relu, use_bias=<span class="literal">False</span>, name=<span class="string">&#x27;linear1&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> args.bn==<span class="number">1</span>:</span><br><span class="line">            emb_node = tf.layers.batch_normalization(emb_node,axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> args.gate_sum_d==<span class="number">1</span>:</span><br><span class="line">            emb_node_gate = tf.layers.dense(emb_node,<span class="number">1</span>,activation=tf.nn.sigmoid,name=<span class="string">&#x27;gate&#x27;</span>)</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node*emb_node_gate, axis=<span class="number">1</span>),axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            emb_graph = tf.reduce_sum(tf.squeeze(emb_node, axis=<span class="number">1</span>), axis=<span class="number">1</span>)  <span class="comment"># B*f</span></span><br><span class="line">        logit = tf.layers.dense(emb_graph, <span class="number">1</span>, activation=<span class="literal">None</span>, name=<span class="string">&#x27;linear2&#x27;</span>)</span><br><span class="line">        pred = tf.sigmoid(logit)</span><br><span class="line">        <span class="comment"># pred = tf.layers.dense(emb_graph, 1, activation=None, name=&#x27;linear1&#x27;)</span></span><br><span class="line">        <span class="keyword">return</span> pred,logit</span><br></pre></td></tr></table></figure><p>GCPN中有两个判别器，可以理解为过程判别器与结果判别器，这两个判别器是分别训练的。</p><p>与生成器类似将分子图经过三层GCN后，在经过两层网络得到logits，即判别器结果分布。</p><h3 id="Feedback"><a href="#Feedback" class="headerlink" title="Feedback"></a>Feedback</h3><p>在pposgd_simple_gcn.py的traj_segment_generator()中，这个方法是生成一段状态、动作、奖励、价值序列。</p><p>在GAN的公式中已经可以体现出D与G两者是互相影响的，在训练D网络的同时已经利用了来自G生成的数据，GCPN在生成动作时将<script type="math/tex">- \mathbb E_{z \sim P_z}[log(1-D(G(z)))]</script>作为生成过程中的一项奖励，也就是说在执行完一个动作后，得到的奖励为：环境奖励（写在gym内的关于化学性质的）+ 过程判别器奖励 + 结果判别器奖励（如果状态结束了） </p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;【&lt;strong&gt;Part I&lt;/strong&gt;】&lt;/p&gt;
+        &lt;h1 id=&quot;GCPN中的GAN&quot;&gt;&lt;a href=&quot;#GCPN中的GAN&quot; class=&quot;headerlink&quot; title=&quot;GCPN中的GAN&quot;&gt;&lt;/a&gt;GCPN中的GAN&lt;/h1&gt;&lt;h2 id=&quot;GAN&quot;&gt;&lt;a href=&quot;#GAN&quot; class=&quot;headerlink
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>SICKO MODE歌词翻译</title>
+    <link href="https://www.aoshuqiu.top/2021/02/03/sicko%20mode/"/>
+    <id>https://www.aoshuqiu.top/2021/02/03/sicko%20mode/</id>
+    <published>2021-02-03T15:26:37.000Z</published>
+    <updated>2021-03-11T03:02:23.313Z</updated>
+    
+    <content type="html"><![CDATA[<p>【<strong>Part I</strong>】</p><ul><li><p><strong>Astro, yeah </strong></p></li><li><p><strong>欢迎来到Astroworld</strong></p><p>这首歌出自Travis Scott专辑AstroWorld，名字来自休斯顿的一座废弃主题乐园，他本人也来自休斯顿。</p></li><li><p><strong>Sun is down, freezin’ cold </strong></p></li><li><p><strong>That’s how we already know winter’s here</strong></p></li><li><p><strong>日落西山，冷冽刺骨</strong></p></li><li><p><strong>才知冬日已至</strong></p></li><li><p><strong>My dawg would prolly do it for a Louis belt</strong></p></li><li><p>我的哥们可能只是在为一条LV腰带做事</p></li><li><p>That’s just all he know, he don’t know nothin’ else</p></li><li><p>他眼里那就是一切，别无他物</p></li><li><p>I tried to show ‘em, yeah</p></li><li><p>我试过告诉他更多</p></li><li><p>I tried to show ‘em, yeah, yeah</p></li><li><p>我试过告诉他们更多</p></li><li><p>Gone on you with the pick and roll</p></li><li><p>我一记挡拆掩护Scott顺下</p></li><li><p>Young LaFlame, he in sicko mode</p></li><li><p>Travis Scott已经进入狂暴模式了</p><p>LaFlame是Travis Scott的别名</p><a id="more"></a></li></ul><p>【part II】</p><ul><li><p>Woo, made this here with all the ice on in the booth</p></li><li><p>钻石满身在录歌房录歌，就达到了今天的成就</p></li><li><p>At the gate outside, when they pull up, they get me loose</p></li><li><p>在大门外看到哥几个过来，我就变成了脱缰的马肆无忌惮</p><p>（MV里Travis骑着马也太帅了）</p></li><li><p>Yeah, Jump Out boys, that’s Nike boys, hoppin’ out coupes</p></li><li><p>跳下跑车吧，穿着耐克的小伙们</p></li><li><p>This shit way too big, when we pull up give me the loot</p></li><li><p>这家伙事够大，我们到了就麻溜把东西拿来</p></li><li><p>(Gimme the loot!)</p></li><li><p>把东西拿来！</p><p>这段采样自Biggy的Gimme the loot,</p></li><li><p>Was off the Remy, had a Papoose</p></li><li><p>喝完人头马，更加为所欲为</p><p>Remy Ma 和 Papoose是一对儿夫妻</p></li><li><p>Had to hit my old town to duck the news</p></li><li><p>必须回老家去避避风头</p></li><li><p>Two-four hour on lockdown, we make no moves</p></li><li><p>24小时封锁日程，我们什么都不做</p></li><li><p>Now it’s 4AM and I’m back up poppin’ with the crew</p></li><li><p>现在已经是凌晨四点了，我回去和团队弟兄们继续作乐</p></li><li><p>I just landed in, Chase B mixes pop like Jamba juice</p></li><li><p>闪亮登场，Chase B 做音乐就像喝饮料般简单</p></li><li><p>Different colored chains, see my jeweler really sellin’ fruits</p></li><li><p>我的珠宝链子五光十色，我的珠宝商只卖像水果般的珍品</p></li><li><p>And they chokin’, man, know the crackers wish it was a noose</p></li><li><p>我们都飞高了，那些白人希望我们被扼住脖颈</p><p>chokin 本来有窒息的意思，也有飞叶子的意思，crackers指某些种族主义白人，那些crakers希望他们是因为绳套（noose）而chokin。</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;【&lt;strong&gt;Part I&lt;/strong&gt;】&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;Astro, yeah &lt;/strong&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;欢迎来到Astroworld&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;这首歌出自Trav
-      
+&lt;p&gt;这首歌出自Travis Scott专辑AstroWorld，名字来自休斯顿的一座废弃主题乐园，他本人也来自休斯顿。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Sun is down, freezin’ cold &lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;That’s how we already know winter’s here&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;日落西山，冷冽刺骨&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;才知冬日已至&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;My dawg would prolly do it for a Louis belt&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;我的哥们可能只是在为一条LV腰带做事&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;That’s just all he know, he don’t know nothin’ else&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;他眼里那就是一切，别无他物&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I tried to show ‘em, yeah&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;我试过告诉他更多&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I tried to show ‘em, yeah, yeah&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;我试过告诉他们更多&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Gone on you with the pick and roll&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;我一记挡拆掩护Scott顺下&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Young LaFlame, he in sicko mode&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Travis Scott已经进入狂暴模式了&lt;/p&gt;
+&lt;p&gt;LaFlame是Travis Scott的别名&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
     
     </summary>
     

@@ -22,22 +22,22 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Morris中序遍历中序遍历二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。 这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点">
+  <meta name="description" content="GCPN源码分析run_molecule.py整个程序的入口，主要任务是确定调用时参数、连接各模块  train(args, seed, writer&#x3D;none)  创建环境：env &#x3D; gym.make(&#39;molecule-v0&#39;)  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入pip install -e.进行安装，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二叉树遍历-Morris中序遍历">
-<meta property="og:url" content="https://www.aoshuqiu.top/2020/08/08/leetcode-99/index.html">
+<meta property="og:title" content="GCPN源码分析">
+<meta property="og:url" content="https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="Morris中序遍历中序遍历二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。 这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点">
+<meta property="og:description" content="GCPN源码分析run_molecule.py整个程序的入口，主要任务是确定调用时参数、连接各模块  train(args, seed, writer&#x3D;none)  创建环境：env &#x3D; gym.make(&#39;molecule-v0&#39;)  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入pip install -e.进行安装，">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-08-08T09:42:36.000Z">
-<meta property="article:modified_time" content="2020-08-08T13:08:55.617Z">
+<meta property="article:published_time" content="2021-03-11T03:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-11T03:03:08.169Z">
 <meta property="article:author" content="三儿">
-<meta property="article:tag" content="leetcode">
 <meta property="article:tag" content="算法">
-<meta property="article:tag" content="二叉树">
+<meta property="article:tag" content="毕设">
+<meta property="article:tag" content="GCPN">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://www.aoshuqiu.top/2020/08/08/leetcode-99/">
+<link rel="canonical" href="https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>二叉树遍历-Morris中序遍历 | 3号列车</title>
+  <title>GCPN源码分析 | 3号列车</title>
   
 
 
@@ -172,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/08/leetcode-99/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -185,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          二叉树遍历-Morris中序遍历
+          GCPN源码分析
         </h1>
 
         <div class="post-meta">
@@ -196,7 +196,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-08 17:42:36 / 修改时间：21:08:55" itemprop="dateCreated datePublished" datetime="2020-08-08T17:42:36+08:00">2020-08-08</time>
+              <time title="创建时间：2021-03-11 11:00:00 / 修改时间：11:03:08" itemprop="dateCreated datePublished" datetime="2021-03-11T11:00:00+08:00">2021-03-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,44 +219,148 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="Morris中序遍历"><a href="#Morris中序遍历" class="headerlink" title="Morris中序遍历"></a>Morris中序遍历</h2><h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。</p>
-<p>这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点）。</p>
-<p>然而，存在一个<strong>常数空间</strong>算法来解决这个问题：</p>
-<h3 id="Morris-遍历"><a href="#Morris-遍历" class="headerlink" title="Morris 遍历"></a>Morris 遍历</h3><a id="more"></a>
-<p>Morris遍历算法只需要维护一个节点$pred$，它代表最终遍历序列中的前序节点。</p>
-<p>算法的整体步骤如下：（假设当前遍历到的节点为$x$）</p>
+        <h1 id="GCPN源码分析"><a href="#GCPN源码分析" class="headerlink" title="GCPN源码分析"></a>GCPN源码分析</h1><h2 id="run-molecule-py"><a href="#run-molecule-py" class="headerlink" title="run_molecule.py"></a>run_molecule.py</h2><p>整个程序的入口，主要任务是确定调用时参数、连接各模块</p>
 <ul>
-<li>若$x$无左孩子，则可以将$x$输出，即$pred = x$,之后遍历$x$的右孩子。</li>
-<li>若$x$有左孩子，则先寻找x左子树上的最右节点（也就是$x$在中序遍历中的前序节点），记为$predecessor$。其中：<ul>
-<li>若$predecessor$的右孩子为空，则将它的右孩子指向$x$,之后遍历$x$的左孩子。</li>
-<li>若$predecessor$的右孩子不为空，它只能为$x$，则说明此时是第二次遍历节点$x$（即之前进行过上一步）, 因此将$predecessor$的右孩子置为空，输出$x$即$pred=x$，之后遍历$x$的右孩子</li>
+<li><p>train(args, seed, writer=none)</p>
+<ul>
+<li><p>创建环境：<code>env = gym.make(&#39;molecule-v0&#39;)</code>  这个环境也是源码中定义的，需要安装库gym_molecule，在gym-molecule文件夹内命令行输入<code>pip install -e.</code>进行安装，在代码开头需要import gym_molecule 来使用 molecule-v0 环境。</p>
+</li>
+<li><p>定义得出策略方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义用于从观测中得出策略的函数#</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">policy_fn</span>(<span class="params">name, ob_space, ac_space</span>):</span></span><br><span class="line">    <span class="keyword">return</span> gcn_policy.GCNPolicy(name=name, ob_space=ob_space, ac_space=ac_space, atom_type_num=env.atom_type_num,args=args)</span><br></pre></td></tr></table></figure>
+<p>policy_fn，输入name（用于tf scope命名），ob_space，ac_space ，直接返回一个策略类</p>
+</li>
+<li><p>调用pposgd_simple_gcn.learn()开始训练</p>
+<a id="more"></a>
+</li>
 </ul>
 </li>
-<li>重复上述操作，直至访问完整棵树</li>
+<li><p>arg_parser()</p>
+<p>​    定义一个新的argparser对象</p>
+</li>
+<li><p>molecule_arg_parser()</p>
+<p>​    在创建的argparser中加入一系列参数，例如’—dataset’，’—has_d_step’。</p>
+</li>
+<li><p>main()</p>
+<p>​    入口函数，排列参数后调用train（）进行训练</p>
+</li>
 </ul>
-<p><strong>算法理解：</strong></p>
-<p>改变$predecessor$的右孩子，使其指向$x$，便于遍历左子树后能遍历回节点$x$。每次条件判断后只遍历一个子节点，相当于将树形结构变成了线性结构，通过遍历每个节点2次来降低算法的空间复杂度。</p>
-<p>时间复杂度：$O(2N) = O(N)$</p>
-<p>空间复杂度：$O(1)$</p>
-<h3 id="leetcode-99-恢复二叉搜索树"><a href="#leetcode-99-恢复二叉搜索树" class="headerlink" title="leetcode 99 恢复二叉搜索树"></a>leetcode 99 恢复二叉搜索树</h3><p>二叉搜索树中的两个节点被错误地交换。</p>
-<p>请在不改变其结构的情况下，恢复这棵树。</p>
-<p>示例 1:</p>
-<p>输入: [1,3,null,null,2]</p>
-<p>   1<br>  /<br> 3<br>  \<br>   2</p>
-<p>输出: [3,1,null,null,2]</p>
-<p>   3<br>  /<br> 1<br>  \<br>   2</p>
-<p>示例 2:</p>
-<p>输入: [3,1,4,null,null,2]</p>
-<p>  3<br> / \<br>1   4<br>   /<br>  2</p>
-<p>输出: [2,1,4,null,null,3]</p>
-<p>  2<br> / \<br>1   4<br>   /<br>  3</p>
-<p>进阶:</p>
+<h2 id="gcn-policy-py"><a href="#gcn-policy-py" class="headerlink" title="gcn_policy.py"></a>gcn_policy.py</h2><ul>
+<li><p>GCN_batch(adj, node_feature, out_channels, is_act=True, is_normalize=False, name=’gcn_simple’, aggregate=”sum”)</p>
 <ul>
-<li>使用 O(n) 空间复杂度的解法很容易实现。</li>
-<li>你能想出一个只使用常数空间的解决方案吗？</li>
+<li>定义具体一个GCN层</li>
+<li>adj: 拉普拉斯规范化邻接矩阵，规范化部分是在gym-molecule环境内完成的 (B,e,n,n) B:batchsize, e:edgesize, n: nodesize</li>
+<li>node_feature: 结点特征矩阵 (B,1,n,d) d:feature dimension</li>
+<li>out_channels: 输出特征维度</li>
+<li>is_act: 要不要用激活函数</li>
+<li>is_normalize: 结果要不要规范化</li>
+<li>name: 本层中trainable变量所在scope名称，相当于一个gcn层的名字</li>
+<li>aggregate: 最终输出要对边类型进行聚合，聚合方式：[sum,mean,concat]</li>
+<li>return: node_embedding (B,1,n,f) gcn后结点嵌入</li>
 </ul>
-<p>写的时候有点着急，代码有点乱</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recoverTree</span>(<span class="params">self, root: TreeNode</span>) -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Do not return anything, modify root in-place instead.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        wrongNode=[]</span><br><span class="line">        pred = <span class="literal">None</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">morrisInorder</span>(<span class="params">root</span>):</span></span><br><span class="line">            <span class="keyword">nonlocal</span> pred</span><br><span class="line">            <span class="keyword">if</span> root.left:</span><br><span class="line">                predecessor = root.left</span><br><span class="line">                <span class="keyword">while</span> predecessor.right <span class="keyword">and</span> predecessor.right!=root: predecessor = predecessor.right</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> predecessor.right:</span><br><span class="line">                    predecessor.right = root</span><br><span class="line">                    morrisInorder(root.left)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> pred <span class="keyword">and</span> pred.val &gt; root.val:</span><br><span class="line">                        wrongNode.append([pred,root])</span><br><span class="line">                    predecessor.right = <span class="literal">None</span></span><br><span class="line">                    pred=root</span><br><span class="line">                    <span class="keyword">if</span> root.right:</span><br><span class="line">                        morrisInorder(root.right)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> pred <span class="keyword">and</span> pred.val &gt; root.val:</span><br><span class="line">                    wrongNode.append([pred,root])</span><br><span class="line">                pred=root</span><br><span class="line">                <span class="keyword">if</span> root.right:</span><br><span class="line">                    morrisInorder(root.right)    </span><br><span class="line">        morrisInorder(root)</span><br><span class="line">        <span class="keyword">if</span> len(wrongNode)==<span class="number">1</span>:</span><br><span class="line">            temp = wrongNode[<span class="number">0</span>][<span class="number">1</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">1</span>].val = wrongNode[<span class="number">0</span>][<span class="number">0</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">0</span>].val = temp</span><br><span class="line">        <span class="keyword">if</span> len(wrongNode)==<span class="number">2</span>:</span><br><span class="line">            temp = wrongNode[<span class="number">0</span>][<span class="number">0</span>].val</span><br><span class="line">            wrongNode[<span class="number">0</span>][<span class="number">0</span>].val = wrongNode[<span class="number">1</span>][<span class="number">1</span>].val</span><br><span class="line">            wrongNode[<span class="number">1</span>][<span class="number">1</span>].val = temp</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>discriminator_net(ob,args,name=’d_net’)</p>
+<ul>
+<li><p>判别网络对gym观测进行判别，判别网络也是先经过三层gcn，之后降维到一维，用逻辑斯特分布判断是否为过程/结果分子。</p>
+</li>
+<li><p>ob: 观测返回的ob，含有adj与node矩阵</p>
+</li>
+<li><p>args：调用程序时的参数，主要用于判断每层后是否要用batch_normalization</p>
+</li>
+<li><p>name: scope name</p>
+</li>
+<li><p>return:     pred:sigmoid分布，logit：逻辑斯特分布中的x</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>class <em>GCNPolicy(object)</em>:</p>
+<ul>
+<li><p>scope: 策略中所有trainable变量所在scope名称</p>
+</li>
+<li><p>_init(self, ob_space, ac_space, kind, atom_type_num, args)</p>
+<ul>
+<li><p>初始化策略类，所有动作生成过程都在这个函数中，最终会生成一个从分布中采样的动作。</p>
+</li>
+<li><p>ob_space,ac_space: env返回的东西，ac_space没用到因为ac是作者指定的</p>
+</li>
+<li>kind: 没用到 </li>
+<li>atom_type_num:  可用原子个数，主要用于蒙版蒙掉脚手架上原子来从已有原子中选边的第一个结点</li>
+<li>args：参数</li>
+</ul>
+</li>
+<li><p>act(self, stochastic, ob):</p>
+<ul>
+<li><p>通过观测ob返回一个采样的动作</p>
+</li>
+<li><p>stochastic： 随机？ 干嘛的 代码中没有调用过, 是一个多余的变量，但他调用act时都将它置为true</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="pposgd-simple-gcn-py"><a href="#pposgd-simple-gcn-py" class="headerlink" title="pposgd_simple_gcn.py"></a>pposgd_simple_gcn.py</h2><ul>
+<li><p>traj_segment_generator(args, pi, env, horizon, stochastic, d_step_func, d_final_func)</p>
+<ul>
+<li>顾名思义，生成一段动作，这一段动作不一定是生成同一个分子的过程，但是都是连续的时间段中的动作，且一开始都是从头生成。</li>
+<li>args: 运行是输入的参数，这个函数中主要用来定义得到判别步骤的奖励的方法。</li>
+<li>pi: 一个GCNPolicy类，待采样的策略</li>
+<li>env: gym环境，这里是molecule-v0</li>
+<li>horizon: 时间段的长度，也就是返回结果中列表的大小</li>
+<li>stochastic: 用于act的参数，同样调用的时候都是true</li>
+<li>d_step_func: 计算中间产物判别奖励的方法</li>
+<li>d_final_func: 计算最终产物判别奖励的方法</li>
+<li>返回用的是yield以便多次生成: horizon：时间段长度，N: episode个数<ul>
+<li>ob_adj: 当前分子图邻接矩阵 horizon</li>
+<li>ob_node: 当前分子图结点特征 horizon</li>
+<li>ac : 在当前分子图条件下的动作 horizon</li>
+<li>prevac: 得到当前分子图之前的动作 horizon</li>
+<li>rew:  当前ob执行ac后得到的奖励 horizon</li>
+<li>vpred: 当前ob的V horizon</li>
+<li>nextvpred: 当前ob执行ac后的ob的V horizon</li>
+<li>news:  如果为true证明该分子图是个新生成的分子 horizon</li>
+<li>ob_adj_final: 这个时间段中最终生成分子的邻接矩阵 N</li>
+<li>ob_node_final: 这个时间段中最终生成分子的结点特征 N</li>
+<li>ep_rets: 时间段中完整episode的奖励return N</li>
+<li>ep_lens: 时间段中完整episode的动作长度 N</li>
+<li>ep_lens_valid: 时间段中完整episode的有效动作长度 N</li>
+<li>ep_final_rew: 时间段中完整episode的进入最终状态的奖励 N</li>
+<li>ep_final_rew_stat：时间段中完整episode的进入最终状态信息 N</li>
+<li>ep_rets_env：时间段中完整episode的环境奖励return N</li>
+<li>ep_rets_d_step： 时间段中完整episode的中间判别奖励return N</li>
+<li>ep_rets_d_final：时间段中完整episode的最终判别奖励return N</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>add_vtarg_and_adv(seg, gamma, lam)</p>
+<ul>
+<li>给之前返回的时间段添加vtarg与adv，在此步骤中通过gae评估v与q与adv</li>
+<li>seg: 时间段</li>
+<li>gamma：衰减系数</li>
+<li>lam: GAE参数 在0-1之间</li>
+<li>seg[“adv”]: advantage (Q(ob,ac)-V(ob))</li>
+<li>seg[“tdlamret”]: Q(ob,ac)</li>
+</ul>
+</li>
+<li><p>learn(args, env, policy_fn, timesteps_per_actorbatch, clip_param, entcoeff, optim_epochs, optim_stepsize, optim_batchsize, gamma, lam, max_timesteps=0, max_episodes=0, max_iters=0, max_seconds=0, callback=None, adam_epsilon=1e-5,schedule=’constant’,writer = None)</p>
+<ul>
+<li>主要函数，开始训练，并输出最终生成分子</li>
+<li>args: 运行参数</li>
+<li>env: gym环境</li>
+<li>policy_fn: 策略生成函数</li>
+<li>clip_param: PPO超参裁剪参数</li>
+<li>entcoeff: 在PPOloss计算中要用到pi分布的熵，系统希望actor可以有更多的选择，因此熵越大越好，但这个熵也有限度，通过entcoeff(熵权系数)来控制熵的影响程度。</li>
+<li>optim_epochs: 优化epoch数</li>
+<li>optim_stepsize: 优化梯度方向步长</li>
+<li>optim_batchsize: 优化batch大小</li>
+<li>gamma, lam: 用于adv评估，上一个函数的参数</li>
+<li>max_timesteps=0, max_episodes=0, max_iters=0, max_seconds=0  时间控制</li>
+<li>callback: 回调函数</li>
+<li>adam_epsilon=1e-5 :  变量adam优化系数</li>
+<li>schedule: 决定步长是常量还是随着时间递减</li>
+<li>writer：输出信息</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -285,9 +389,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
               <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
-              <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"># 二叉树</a>
+              <a href="/tags/%E6%AF%95%E8%AE%BE/" rel="tag"># 毕设</a>
+              <a href="/tags/GCPN/" rel="tag"># GCPN</a>
           </div>
 
         
@@ -296,13 +400,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/06/leetcode-336/" rel="prev" title="leetcode 336 回文对">
-      <i class="fa fa-chevron-left"></i> leetcode 336 回文对
+    <a href="/2021/02/27/GCPN%E4%B8%AD%E7%9A%84GAN/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/01/13/policy%20gradient/" rel="next" title="策略梯度方法推导">
-      策略梯度方法推导 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -361,7 +462,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Morris%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">Morris中序遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-text">中序遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Morris-%E9%81%8D%E5%8E%86"><span class="nav-text">Morris 遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#leetcode-99-%E6%81%A2%E5%A4%8D%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-text">leetcode 99 恢复二叉搜索树</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">GCPN源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#run-molecule-py"><span class="nav-text">run_molecule.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcn-policy-py"><span class="nav-text">gcn_policy.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pposgd-simple-gcn-py"><span class="nav-text">pposgd_simple_gcn.py</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
