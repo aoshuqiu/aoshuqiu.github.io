@@ -16,13 +16,6 @@
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/2021/03/19/rdkit/</loc>
-    
-    <lastmod>2021-03-19</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.aoshuqiu.top/2021/03/11/GCPN%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     
     <lastmod>2021-03-11</lastmod>
@@ -151,27 +144,6 @@
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2021-03-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.aoshuqiu.top/tags/mujoco/</loc>
-    <lastmod>2021-03-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.aoshuqiu.top/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2021-03-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.aoshuqiu.top/tags/%E6%AF%95%E8%AE%BE/</loc>
     <lastmod>2021-03-23</lastmod>
     <changefreq>daily</changefreq>
@@ -187,6 +159,27 @@
   
   <url>
     <loc>https://www.aoshuqiu.top/tags/GCPN/</loc>
+    <lastmod>2021-03-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2021-03-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/mujoco/</loc>
+    <lastmod>2021-03-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2021-03-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
