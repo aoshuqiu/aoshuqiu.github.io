@@ -22,25 +22,19 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="PPOTRPO的最终替代函数为： L^{CPI}(\theta)&#x3D;\mathbb{E}_t\bigg[ \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }A_t\bigg]因为用到了重要性采样，保留了之前策略的动作与状态分布，CPI（Conservation Policy Iteration）保留策略迭代。 记概率比值$r_">
+  <meta name="description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。 预备知识 X与Y都为集合。那么，Id_x表示X上的恒等关系，2^X表示X的子集集合，X\backslash Y 表示集合\left\{x|x\in X,x\notin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PPO">
-<meta property="og:url" content="https://www.aoshuqiu.top/2021/01/19/PPO/index.html">
+<meta property="og:title" content="3号列车">
+<meta property="og:url" content="https://www.aoshuqiu.top/2022/01/05/NCE/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="PPOTRPO的最终替代函数为： L^{CPI}(\theta)&#x3D;\mathbb{E}_t\bigg[ \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }A_t\bigg]因为用到了重要性采样，保留了之前策略的动作与状态分布，CPI（Conservation Policy Iteration）保留策略迭代。 记概率比值$r_">
+<meta property="og:description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。 预备知识 X与Y都为集合。那么，Id_x表示X上的恒等关系，2^X表示X的子集集合，X\backslash Y 表示集合\left\{x|x\in X,x\notin">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/19/PPO/image-20210119175132551.png">
-<meta property="og:image" content="https://www.aoshuqiu.top/2021/01/19/PPO/aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzg4YWRkZjZiMjkzMzQ3Yjc5NDI1YWYzYjMzZDg4MDE1LmpwZWc">
-<meta property="article:published_time" content="2021-01-19T08:50:21.000Z">
-<meta property="article:modified_time" content="2021-01-19T10:25:39.226Z">
+<meta property="article:published_time" content="2022-01-05T06:30:10.563Z">
+<meta property="article:modified_time" content="2021-12-06T14:02:49.950Z">
 <meta property="article:author" content="三儿">
-<meta property="article:tag" content="机器学习">
-<meta property="article:tag" content="强化学习">
-<meta property="article:tag" content="TRPO">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.aoshuqiu.top/2021/01/19/PPO/image-20210119175132551.png">
 
-<link rel="canonical" href="https://www.aoshuqiu.top/2021/01/19/PPO/">
+<link rel="canonical" href="https://www.aoshuqiu.top/2022/01/05/NCE/">
 
 
 <script id="page-configurations">
@@ -53,7 +47,7 @@
   };
 </script>
 
-  <title>PPO | 3号列车</title>
+  <title> | 3号列车</title>
   
 
 
@@ -175,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/19/PPO/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/01/05/NCE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -188,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          PPO
+          
         </h1>
 
         <div class="post-meta">
@@ -197,19 +191,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-19 16:50:21 / 修改时间：18:25:39" itemprop="dateCreated datePublished" datetime="2021-01-19T16:50:21+08:00">2021-01-19</time>
+              <time title="创建时间：2022-01-05 14:30:10" itemprop="dateCreated datePublished" datetime="2022-01-05T14:30:10+08:00">2022-01-05</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
                 </span>
-            </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-06 22:02:49" itemprop="dateModified" datetime="2021-12-06T22:02:49+08:00">2021-12-06</time>
+              </span>
 
           
 
@@ -222,29 +213,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h1><p>TRPO的最终替代函数为：</p>
-<script type="math/tex; mode=display">L^{CPI}(\theta)=\mathbb{E}_t\bigg[ \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }A_t\bigg]</script><p>因为用到了重要性采样，保留了之前策略的动作与状态分布，CPI（Conservation Policy Iteration）保留策略迭代。</p>
-<p>记概率比值$r_t(\theta) = \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }$，得到$L^{CPI}(\theta)=\mathbb{E}_t\big[ r_t(\theta)A_t\big]$</p>
-<p><strong>问题</strong></p>
-<p>没有约束条件的话，最大化$L^{CPI}$会导致大幅度的策略更新，因此要想办法通过改变目标函数，来对那些$r_t(\theta)$项离1很远的情况进行惩罚。</p>
-<a id="more"></a>
-<p><strong>解决</strong></p>
-<p>PPO提出了一种替代函数的替代</p>
-<p>$L^{CLIP}(\theta)=\mathbb{E}_t\big[\min(r_t(\theta)A_t,clip(r_t(\theta),1-\epsilon,1+\epsilon)A_t)\big]$</p>
-<p>通过其中的clip裁剪，来去掉最大化TRPO替代函数时大幅度改变$r_t(\theta)$的倾向。也就是说只保留那些使目标更好的比值变化，舍弃那些使目标变坏但靠着比值增大硬拉替代函数值的比值变化。</p>
-<p>通过取小值来保证它是裁剪前函数的下界，来达到最大化下界的目的。</p>
-<p><img src="/2021/01/19/PPO/image-20210119175132551.png" alt="image-20210119175132551"></p>
-<p>上图是在特定t下的裁剪情况，其中左图代表正奖励时的裁剪，右图代表负奖励时的裁剪</p>
-<p>还有一种自适应改变步长的替代方法，首先它采用的是带KL散度惩罚的替代函数</p>
-<p>$L^{KLPEN}(\theta) = \mathbb{E}\bigg[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t-\beta KL[\pi_{\theta_{old}}(\cdot | s_t),\pi_{\theta}(\cdot | s_t)]\bigg]$</p>
-<p>在每次小集群的随机梯度下降中，计算一个$d = \mathbb{E}_t[KL[\pi_{\theta_{old}}(\cdot | s_t),\pi_{\theta}(\cdot | s_t)]]$</p>
-<ul>
-<li>如果$d&lt; d_{targ}/1.5$，那么$ \beta \leftarrow \beta/2$</li>
-<li>如果$d&gt; d_{targ} \times 1.5$，那么$ \beta \leftarrow \beta \times 2$</li>
+        <h1 id="GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING"><a href="#GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING" class="headerlink" title="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING"></a>GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING</h1><p>邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。</p>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><ul>
+<li><script type="math/tex">X</script>与<script type="math/tex">Y</script>都为集合。那么，<script type="math/tex">Id_x</script>表示<script type="math/tex">X</script>上的恒等关系，<script type="math/tex">2^X</script>表示<script type="math/tex">X</script>的子集集合，<script type="math/tex">X\backslash Y</script> 表示集合<script type="math/tex">\left\{x|x\in X,x\notin Y \right\}</script>。如果<script type="math/tex">X</script>是有限的，那么<script type="math/tex">\#X</script>表示<script type="math/tex">X</script>的基数。</li>
+<li><script type="math/tex">X,Y,Z</script>都为集合，<script type="math/tex">f</script>为从<script type="math/tex">X</script>到<script type="math/tex">Y</script>的函数，<script type="math/tex">g</script>为从<script type="math/tex">Y</script>到<script type="math/tex">Z</script>的函数。那么， <script type="math/tex">g\circ f</script>表示<script type="math/tex">f</script>和<script type="math/tex">g</script>的组合（先<script type="math/tex">f</script>,后<script type="math/tex">g</script>)</li>
+<li><p>一个无向结点标记图是一个系统<script type="math/tex">H=(V,E,\Sigma,\phi)</script>，其中<script type="math/tex">V</script>是一个有限非空集合，称作结点集；<script type="math/tex">E</script>是一个关于<script type="math/tex">V</script>中两个元素的二重集合，称作边集；<script type="math/tex">\Sigma</script>是一个有限非空集，称作标签集（或字母表）；<script type="math/tex">\phi</script>是从<script type="math/tex">V</script>到<script type="math/tex">\Sigma</script>的函数，称作标识函数。<script type="math/tex">H</script>称作标签集<script type="math/tex">\Sigma</script>上的一个图。<strong>之后图<script type="math/tex">H</script>中的元素会标记为<script type="math/tex">V_H,E_H,\Sigma_H,\phi_H</script>。</strong></p>
+</li>
+<li><p>H为一个图其中一条边<script type="math/tex">\{x,y\}\in E_H</script>。我们说边<script type="math/tex">\{x,y\}</script>与结点<script type="math/tex">x,y</script>相关，<script type="math/tex">x,y</script>互为邻居。</p>
+</li>
+<li>H为一个图其中一个结点<script type="math/tex">{x}\in V_H</script>。那么<script type="math/tex">x</script>的度表示为<script type="math/tex">deg(x)</script>，它代表与<script type="math/tex">x</script>相关的边的数目。</li>
+<li><script type="math/tex">A</script>与<script type="math/tex">B</script>都为图，若<script type="math/tex">V_A \sube V_B,E_A \sube E_B\cap\{\{x,y\}|x,y\in V_A\},\Sigma_A \sube \Sigma_B</script>，则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的子图。其中若<script type="math/tex">E_A = E_B\cap\{\{x,y\}|x,y\in V_A\}</script>，则称则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的全子图，在这种情况下称<script type="math/tex">A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_A</script>支撑生成的子图。<strong><script type="math/tex">B-A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_B \backslash V_A</script>支撑生成的子图。</strong></li>
+<li><script type="math/tex">H</script>与<script type="math/tex">\bar H</script>为同一字母表<script type="math/tex">\Sigma</script>上的图，从<script type="math/tex">H</script>到<script type="math/tex">\bar H</script>的同构为一个双射函数<script type="math/tex">h</script>，其中<script type="math/tex">\phi_{\bar H}\circ h=\phi_H \quad and\quad E_A=\{\{h(x),h(y)\}|\{x,y\}=E_H\}</script>，则定义<script type="math/tex">H</script>与<script type="math/tex">\bar H</script>同构</li>
+<li>完全图中<script type="math/tex">E_H = \{\{x,y\}|x,y \in V_H\}</script></li>
+<li>离散图中<script type="math/tex">E_H=\varnothing</script></li>
+<li>连接图<script type="math/tex">H</script>中每个<script type="math/tex">x,y \in V_H</script>,都存在着一个结点序列<script type="math/tex">x_1,x_2,…,x_n</script>，使得<script type="math/tex">x_1=x, x_n=y</script>，对于<script type="math/tex">1\le i\le n-1</script>，<script type="math/tex">x_i</script>为<script type="math/tex">x_{i+1}</script>的邻居。</li>
 </ul>
-<p>更新后的步长$\beta$ 用于下一次的策略更新，1.5和2是通过启发性选择得到的。初始步长也是一个超参，不过无关紧要，因为步长会被很快地调整。</p>
-<p>这种方法并没有上一种CLIP的效果好，所以通常还是使用上面的CLIP替代。</p>
-<p><img src="/2021/01/19/PPO/aHR0cDovLzViMDk4OGU1OTUyMjUuY2RuLnNvaHVjcy5jb20vaW1hZ2VzLzIwMTkwMjAyLzg4YWRkZjZiMjkzMzQ3Yjc5NDI1YWYzYjMzZDg4MDE1LmpwZWc" alt="img"></p>
+<h2 id="NCE基本定义"><a href="#NCE基本定义" class="headerlink" title="NCE基本定义"></a>NCE基本定义</h2><p><strong>Definition 1.</strong>一个NCE语法图<script type="math/tex">G=(\Sigma,\Delta,P,Z)</script>，其中<script type="math/tex">\Sigma</script>为有限非空集，称作全字母表；<script type="math/tex">\Delta</script>为<script type="math/tex">\Sigma</script>的子集，称作终结字母表；P为产生式的有限集，产生式的形式为<script type="math/tex">(\alpha,\beta,\psi)</script>，其中<script type="math/tex">\alpha</script>为一个连接图，<script type="math/tex">\beta</script>为一个图，<script type="math/tex">\psi</script>为一个函数<script type="math/tex">V_\alpha \times V_\beta \times \Sigma \rightarrow \{0,1\}</script>，<script type="math/tex">\psi</script>被称作产生式的嵌入函数；Z是<script type="math/tex">\Sigma</script>上的一个图，称作公理图。</p>
+<p>​    NCE语法下的一个派生步骤如下。H为一个图，<script type="math/tex">\pi=(\alpha,\beta,\psi)</script>为P的一个产生式，<script type="math/tex">\hat \alpha</script>为H的一个支撑子图且<script type="math/tex">\hat \alpha</script>与<script type="math/tex">\alpha</script>同构（h为同构映射)，<script type="math/tex">\hat\beta</script>与<script type="math/tex">\beta</script>同构（g为同构映射）而且<script type="math/tex">V_{\hat\beta} \cap V_{H-\hat\alpha}=\varnothing</script> 。那么<script type="math/tex">\pi</script>到<script type="math/tex">\hat\alpha</script>上的应用首先从H中移除<script type="math/tex">\hat\alpha</script>，之后用<script type="math/tex">\hat\beta</script>替换<script type="math/tex">\hat\alpha</script>，最终对每个<script type="math/tex">n\in V_\beta,v \in V_{H}\backslash V_{\hat a}</script>，若满足以下条件则加入边{n,v}：</p>
+<ul>
+<li><p>存在一个结点<script type="math/tex">m \in V_\alpha</script>，<script type="math/tex">\{h(m),v\} \in E_H</script> 并且，</p>
+</li>
+<li><p><script type="math/tex">\psi(m,g(n),\phi_H(v))=1</script>。</p>
+</li>
+</ul>
 
     </div>
 
@@ -272,11 +263,6 @@
 
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
-              <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag"># 强化学习</a>
-              <a href="/tags/TRPO/" rel="tag"># TRPO</a>
-          </div>
 
         
 
@@ -284,12 +270,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/16/TRPO/" rel="prev" title="TRPO">
-      <i class="fa fa-chevron-left"></i> TRPO
+    <a href="/2022/01/05/hello-world/" rel="prev" title="闲唠唠嗑">
+      <i class="fa fa-chevron-left"></i> 闲唠唠嗑
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/02/01/GCPN%E4%B8%ADrl-baselines%E7%8E%AF%E5%A2%83%E7%9A%84%E6%9B%B4%E6%94%B9/" rel="next" title="GCPN环境搭建时对rl-baselines中环境的更改">
-      GCPN环境搭建时对rl-baselines中环境的更改 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/01/05/MolDQN/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -349,7 +335,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PPO"><span class="nav-text">PPO</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING"><span class="nav-text">GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-text">预备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCE%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-text">NCE基本定义</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -489,59 +475,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
