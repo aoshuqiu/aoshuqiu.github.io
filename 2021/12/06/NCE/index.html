@@ -22,15 +22,15 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。 预备知识 X与Y都为集合。那么，Id_x表示X上的恒等关系，2^X表示X的子集集合，X\backslash Y 表示集合\left\{x|x\in X,x\notin">
+  <meta name="description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NCE阅读笔记">
 <meta property="og:url" content="https://www.aoshuqiu.top/2021/12/06/NCE/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。 预备知识 X与Y都为集合。那么，Id_x表示X上的恒等关系，2^X表示X的子集集合，X\backslash Y 表示集合\left\{x|x\in X,x\notin">
+<meta property="og:description" content="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-06T14:02:21.000Z">
-<meta property="article:modified_time" content="2022-01-05T06:52:51.665Z">
+<meta property="article:modified_time" content="2022-01-05T07:00:01.027Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="图嵌入">
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-05 14:52:51" itemprop="dateModified" datetime="2022-01-05T14:52:51+08:00">2022-01-05</time>
+                <time title="修改时间：2022-01-05 15:00:01" itemprop="dateModified" datetime="2022-01-05T15:00:01+08:00">2022-01-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -226,15 +226,14 @@
 
       
         <h1 id="GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING"><a href="#GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING" class="headerlink" title="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING"></a>GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING</h1><p>邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。</p>
+<a id="more"></a>
 <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><ul>
 <li><script type="math/tex">X</script>与<script type="math/tex">Y</script>都为集合。那么，<script type="math/tex">Id_x</script>表示<script type="math/tex">X</script>上的恒等关系，<script type="math/tex">2^X</script>表示<script type="math/tex">X</script>的子集集合，<script type="math/tex">X\backslash Y</script> 表示集合<script type="math/tex">\left\{x|x\in X,x\notin Y \right\}</script>。如果<script type="math/tex">X</script>是有限的，那么<script type="math/tex">\#X</script>表示<script type="math/tex">X</script>的基数。</li>
 <li><script type="math/tex">X,Y,Z</script>都为集合，<script type="math/tex">f</script>为从<script type="math/tex">X</script>到<script type="math/tex">Y</script>的函数，<script type="math/tex">g</script>为从<script type="math/tex">Y</script>到<script type="math/tex">Z</script>的函数。那么， <script type="math/tex">g\circ f</script>表示<script type="math/tex">f</script>和<script type="math/tex">g</script>的组合（先<script type="math/tex">f</script>,后<script type="math/tex">g</script>)</li>
-<li><p>一个无向结点标记图是一个系统<script type="math/tex">H=(V,E,\Sigma,\phi)</script>，其中<script type="math/tex">V</script>是一个有限非空集合，称作结点集；<script type="math/tex">E</script>是一个关于<script type="math/tex">V</script>中两个元素的二重集合，称作边集；<script type="math/tex">\Sigma</script>是一个有限非空集，称作标签集（或字母表）；<script type="math/tex">\phi</script>是从<script type="math/tex">V</script>到<script type="math/tex">\Sigma</script>的函数，称作标识函数。<script type="math/tex">H</script>称作标签集<script type="math/tex">\Sigma</script>上的一个图。<strong>之后图<script type="math/tex">H</script>中的元素会标记为<script type="math/tex">V_H,E_H,\Sigma_H,\phi_H</script>。</strong></p>
-</li>
-<li><p>H为一个图其中一条边<script type="math/tex">\{x,y\}\in E_H</script>。我们说边<script type="math/tex">\{x,y\}</script>与结点<script type="math/tex">x,y</script>相关，<script type="math/tex">x,y</script>互为邻居。</p>
-</li>
+<li>一个无向结点标记图是一个系统<script type="math/tex">H=(V,E,\Sigma,\phi)</script>，其中<script type="math/tex">V</script>是一个有限非空集合，称作结点集；<script type="math/tex">E</script>是一个关于<script type="math/tex">V</script>中两个元素的二重集合，称作边集；<script type="math/tex">\Sigma</script>是一个有限非空集，称作标签集（或字母表）；<script type="math/tex">\phi</script>是从<script type="math/tex">V</script>到<script type="math/tex">\Sigma</script>的函数，称作标识函数。<script type="math/tex">H</script>称作标签集<script type="math/tex">\Sigma</script>上的一个图。<strong>之后图<script type="math/tex">H</script>中的元素会标记为<script type="math/tex">V_H,E_H,\Sigma_H,\phi_H</script>。</strong></li>
+<li>H为一个图其中一条边<script type="math/tex">\{x,y\}\in E_H</script>。我们说边<script type="math/tex">\{x,y\}</script>与结点<script type="math/tex">x,y</script>相关，<script type="math/tex">x,y</script>互为邻居。</li>
 <li>H为一个图其中一个结点<script type="math/tex">{x}\in V_H</script>。那么<script type="math/tex">x</script>的度表示为<script type="math/tex">deg(x)</script>，它代表与<script type="math/tex">x</script>相关的边的数目。</li>
-<li><script type="math/tex">A</script>与<script type="math/tex">B</script>都为图，若<script type="math/tex">V_A \sube V_B,E_A \sube E_B\cap\{\{x,y\}|x,y\in V_A\},\Sigma_A \sube \Sigma_B</script>，则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的子图。其中若<script type="math/tex">E_A = E_B\cap\{\{x,y\}|x,y\in V_A\}</script>，则称则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的全子图，在这种情况下称<script type="math/tex">A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_A</script>支撑生成的子图。<strong><script type="math/tex">B-A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_B \backslash V_A</script>支撑生成的子图。</strong></li>
+<li><script type="math/tex">A</script>与<script type="math/tex">B</script>都为图，若<script type="math/tex">V_A \subseteq V_B,E_A \subseteq E_B\cap\{\{x,y\}|x,y\in V_A\},\Sigma_A \sube \Sigma_B</script>，则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的子图。其中若<script type="math/tex">E_A = E_B\cap\{\{x,y\}|x,y\in V_A\}</script>，则称则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的全子图，在这种情况下称<script type="math/tex">A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_A</script>支撑生成的子图。<strong><script type="math/tex">B-A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_B \backslash V_A</script>支撑生成的子图。</strong></li>
 <li><script type="math/tex">H</script>与<script type="math/tex">\bar H</script>为同一字母表<script type="math/tex">\Sigma</script>上的图，从<script type="math/tex">H</script>到<script type="math/tex">\bar H</script>的同构为一个双射函数<script type="math/tex">h</script>，其中<script type="math/tex">\phi_{\bar H}\circ h=\phi_H \quad and\quad E_A=\{\{h(x),h(y)\}|\{x,y\}=E_H\}</script>，则定义<script type="math/tex">H</script>与<script type="math/tex">\bar H</script>同构</li>
 <li>完全图中<script type="math/tex">E_H = \{\{x,y\}|x,y \in V_H\}</script></li>
 <li>离散图中<script type="math/tex">E_H=\varnothing</script></li>
@@ -290,10 +289,7 @@
     <a href="/2021/05/18/Double-DQN/" rel="prev" title="DDQN学习笔记">
       <i class="fa fa-chevron-left"></i> DDQN学习笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/01/05/hello-world/" rel="next" title="闲唠唠嗑">
-      闲唠唠嗑 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
