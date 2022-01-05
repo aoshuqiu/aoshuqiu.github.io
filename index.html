@@ -164,220 +164,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/01/05/MolDQN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/05/MolDQN/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-05 14:30:10" itemprop="dateCreated datePublished" datetime="2022-01-05T14:30:10+08:00">2022-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-28 20:42:57" itemprop="dateModified" datetime="2021-04-28T20:42:57+08:00">2021-04-28</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>moldqn所说的与之前模型的不同，大多都针对gcpn</p>
-<ul>
-<li><p>基于价值函数，低方差、稳定、采样效率高</p>
-</li>
-<li><p>不需要专家数据，从自己的经验学习</p>
-</li>
-<li><p>多目标强化学习，用户自己定权重</p>
-</li>
-</ul>
-<p>动作：原子添加、键添加、键移除</p>
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><ol>
-<li><p>一个显式步数限制（与GCPN相同）</p>
-</li>
-<li><p>违反价约束的动作不会被考虑（GCPN中会给这些动作一个惩罚）</p>
-</li>
-<li><p>允许键、边的移除（GCPN中只能添加）</p>
-</li>
-</ol>
-<h3 id="状态空间"><a href="#状态空间" class="headerlink" title="状态空间"></a>状态空间</h3><p>（m, t) </p>
-<ol>
-<li><p>m是一个有效分子，t是从起始状态到目前分子的步数</p>
-</li>
-<li><p>起始状态中，m可以是一个特定分子或什么都不是，t起始为0</p>
-</li>
-<li><p>限制最大步数为T，那么最终的状态为$\{s=(m,t)|t=T\}$, 也就是那些达到T步的分子，所有轨迹步长相同（GCPN会传入停止符导致步长不同）</p>
-</li>
-</ol>
-<h3 id="动作空间"><a href="#动作空间" class="headerlink" title="动作空间"></a>动作空间</h3><ol>
-<li><p>原子添加：原子添加总是伴随着键添加，加入一个新原子并在已有分子与这个原子之间添加一个化学键。</p>
-</li>
-<li><p>化学键添加：遵守以下规则</p>
-</li>
-</ol>
-<ul>
-<li>No bond $\rightarrow${Single, Double, Triple} Bond.</li>
-<li>Single bond $\rightarrow${Double, Triple} Bond.</li>
-<li><p>Double bond $\rightarrow${Triple} Bond.</p>
-<p>同时：环内不允许键的添加，只允许生成拥有3-6个原子的环。但还是会出现多于6个原子的环结构，只要先生成一个双环结构，再去掉它的桥接键。</p>
-</li>
-</ul>
-<ol>
-<li>化学键去除：遵守以下规则</li>
-</ol>
-<ul>
-<li><p>Triple bond $\rightarrow${Double, Single, No} Bond.</p>
-</li>
-<li><p>Double bond $\rightarrow${Single, No} Bond.</p>
-</li>
-<li><p>Single bond $\rightarrow${No} Bond.</p>
-<p>同时：除了同时去掉一个原子的情况，不允许在去掉化学键后生成两个不连接的图，也就是说去掉键后还要是一个分子。</p>
-<p>在设计分子时不会主动破坏芳香键，但去除外环双键也会破坏芳香性。芳香性也可以通过逐步生成单双键形成。</p>
-</li>
-</ul>
-<ol>
-<li>转移概率：确定策略</li>
-<li>折扣因子：奖励影响从最终到起始逐渐衰退，在奖励设定时隐式设定，在得到中间产物时也判定性质奖励。</li>
-</ol>
-<h2 id="多目标强化学习"><a href="#多目标强化学习" class="headerlink" title="多目标强化学习"></a>多目标强化学习</h2><p>多个奖励取权重和</p>
-<h2 id="训练中的探索与开发"><a href="#训练中的探索与开发" class="headerlink" title="训练中的探索与开发"></a>训练中的探索与开发</h2><p>策略网络的探索与开发都是从网络获得的动作分布中采样，本身就存在一定的探索能力，gcpn通过对熵的减小进行惩罚进一步保证了模型的探索能力。</p>
-<p>价值函数则可以直接利用得到的状态价值找到最优的动作，但一位地采取最优动作会使模型丧失探索能力，因此有各种提高探索能力的方法。</p>
-<p>dithering strategy：例如$\epsilon$贪婪 不考虑短期探索，只有一步随机（抖动），会导致数据需求指数级增长（数据也就是智能体生成采样，但抖动策略都很短视，想要拿到长期回报高的就需要大量数据，当然所需时间也会指数级增长）</p>
-<p>但抖动策略完全没有考虑到状态的不确定性，只是以一定概率采用随机动作，没法进行深度的探索。</p>
-<p>molDQN采用bootstrapped-dqn来解决这个问题，它有H个独立的价值函数<script type="math/tex">\{Q^{(i)}|i=1,...,H\}</script>,每一个值函数都用样本的不同子集进行训练，在每个episode，都规范化地选择一个值函数<script type="math/tex">Q^{(i)}</script>来执行决策。通过这些值函数的不同初始化，来使得模型具有一定的深度探索能力。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/01/05/NCE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/05/NCE/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-05 14:30:10" itemprop="dateCreated datePublished" datetime="2022-01-05T14:30:10+08:00">2022-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-06 22:02:49" itemprop="dateModified" datetime="2021-12-06T22:02:49+08:00">2021-12-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING"><a href="#GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING" class="headerlink" title="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING"></a>GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING</h1><p>邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。</p>
-<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><ul>
-<li><script type="math/tex">X</script>与<script type="math/tex">Y</script>都为集合。那么，<script type="math/tex">Id_x</script>表示<script type="math/tex">X</script>上的恒等关系，<script type="math/tex">2^X</script>表示<script type="math/tex">X</script>的子集集合，<script type="math/tex">X\backslash Y</script> 表示集合<script type="math/tex">\left\{x|x\in X,x\notin Y \right\}</script>。如果<script type="math/tex">X</script>是有限的，那么<script type="math/tex">\#X</script>表示<script type="math/tex">X</script>的基数。</li>
-<li><script type="math/tex">X,Y,Z</script>都为集合，<script type="math/tex">f</script>为从<script type="math/tex">X</script>到<script type="math/tex">Y</script>的函数，<script type="math/tex">g</script>为从<script type="math/tex">Y</script>到<script type="math/tex">Z</script>的函数。那么， <script type="math/tex">g\circ f</script>表示<script type="math/tex">f</script>和<script type="math/tex">g</script>的组合（先<script type="math/tex">f</script>,后<script type="math/tex">g</script>)</li>
-<li><p>一个无向结点标记图是一个系统<script type="math/tex">H=(V,E,\Sigma,\phi)</script>，其中<script type="math/tex">V</script>是一个有限非空集合，称作结点集；<script type="math/tex">E</script>是一个关于<script type="math/tex">V</script>中两个元素的二重集合，称作边集；<script type="math/tex">\Sigma</script>是一个有限非空集，称作标签集（或字母表）；<script type="math/tex">\phi</script>是从<script type="math/tex">V</script>到<script type="math/tex">\Sigma</script>的函数，称作标识函数。<script type="math/tex">H</script>称作标签集<script type="math/tex">\Sigma</script>上的一个图。<strong>之后图<script type="math/tex">H</script>中的元素会标记为<script type="math/tex">V_H,E_H,\Sigma_H,\phi_H</script>。</strong></p>
-</li>
-<li><p>H为一个图其中一条边<script type="math/tex">\{x,y\}\in E_H</script>。我们说边<script type="math/tex">\{x,y\}</script>与结点<script type="math/tex">x,y</script>相关，<script type="math/tex">x,y</script>互为邻居。</p>
-</li>
-<li>H为一个图其中一个结点<script type="math/tex">{x}\in V_H</script>。那么<script type="math/tex">x</script>的度表示为<script type="math/tex">deg(x)</script>，它代表与<script type="math/tex">x</script>相关的边的数目。</li>
-<li><script type="math/tex">A</script>与<script type="math/tex">B</script>都为图，若<script type="math/tex">V_A \sube V_B,E_A \sube E_B\cap\{\{x,y\}|x,y\in V_A\},\Sigma_A \sube \Sigma_B</script>，则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的子图。其中若<script type="math/tex">E_A = E_B\cap\{\{x,y\}|x,y\in V_A\}</script>，则称则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的全子图，在这种情况下称<script type="math/tex">A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_A</script>支撑生成的子图。<strong><script type="math/tex">B-A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_B \backslash V_A</script>支撑生成的子图。</strong></li>
-<li><script type="math/tex">H</script>与<script type="math/tex">\bar H</script>为同一字母表<script type="math/tex">\Sigma</script>上的图，从<script type="math/tex">H</script>到<script type="math/tex">\bar H</script>的同构为一个双射函数<script type="math/tex">h</script>，其中<script type="math/tex">\phi_{\bar H}\circ h=\phi_H \quad and\quad E_A=\{\{h(x),h(y)\}|\{x,y\}=E_H\}</script>，则定义<script type="math/tex">H</script>与<script type="math/tex">\bar H</script>同构</li>
-<li>完全图中<script type="math/tex">E_H = \{\{x,y\}|x,y \in V_H\}</script></li>
-<li>离散图中<script type="math/tex">E_H=\varnothing</script></li>
-<li>连接图<script type="math/tex">H</script>中每个<script type="math/tex">x,y \in V_H</script>,都存在着一个结点序列<script type="math/tex">x_1,x_2,…,x_n</script>，使得<script type="math/tex">x_1=x, x_n=y</script>，对于<script type="math/tex">1\le i\le n-1</script>，<script type="math/tex">x_i</script>为<script type="math/tex">x_{i+1}</script>的邻居。</li>
-</ul>
-<h2 id="NCE基本定义"><a href="#NCE基本定义" class="headerlink" title="NCE基本定义"></a>NCE基本定义</h2><p><strong>Definition 1.</strong>一个NCE语法图<script type="math/tex">G=(\Sigma,\Delta,P,Z)</script>，其中<script type="math/tex">\Sigma</script>为有限非空集，称作全字母表；<script type="math/tex">\Delta</script>为<script type="math/tex">\Sigma</script>的子集，称作终结字母表；P为产生式的有限集，产生式的形式为<script type="math/tex">(\alpha,\beta,\psi)</script>，其中<script type="math/tex">\alpha</script>为一个连接图，<script type="math/tex">\beta</script>为一个图，<script type="math/tex">\psi</script>为一个函数<script type="math/tex">V_\alpha \times V_\beta \times \Sigma \rightarrow \{0,1\}</script>，<script type="math/tex">\psi</script>被称作产生式的嵌入函数；Z是<script type="math/tex">\Sigma</script>上的一个图，称作公理图。</p>
-<p>​    NCE语法下的一个派生步骤如下。H为一个图，<script type="math/tex">\pi=(\alpha,\beta,\psi)</script>为P的一个产生式，<script type="math/tex">\hat \alpha</script>为H的一个支撑子图且<script type="math/tex">\hat \alpha</script>与<script type="math/tex">\alpha</script>同构（h为同构映射)，<script type="math/tex">\hat\beta</script>与<script type="math/tex">\beta</script>同构（g为同构映射）而且<script type="math/tex">V_{\hat\beta} \cap V_{H-\hat\alpha}=\varnothing</script> 。那么<script type="math/tex">\pi</script>到<script type="math/tex">\hat\alpha</script>上的应用首先从H中移除<script type="math/tex">\hat\alpha</script>，之后用<script type="math/tex">\hat\beta</script>替换<script type="math/tex">\hat\alpha</script>，最终对每个<script type="math/tex">n\in V_\beta,v \in V_{H}\backslash V_{\hat a}</script>，若满足以下条件则加入边{n,v}：</p>
-<ul>
-<li><p>存在一个结点<script type="math/tex">m \in V_\alpha</script>，<script type="math/tex">\{h(m),v\} \in E_H</script> 并且，</p>
-</li>
-<li><p><script type="math/tex">\psi(m,g(n),\phi_H(v))=1</script>。</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/01/05/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -453,7 +239,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/01/05/Double-DQN/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/12/06/NCE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -467,7 +253,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/05/Double-DQN/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/12/06/NCE/" class="post-title-link" itemprop="url">NCE阅读笔记</a>
         </h2>
 
         <div class="post-meta">
@@ -477,15 +263,120 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-01-05 14:30:10" itemprop="dateCreated datePublished" datetime="2022-01-05T14:30:10+08:00">2022-01-05</time>
+              <time title="创建时间：2021-12-06 22:02:21" itemprop="dateCreated datePublished" datetime="2021-12-06T22:02:21+08:00">2021-12-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-18 16:42:44" itemprop="dateModified" datetime="2021-05-18T16:42:44+08:00">2021-05-18</time>
+                <time title="修改时间：2022-01-05 14:52:51" itemprop="dateModified" datetime="2022-01-05T14:52:51+08:00">2022-01-05</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING"><a href="#GRAPH-GRAMMERS-WITH-NEIGHBOURHOOD-CONTROLLED-EMBEDDING" class="headerlink" title="GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING"></a>GRAPH GRAMMERS WITH NEIGHBOURHOOD-CONTROLLED EMBEDDING</h1><p>邻居控制图嵌入，是一种图的序列嵌入，在用于以序列形式生成图的方法中便利且准确度高，因此可以更好地适配强化学习的序列决策过程。</p>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><ul>
+<li><script type="math/tex">X</script>与<script type="math/tex">Y</script>都为集合。那么，<script type="math/tex">Id_x</script>表示<script type="math/tex">X</script>上的恒等关系，<script type="math/tex">2^X</script>表示<script type="math/tex">X</script>的子集集合，<script type="math/tex">X\backslash Y</script> 表示集合<script type="math/tex">\left\{x|x\in X,x\notin Y \right\}</script>。如果<script type="math/tex">X</script>是有限的，那么<script type="math/tex">\#X</script>表示<script type="math/tex">X</script>的基数。</li>
+<li><script type="math/tex">X,Y,Z</script>都为集合，<script type="math/tex">f</script>为从<script type="math/tex">X</script>到<script type="math/tex">Y</script>的函数，<script type="math/tex">g</script>为从<script type="math/tex">Y</script>到<script type="math/tex">Z</script>的函数。那么， <script type="math/tex">g\circ f</script>表示<script type="math/tex">f</script>和<script type="math/tex">g</script>的组合（先<script type="math/tex">f</script>,后<script type="math/tex">g</script>)</li>
+<li><p>一个无向结点标记图是一个系统<script type="math/tex">H=(V,E,\Sigma,\phi)</script>，其中<script type="math/tex">V</script>是一个有限非空集合，称作结点集；<script type="math/tex">E</script>是一个关于<script type="math/tex">V</script>中两个元素的二重集合，称作边集；<script type="math/tex">\Sigma</script>是一个有限非空集，称作标签集（或字母表）；<script type="math/tex">\phi</script>是从<script type="math/tex">V</script>到<script type="math/tex">\Sigma</script>的函数，称作标识函数。<script type="math/tex">H</script>称作标签集<script type="math/tex">\Sigma</script>上的一个图。<strong>之后图<script type="math/tex">H</script>中的元素会标记为<script type="math/tex">V_H,E_H,\Sigma_H,\phi_H</script>。</strong></p>
+</li>
+<li><p>H为一个图其中一条边<script type="math/tex">\{x,y\}\in E_H</script>。我们说边<script type="math/tex">\{x,y\}</script>与结点<script type="math/tex">x,y</script>相关，<script type="math/tex">x,y</script>互为邻居。</p>
+</li>
+<li>H为一个图其中一个结点<script type="math/tex">{x}\in V_H</script>。那么<script type="math/tex">x</script>的度表示为<script type="math/tex">deg(x)</script>，它代表与<script type="math/tex">x</script>相关的边的数目。</li>
+<li><script type="math/tex">A</script>与<script type="math/tex">B</script>都为图，若<script type="math/tex">V_A \sube V_B,E_A \sube E_B\cap\{\{x,y\}|x,y\in V_A\},\Sigma_A \sube \Sigma_B</script>，则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的子图。其中若<script type="math/tex">E_A = E_B\cap\{\{x,y\}|x,y\in V_A\}</script>，则称则称<script type="math/tex">A</script>为<script type="math/tex">B</script>的全子图，在这种情况下称<script type="math/tex">A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_A</script>支撑生成的子图。<strong><script type="math/tex">B-A</script>为在<script type="math/tex">B</script>中由<script type="math/tex">V_B \backslash V_A</script>支撑生成的子图。</strong></li>
+<li><script type="math/tex">H</script>与<script type="math/tex">\bar H</script>为同一字母表<script type="math/tex">\Sigma</script>上的图，从<script type="math/tex">H</script>到<script type="math/tex">\bar H</script>的同构为一个双射函数<script type="math/tex">h</script>，其中<script type="math/tex">\phi_{\bar H}\circ h=\phi_H \quad and\quad E_A=\{\{h(x),h(y)\}|\{x,y\}=E_H\}</script>，则定义<script type="math/tex">H</script>与<script type="math/tex">\bar H</script>同构</li>
+<li>完全图中<script type="math/tex">E_H = \{\{x,y\}|x,y \in V_H\}</script></li>
+<li>离散图中<script type="math/tex">E_H=\varnothing</script></li>
+<li>连接图<script type="math/tex">H</script>中每个<script type="math/tex">x,y \in V_H</script>,都存在着一个结点序列<script type="math/tex">x_1,x_2,…,x_n</script>，使得<script type="math/tex">x_1=x, x_n=y</script>，对于<script type="math/tex">1\le i\le n-1</script>，<script type="math/tex">x_i</script>为<script type="math/tex">x_{i+1}</script>的邻居。</li>
+</ul>
+<h2 id="NCE基本定义"><a href="#NCE基本定义" class="headerlink" title="NCE基本定义"></a>NCE基本定义</h2><p><strong>Definition 1.</strong>一个NCE语法图<script type="math/tex">G=(\Sigma,\Delta,P,Z)</script>，其中<script type="math/tex">\Sigma</script>为有限非空集，称作全字母表；<script type="math/tex">\Delta</script>为<script type="math/tex">\Sigma</script>的子集，称作终结字母表；P为产生式的有限集，产生式的形式为<script type="math/tex">(\alpha,\beta,\psi)</script>，其中<script type="math/tex">\alpha</script>为一个连接图，<script type="math/tex">\beta</script>为一个图，<script type="math/tex">\psi</script>为一个函数<script type="math/tex">V_\alpha \times V_\beta \times \Sigma \rightarrow \{0,1\}</script>，<script type="math/tex">\psi</script>被称作产生式的嵌入函数；Z是<script type="math/tex">\Sigma</script>上的一个图，称作公理图。</p>
+<p>​    NCE语法下的一个派生步骤如下。H为一个图，<script type="math/tex">\pi=(\alpha,\beta,\psi)</script>为P的一个产生式，<script type="math/tex">\hat \alpha</script>为H的一个支撑子图且<script type="math/tex">\hat \alpha</script>与<script type="math/tex">\alpha</script>同构（h为同构映射)，<script type="math/tex">\hat\beta</script>与<script type="math/tex">\beta</script>同构（g为同构映射）而且<script type="math/tex">V_{\hat\beta} \cap V_{H-\hat\alpha}=\varnothing</script> 。那么<script type="math/tex">\pi</script>到<script type="math/tex">\hat\alpha</script>上的应用首先从H中移除<script type="math/tex">\hat\alpha</script>，之后用<script type="math/tex">\hat\beta</script>替换<script type="math/tex">\hat\alpha</script>，最终对每个<script type="math/tex">n\in V_\beta,v \in V_{H}\backslash V_{\hat a}</script>，若满足以下条件则加入边{n,v}：</p>
+<ul>
+<li><p>存在一个结点<script type="math/tex">m \in V_\alpha</script>，<script type="math/tex">\{h(m),v\} \in E_H</script> 并且，</p>
+</li>
+<li><p><script type="math/tex">\psi(m,g(n),\phi_H(v))=1</script>。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/05/18/Double-DQN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/18/Double-DQN/" class="post-title-link" itemprop="url">DDQN学习笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-18 16:42:21" itemprop="dateCreated datePublished" datetime="2021-05-18T16:42:21+08:00">2021-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-05 14:54:00" itemprop="dateModified" datetime="2022-01-05T14:54:00+08:00">2022-01-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
 
           
 
@@ -514,7 +405,7 @@
 </ul>
 <p>两个技巧都大幅度提高了算法的效率。</p>
 <h2 id="评估误差带来的过高估计"><a href="#评估误差带来的过高估计" class="headerlink" title="评估误差带来的过高估计"></a>评估误差带来的过高估计</h2><p>Q-learning与DQN中的max操作经常会造成过高估计，因为他们动作选择与评估动作值用的是同一个价值函数。通过一个实例来解释这个现象，其中状态是连续的实数，每个状态有10个离散的动作。并且为了简便，每个状态的最优值函数只跟据当前状态而定，所有动作的值函数都相同。</p>
-<p><img src="/2022/01/05/Double-DQN/image-20210428162257165.png" alt="image-20210428162257165"></p>
+<p><img src="/2021/05/18/Double-DQN/image-20210428162257165.png" alt="image-20210428162257165"></p>
 <p>如图所示，左侧一列为同一动作的值函数，紫色曲线为真实的值函数，绿色曲线为从真实值函数采样拟合得到的估计值函数。真实值函数分别为<script type="math/tex">Q_*(s,a)=sin(s)</script>（上）与<script type="math/tex">Q_*(s,a)=2exp(-s^2)</script>（中，下）。拟合函数为d维多项式，其中d=6(上，下)或d=9（下）。</p>
 <p>从左侧一列可以看到由于无法得知全部的信息，评估值函数与真实值函数总会有差异，上面两行的评估值函数由于参数不够灵活甚至无法完全拟合采样点。但可以看到，下面的评估值函数虽然足够灵活能够经过所有采样点，但在那些未采样的状态上非常不准确。这些现象在学习过程中非常典型，因为在某一时刻总是只能得到受限的数据。</p>
 <p>中间一列可以看到所有10个动作的评估值函数（绿色），以及优化的目标<script type="math/tex">max_a Q_t(s,a)</script>（虚线）。这些评估值函数因为采样点的不同而有所差异，可以看到虚线所代表的的优化目标<script type="math/tex">max_a Q_t(s,a)</script>总比真实最优值<script type="math/tex">Q_*(s,a)</script>要大。</p>
@@ -525,6 +416,142 @@
 <script type="math/tex; mode=display">Y_t^{DoubleDQN}\equiv R_{t+1}+\gamma Q(S_{t+1},\mathop{\arg\max}\limits_{a}Q(S_{t+1},a;\theta_t) ;\theta_t^-)</script><p>DQN中<script type="math/tex">\theta_t^-</script>的更新过程并没有改变</p>
 <p>在获得double q_learning的大部分好处的同时，来最小化对DQN的改变。</p>
 <p>the diversity of a set of molecules is defined as the average pairwise Tanimoto distance between the Morgan fingerprints of the molecules.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/04/28/MolDQN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/28/MolDQN/" class="post-title-link" itemprop="url">Moldqn论文阅读笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-28 13:20:21" itemprop="dateCreated datePublished" datetime="2021-04-28T13:20:21+08:00">2021-04-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-05 14:51:15" itemprop="dateModified" datetime="2022-01-05T14:51:15+08:00">2022-01-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>moldqn所说的与之前模型的不同，大多都针对gcpn</p>
+<ul>
+<li><p>基于价值函数，低方差、稳定、采样效率高</p>
+</li>
+<li><p>不需要专家数据，从自己的经验学习</p>
+</li>
+<li><p>多目标强化学习，用户自己定权重</p>
+</li>
+</ul>
+<p>动作：原子添加、键添加、键移除</p>
+<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><ol>
+<li><p>一个显式步数限制（与GCPN相同）</p>
+</li>
+<li><p>违反价约束的动作不会被考虑（GCPN中会给这些动作一个惩罚）</p>
+</li>
+<li><p>允许键、边的移除（GCPN中只能添加）</p>
+</li>
+</ol>
+<h3 id="状态空间"><a href="#状态空间" class="headerlink" title="状态空间"></a>状态空间</h3><p>（m, t) </p>
+<ol>
+<li><p>m是一个有效分子，t是从起始状态到目前分子的步数</p>
+</li>
+<li><p>起始状态中，m可以是一个特定分子或什么都不是，t起始为0</p>
+</li>
+<li><p>限制最大步数为T，那么最终的状态为$\{s=(m,t)|t=T\}$, 也就是那些达到T步的分子，所有轨迹步长相同（GCPN会传入停止符导致步长不同）</p>
+</li>
+</ol>
+<h3 id="动作空间"><a href="#动作空间" class="headerlink" title="动作空间"></a>动作空间</h3><ol>
+<li><p>原子添加：原子添加总是伴随着键添加，加入一个新原子并在已有分子与这个原子之间添加一个化学键。</p>
+</li>
+<li><p>化学键添加：遵守以下规则</p>
+</li>
+</ol>
+<ul>
+<li>No bond $\rightarrow${Single, Double, Triple} Bond.</li>
+<li>Single bond $\rightarrow${Double, Triple} Bond.</li>
+<li><p>Double bond $\rightarrow${Triple} Bond.</p>
+<p>同时：环内不允许键的添加，只允许生成拥有3-6个原子的环。但还是会出现多于6个原子的环结构，只要先生成一个双环结构，再去掉它的桥接键。</p>
+</li>
+</ul>
+<ol>
+<li>化学键去除：遵守以下规则</li>
+</ol>
+<ul>
+<li><p>Triple bond $\rightarrow${Double, Single, No} Bond.</p>
+</li>
+<li><p>Double bond $\rightarrow${Single, No} Bond.</p>
+</li>
+<li><p>Single bond $\rightarrow${No} Bond.</p>
+<p>同时：除了同时去掉一个原子的情况，不允许在去掉化学键后生成两个不连接的图，也就是说去掉键后还要是一个分子。</p>
+<p>在设计分子时不会主动破坏芳香键，但去除外环双键也会破坏芳香性。芳香性也可以通过逐步生成单双键形成。</p>
+</li>
+</ul>
+<ol>
+<li>转移概率：确定策略</li>
+<li>折扣因子：奖励影响从最终到起始逐渐衰退，在奖励设定时隐式设定，在得到中间产物时也判定性质奖励。</li>
+</ol>
+<h2 id="多目标强化学习"><a href="#多目标强化学习" class="headerlink" title="多目标强化学习"></a>多目标强化学习</h2><p>多个奖励取权重和</p>
+<h2 id="训练中的探索与开发"><a href="#训练中的探索与开发" class="headerlink" title="训练中的探索与开发"></a>训练中的探索与开发</h2><p>策略网络的探索与开发都是从网络获得的动作分布中采样，本身就存在一定的探索能力，gcpn通过对熵的减小进行惩罚进一步保证了模型的探索能力。</p>
+<p>价值函数则可以直接利用得到的状态价值找到最优的动作，但一位地采取最优动作会使模型丧失探索能力，因此有各种提高探索能力的方法。</p>
+<p>dithering strategy：例如$\epsilon$贪婪 不考虑短期探索，只有一步随机（抖动），会导致数据需求指数级增长（数据也就是智能体生成采样，但抖动策略都很短视，想要拿到长期回报高的就需要大量数据，当然所需时间也会指数级增长）</p>
+<p>但抖动策略完全没有考虑到状态的不确定性，只是以一定概率采用随机动作，没法进行深度的探索。</p>
+<p>molDQN采用bootstrapped-dqn来解决这个问题，它有H个独立的价值函数<script type="math/tex">\{Q^{(i)}|i=1,...,H\}</script>,每一个值函数都用样本的不同子集进行训练，在每个episode，都规范化地选择一个值函数<script type="math/tex">Q^{(i)}</script>来执行决策。通过这些值函数的不同初始化，来使得模型具有一定的深度探索能力。</p>
 
       
     </div>
@@ -1165,7 +1192,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

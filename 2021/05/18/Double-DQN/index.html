@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+
+<meta name="google-site-verification" content="dbpwuLYVFXbb0TpPpFAzrQzI57R9GIkTP6KlpmuCExU" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ss.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ss.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="bootstrapped DQNMolDQN中用到了bootstrapped DQN，为了理解bootstrapped DQN的改进，从头梳理一下DQN的发展。 Q-learning基于价值的强化学习通过获得各个状态的价值来采取最优策略。 对于一个给定的策略\pi,在状态s采取a动作的真实价值为： Q_\pi(s,a) \equiv \mathbb{E}[R_1+\gamma R_2 + ...|">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDQN学习笔记">
+<meta property="og:url" content="https://www.aoshuqiu.top/2021/05/18/Double-DQN/index.html">
+<meta property="og:site_name" content="3号列车">
+<meta property="og:description" content="bootstrapped DQNMolDQN中用到了bootstrapped DQN，为了理解bootstrapped DQN的改进，从头梳理一下DQN的发展。 Q-learning基于价值的强化学习通过获得各个状态的价值来采取最优策略。 对于一个给定的策略\pi,在状态s采取a动作的真实价值为： Q_\pi(s,a) \equiv \mathbb{E}[R_1+\gamma R_2 + ...|">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.aoshuqiu.top/2021/05/18/Double-DQN/image-20210428162257165.png">
+<meta property="article:published_time" content="2021-05-18T08:42:21.000Z">
+<meta property="article:modified_time" content="2022-01-05T06:54:00.357Z">
+<meta property="article:author" content="三儿">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="强化学习">
+<meta property="article:tag" content="DDQN">
+<meta property="article:tag" content="DQN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.aoshuqiu.top/2021/05/18/Double-DQN/image-20210428162257165.png">
+
+<link rel="canonical" href="https://www.aoshuqiu.top/2021/05/18/Double-DQN/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>DDQN学习笔记 | 3号列车</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="3号列车" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <script src="https://cdn.jsdelivr.net/gh/aoshuqiu/live2d-widget@latest/autoload.js"></script>
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">3号列车</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/05/18/Double-DQN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DDQN学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-18 16:42:21" itemprop="dateCreated datePublished" datetime="2021-05-18T16:42:21+08:00">2021-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-05 14:54:00" itemprop="dateModified" datetime="2022-01-05T14:54:00+08:00">2022-01-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="bootstrapped-DQN"><a href="#bootstrapped-DQN" class="headerlink" title="bootstrapped DQN"></a>bootstrapped DQN</h1><p>MolDQN中用到了bootstrapped DQN，为了理解bootstrapped DQN的改进，从头梳理一下DQN的发展。</p>
+<h2 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h2><p>基于价值的强化学习通过获得各个状态的价值来采取最优策略。</p>
+<p>对于一个给定的策略<script type="math/tex">\pi</script>,在状态s采取a动作的真实价值为：</p>
+<script type="math/tex; mode=display">Q_\pi(s,a) \equiv \mathbb{E}[R_1+\gamma R_2 + ...| S_0=s,A_0=a,\pi]</script><p>其中<script type="math/tex">\gamma</script>是一个折扣因子，用来降低后期奖励的权重。最优值函数为：<script type="math/tex">Q_*(s,a)=max_\pi Q_\pi (s,a)</script>,最优策略就是在每个状态下选择动作值最高的动作。</p>
+<p>为了解决无法表示全部状态动作组合的大型问题，引入了参数化的价值函数<script type="math/tex">Q(s,a:\theta_t)</script>。更新参数的过程为：<script type="math/tex">\theta_{t+1}=\theta_t+\alpha(Y_t^{Q}-Q(S_t,A_t;\theta_t))\nabla_{\theta_t}Q(S_t,A_t;\theta_t)</script>，其中<script type="math/tex">\alpha</script>是一个标量步长，<script type="math/tex">Y_t^{Q}</script>定义为：<script type="math/tex">Y_t^{Q}\equiv R_{t+1}+\gamma \max \limits_{a}Q(S_{t+1},a;\theta_t)</script>。</p>
+<p>通过随机梯度下降方法,向目标值<script type="math/tex">Y_t^{Q}</script>方向更新当前值函数<script type="math/tex">Q(S_t,A_t;\theta_t)</script>。</p>
+<h2 id="DQN"><a href="#DQN" class="headerlink" title="DQN"></a>DQN</h2><p>深度Q网络用一个多层神经网络作为价值函数，它将状态s作为输入，输出一个动作值向量<script type="math/tex">Q(s,·;\theta)</script>，其中<script type="math/tex">\theta</script>是网络的参数。</p>
+<p>DQN主要用了两个技巧：目标网络与经验重放</p>
+<ul>
+<li><p><script type="math/tex">Y_t^{DQN}\equiv R_{t+1}+\gamma \max \limits_{a}Q(S_{t+1},a;\theta_t^-)</script>，其中<script type="math/tex">\theta^-</script>为目标网络的参数，它每<script type="math/tex">\tau</script>步更新一次与online值网络保持一致。</p>
+</li>
+<li><p>经验重放是将转移过程存储在一个buffer中，在更新网络时从buffer中取样，目的是降低连续转移过程的影响。</p>
+</li>
+</ul>
+<p>两个技巧都大幅度提高了算法的效率。</p>
+<h2 id="评估误差带来的过高估计"><a href="#评估误差带来的过高估计" class="headerlink" title="评估误差带来的过高估计"></a>评估误差带来的过高估计</h2><p>Q-learning与DQN中的max操作经常会造成过高估计，因为他们动作选择与评估动作值用的是同一个价值函数。通过一个实例来解释这个现象，其中状态是连续的实数，每个状态有10个离散的动作。并且为了简便，每个状态的最优值函数只跟据当前状态而定，所有动作的值函数都相同。</p>
+<p><img src="/2021/05/18/Double-DQN/image-20210428162257165.png" alt="image-20210428162257165"></p>
+<p>如图所示，左侧一列为同一动作的值函数，紫色曲线为真实的值函数，绿色曲线为从真实值函数采样拟合得到的估计值函数。真实值函数分别为<script type="math/tex">Q_*(s,a)=sin(s)</script>（上）与<script type="math/tex">Q_*(s,a)=2exp(-s^2)</script>（中，下）。拟合函数为d维多项式，其中d=6(上，下)或d=9（下）。</p>
+<p>从左侧一列可以看到由于无法得知全部的信息，评估值函数与真实值函数总会有差异，上面两行的评估值函数由于参数不够灵活甚至无法完全拟合采样点。但可以看到，下面的评估值函数虽然足够灵活能够经过所有采样点，但在那些未采样的状态上非常不准确。这些现象在学习过程中非常典型，因为在某一时刻总是只能得到受限的数据。</p>
+<p>中间一列可以看到所有10个动作的评估值函数（绿色），以及优化的目标<script type="math/tex">max_a Q_t(s,a)</script>（虚线）。这些评估值函数因为采样点的不同而有所差异，可以看到虚线所代表的的优化目标<script type="math/tex">max_a Q_t(s,a)</script>总比真实最优值<script type="math/tex">Q_*(s,a)</script>要大。</p>
+<p>右侧一列显示了这种差距，橘色曲线表明了这种估计得到的偏移量的升高部分。紫色曲线为double q-learning得到的估计，可以看到它是无偏的。</p>
+<h2 id="double-q-learning"><a href="#double-q-learning" class="headerlink" title="double q_learning"></a>double q_learning</h2><p>为了解决过高估计的问题，使用两个值函数，他们的weight分别为<script type="math/tex">\theta</script>与<script type="math/tex">\theta'</script>。每一次更新，由其中的一个决定策略，另一个决定动作值。</p>
+<script type="math/tex; mode=display">Y_t^{DoubleQ}\equiv R_{t+1}+\gamma Q(S_{t+1},\mathop{\arg\max}\limits_{a}Q(S_{t+1},a;\theta_t) ;\theta_t')</script><p>其中<script type="math/tex">\theta_t</script>作为online策略进行动作选择，而<script type="math/tex">\theta_t'</script>进行值评估。<script type="math/tex">\theta_t'</script>可以与<script type="math/tex">\theta</script>进行交换来更新<script type="math/tex">\theta_t'</script>。</p>
+<h2 id="double-DQN"><a href="#double-DQN" class="headerlink" title="double DQN"></a>double DQN</h2><p>把dqn中的<script type="math/tex">\theta_t^-</script>作为进行评估的函数</p>
+<script type="math/tex; mode=display">Y_t^{DoubleDQN}\equiv R_{t+1}+\gamma Q(S_{t+1},\mathop{\arg\max}\limits_{a}Q(S_{t+1},a;\theta_t) ;\theta_t^-)</script><p>DQN中<script type="math/tex">\theta_t^-</script>的更新过程并没有改变</p>
+<p>在获得double q_learning的大部分好处的同时，来最小化对DQN的改变。</p>
+<p>the diversity of a set of molecules is defined as the average pairwise Tanimoto distance between the Morgan fingerprints of the molecules.</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag"># 强化学习</a>
+              <a href="/tags/DDQN/" rel="tag"># DDQN</a>
+              <a href="/tags/DQN/" rel="tag"># DQN</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/28/MolDQN/" rel="prev" title="Moldqn论文阅读笔记">
+      <i class="fa fa-chevron-left"></i> Moldqn论文阅读笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/06/NCE/" rel="next" title="NCE阅读笔记">
+      NCE阅读笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#bootstrapped-DQN"><span class="nav-text">bootstrapped DQN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Q-learning"><span class="nav-text">Q-learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DQN"><span class="nav-text">DQN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E8%AF%AF%E5%B7%AE%E5%B8%A6%E6%9D%A5%E7%9A%84%E8%BF%87%E9%AB%98%E4%BC%B0%E8%AE%A1"><span class="nav-text">评估误差带来的过高估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#double-q-learning"><span class="nav-text">double q_learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#double-DQN"><span class="nav-text">double DQN</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="三儿"
+      src="/images/afei.png">
+  <p class="site-author-name" itemprop="name">三儿</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aoshuqiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aoshuqiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/3255787703" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;3255787703" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=119020305" title="网易云音乐 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;119020305" rel="noopener" target="_blank"><i class="fa fa-music fa-fw"></i>网易云音乐</a>
+      </span>
+  </div>
+
+
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=399222&auto=1&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三儿</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

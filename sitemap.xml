@@ -2,23 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.aoshuqiu.top/2022/01/05/NCE/</loc>
+    <loc>https://www.aoshuqiu.top/2021/05/18/Double-DQN/</loc>
     
-    <lastmod>2021-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.aoshuqiu.top/2022/01/05/Double-DQN/</loc>
-    
-    <lastmod>2021-05-18</lastmod>
+    <lastmod>2022-01-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/2022/01/05/MolDQN/</loc>
+    <loc>https://www.aoshuqiu.top/2021/12/06/NCE/</loc>
     
-    <lastmod>2021-04-28</lastmod>
+    <lastmod>2022-01-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/2021/04/28/MolDQN/</loc>
+    
+    <lastmod>2022-01-05</lastmod>
     
   </url>
   
@@ -165,6 +165,20 @@
   </url>
   
   <url>
+    <loc>https://www.aoshuqiu.top/tags/DDQN/</loc>
+    <lastmod>2022-01-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/DQN/</loc>
+    <lastmod>2022-01-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.aoshuqiu.top/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
@@ -207,14 +221,21 @@
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/tags/TRPO/</loc>
+    <loc>https://www.aoshuqiu.top/tags/%E5%9B%BE%E5%B5%8C%E5%85%A5/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/tags/leetcode/</loc>
+    <loc>https://www.aoshuqiu.top/tags/NCE/</loc>
+    <lastmod>2022-01-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/TRPO/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -242,14 +263,14 @@
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
+    <loc>https://www.aoshuqiu.top/tags/leetcode/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.aoshuqiu.top/tags/%E5%9B%BE/</loc>
+    <loc>https://www.aoshuqiu.top/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -278,6 +299,13 @@
   
   <url>
     <loc>https://www.aoshuqiu.top/tags/Drake/</loc>
+    <lastmod>2022-01-05</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.aoshuqiu.top/tags/%E5%9B%BE/</loc>
     <lastmod>2022-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
