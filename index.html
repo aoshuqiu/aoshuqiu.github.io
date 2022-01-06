@@ -164,6 +164,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/" class="post-title-link" itemprop="url">从PG理解信任域(推导)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-23 20:39:31" itemprop="dateCreated datePublished" datetime="2021-12-23T20:39:31+08:00">2021-12-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-06 18:24:55" itemprop="dateModified" datetime="2022-01-06T18:24:55+08:00">2022-01-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>前几天为了组会重新读了一下CS285中信任域的推理部分，重新做了一版PPT，但很遗憾最后没有时间讲，于是整理一下形成文章。</p>
+<h2 id="策略梯度回顾"><a href="#策略梯度回顾" class="headerlink" title="策略梯度回顾"></a>策略梯度回顾</h2><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片13.PNG" alt="幻灯片13"></p>
+<p>强化学习的过程为：智能体做出<strong>决策</strong>与环境交互，环境为智能体返回<strong>状态（观测）</strong>与<strong>奖励</strong>，智能体通过交互不断形成数据，从经验中进行学习。策略梯度方法对策略进行建模，并通过<strong>目标函数</strong>对策略模型进行梯度更新。目标函数即我们希望最大化的值，在强化学习任务下，这个值即为轨迹回报的期望。期望即以概率为权重积分，策略<script type="math/tex">\pi</script>就包含在轨迹概率中。也就是说对于策略不同参数值，由这个策略做决策得到的轨迹概率分布<script type="math/tex">p_\theta(\tau)</script>也不同，我们希望改变<script type="math/tex">\theta</script>使得高回报的轨迹概率升高（上图中第一组公式）。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/12/06/NCE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -914,95 +997,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/13/GCPN/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/GCPN/" class="post-title-link" itemprop="url">GCPN 图卷积策略网络分子生成</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 14:23:10" itemprop="dateCreated datePublished" datetime="2021-01-13T14:23:10+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-03 14:03:41" itemprop="dateModified" datetime="2021-02-03T14:03:41+08:00">2021-02-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>《Graph Convolutional Policy Network for Goal-Directed Molecular Graph Generation》</p>
-<h2 id="GCPN"><a href="#GCPN" class="headerlink" title="GCPN"></a>GCPN</h2><h3 id="应用目标导向"><a href="#应用目标导向" class="headerlink" title="应用目标导向"></a>应用目标导向</h3><ol>
-<li>分子空间大：$10^{60}$</li>
-<li>化学空间离散，分子性质对微小的结构改变也很敏感</li>
-</ol>
-<h2 id="GCPN-1"><a href="#GCPN-1" class="headerlink" title="GCPN"></a>GCPN</h2><ol>
-<li>图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间</li>
-<li>图表示+强化学习+对抗训练</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/13/GCPN/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1074,7 +1068,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1087,7 +1081,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

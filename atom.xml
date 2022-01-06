@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.aoshuqiu.top/"/>
-  <updated>2022-01-05T07:00:01.027Z</updated>
+  <updated>2022-01-06T10:24:55.319Z</updated>
   <id>https://www.aoshuqiu.top/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从PG理解信任域(推导)</title>
+    <link href="https://www.aoshuqiu.top/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/"/>
+    <id>https://www.aoshuqiu.top/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/</id>
+    <published>2021-12-23T12:39:31.000Z</published>
+    <updated>2022-01-06T10:24:55.319Z</updated>
+    
+    <content type="html"><![CDATA[<p>前几天为了组会重新读了一下CS285中信任域的推理部分，重新做了一版PPT，但很遗憾最后没有时间讲，于是整理一下形成文章。</p><h2 id="策略梯度回顾"><a href="#策略梯度回顾" class="headerlink" title="策略梯度回顾"></a>策略梯度回顾</h2><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片13.PNG" alt="幻灯片13"></p><p>强化学习的过程为：智能体做出<strong>决策</strong>与环境交互，环境为智能体返回<strong>状态（观测）</strong>与<strong>奖励</strong>，智能体通过交互不断形成数据，从经验中进行学习。策略梯度方法对策略进行建模，并通过<strong>目标函数</strong>对策略模型进行梯度更新。目标函数即我们希望最大化的值，在强化学习任务下，这个值即为轨迹回报的期望。期望即以概率为权重积分，策略<script type="math/tex">\pi</script>就包含在轨迹概率中。也就是说对于策略不同参数值，由这个策略做决策得到的轨迹概率分布<script type="math/tex">p_\theta(\tau)</script>也不同，我们希望改变<script type="math/tex">\theta</script>使得高回报的轨迹概率升高（上图中第一组公式）。</p><a id="more"></a><p>对目标函数进行求导，<script type="math/tex">p_\theta</script>中与<script type="math/tex">\theta</script>相关的部分只有<script type="math/tex">\pi_\theta</script>，求导时用到了一个公式<script type="math/tex">\nabla_\theta \pi_\theta(\tau) = \pi_\theta(\tau)\nabla_\theta log\pi_\theta(\tau)</script>。观察得到的梯度公式，如果去掉其中的<script type="math/tex">r(\tau)</script>，则这个梯度即为求极大似然时的梯度。从这个角度可以理解一下策略梯度，它也是对自己经验数据的一个极大似然，只不过在其中加入了监督项<script type="math/tex">r</script>。监督项的意义是，增大那些回报高的轨迹的概率，同时降低那些回报低的轨迹的概率。（第二组公式）</p><p>PG算法即对策略参数进行梯度更新，其中更新的步长<script type="math/tex">\alpha</script>是一个比较小的值，通过这种方式不断对策略进行评估与更新。（第三个公式）</p><h2 id="策略梯度存在的问题"><a href="#策略梯度存在的问题" class="headerlink" title="策略梯度存在的问题"></a>策略梯度存在的问题</h2><h3 id="方差过大"><a href="#方差过大" class="headerlink" title="方差过大"></a>方差过大</h3><p>首先方差指的是策略梯度的方差，策略梯度方差大是实践中遇到的问题。由于目标函数中存在期望，期望要通过采样完成，由于采样数量有限，期望一定会受到不同采样的影响，且影响很大。若采样个数增多，则这个方差也会降低。</p><p>策略梯度的方差越大，则策略越难以达到收敛。因此需要想办法解决方差过大的问题。</p><p>降低方差的方法：</p><ul><li><p>因果律</p></li><li><p>加入baseline</p></li></ul><h3 id="因果律"><a href="#因果律" class="headerlink" title="因果律"></a>因果律</h3><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片14.PNG" alt="幻灯片14"></p><p>因果律方法基于一个考量：当前t时刻的决策不会影响到<script type="math/tex">t'<t</script>时刻的奖励。之前说过回报是监督信息，既然之前时刻的奖励不会受此时刻决策印象，就应该在监督中把它们去除。通过这种方式将回报变为reward to go，一个类似Q值的回报。这种方式成功降低了方差，但是还不够。</p><h3 id="加入baselines"><a href="#加入baselines" class="headerlink" title="加入baselines"></a>加入baselines</h3><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片15.PNG" alt="幻灯片15"></p><p>在之前的步骤中我们成功将梯度化成上图第一个式子，通过因果律将轨迹回报变成了<script type="math/tex">\hat Q</script>。但此时的<script type="math/tex">\hat Q</script>只是一条轨迹的reward to go，这其实是一种对reward to go的单样本估计，因此随机性很大，方差也很大。于是将<script type="math/tex">Q</script>值变成期望形式，如上图第二个式子，使用这个值也能有效降低梯度方差。</p><p>加入baselines可以降低方差，且结果无偏。baselines值可以选择平均奖励，也就是采样值的平均值，这是快速且方便的选择。<script type="math/tex">V</script>值是对<script type="math/tex">Q</script>的一个加权平均，也是奖励的平均值，虽说不是最好的baselines，但也足够了。</p><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\image-20220106164403094.png" alt="image-20220106164403094"></p><p>而真正的最优baselines在CS285课程中进行过推导（如上图），可以看到最终的b其实就是以梯度大小为权重的奖励期望，这个计算起来过于复杂，但我们可以领会其中思想，即真正最优的baselines应该视梯度关于各参数的重要性来定，也就是对模型中的每一个不同参数有着不同的baselines。</p><h3 id="整理一下"><a href="#整理一下" class="headerlink" title="整理一下"></a>整理一下</h3><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片16.PNG" alt="幻灯片16"></p><p>在将baselines换为V值后，监督就从奖励变成了Advantage，Advantage是某个动作相对于平均动作的回报优势。但这个V值应该如何获得呢？</p><h3 id="Actor-Critic"><a href="#Actor-Critic" class="headerlink" title="Actor-Critic"></a>Actor-Critic</h3><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片17.PNG" alt="幻灯片17"></p><p>我们用一个神经网络来拟合价值函数。在拟合过程中，真实值标签只能从采样中获得，然而在获得<script type="math/tex">V(s_t)</script>值时，我们不是每次都能回到<script type="math/tex">s_t</script>这个状态，因此只能用一条路径来拟合V值。神经网络的泛化性可以弥补一些这部分的不足，接近的<script type="math/tex">s_t</script>可以互相影响，互相作为参照。</p><p>这个神经网络即为Actor-Critic架构中的Critic部分，策略决策者则为Actor。Actor与环境交互获得数据，Critic对Actor进行评估，最终Actor根据评估对自身模型进行更新。</p><p>我们将Q，V，A都用V值来表示，得到了最终的策略梯度（上图最后一式）。这里的A只是其中的一种方式，不同critic对优势函数的评估方式也不同，PPO中利用了GAE，一种介于蒙特卡洛方法与这个A之间的方法，之后再提。</p><p>我们从最初的奖励期望梯度到现在，从一个无偏/高方差的梯度，变为一个有偏/低方差的梯度。</p><h2 id="PG可行吗？"><a href="#PG可行吗？" class="headerlink" title="PG可行吗？"></a>PG可行吗？</h2><h3 id="目标函数差值"><a href="#目标函数差值" class="headerlink" title="目标函数差值"></a>目标函数差值</h3><p>介绍完PG，我们回头来看一下PG是否可行，或者说PG在什么情况下可行。</p><p>PG的梯度更新公式为<script type="math/tex">\theta' = \theta + \alpha \nabla_\theta J(\theta)</script>，如果我们将PG看为一种策略迭代即用<script type="math/tex">\theta'</script>替代<script type="math/tex">\theta</script>。当然策略迭代实际只是推导Q迭代的中间过程，在这里借用这个算法来进行之后的推导。</p><p>我们希望更新后的参数<script type="math/tex">\theta'</script>在目标函数上有更好的表现，即最大化一个差值目标函数<script type="math/tex">J(\theta')-J(\theta)</script>，下面要证明这个目标函数的梯度即为我们在PG中推导得出的梯度。</p><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片18.PNG" alt="幻灯片18"></p><p>第一行中<script type="math/tex">J(\theta)</script>等于在<script type="math/tex">\theta</script>下初始状态的价值期望。在第一行到第二行的推导中，<script type="math/tex">s_0 \sim p(s_0)</script>与<script type="math/tex">\tau \sim p_{\theta'}(\tau)</script>是一样的，前者与<script type="math/tex">\theta</script>的值无关，而后者中每一条轨迹都经过<script type="math/tex">s_0</script>，且初始状态概率不会改变，因此可以后者替换前者。之后的推导过程比较直观易懂。</p><p>最终得到的式子的确与<script type="math/tex">\theta</script>下的优势函数有关，但注意期望中的<script type="math/tex">\tau</script>是来自<script type="math/tex">\pi_{\theta'}</script>的。然而我们在PG中只能从<script type="math/tex">\theta</script>中采样，因为<script type="math/tex">\theta'</script>还是未知的。因此接下来就要将其中的<script type="math/tex">\theta'</script>换成<script type="math/tex">\theta</script>，当然不能直接换，要利用重要性采样。</p><h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片19.PNG" alt="幻灯片19"></p><p>将<script type="math/tex">\tau</script>打开，对动作进行重要性采样，将动作换成了<script type="math/tex">\theta</script>下的动作，但<script type="math/tex">s_t</script>仍为<script type="math/tex">\theta’</script>下的期望。如果真的能将期望换成最下面这种形式，那我们就成功证明了PG是正确的，即可以通过对优势进行评估来对策略进行更新。那么我们只能默认<script type="math/tex">p_\theta(s_t) \approx p_\theta'(s_t)</script>，也就是说在两个参数下状态的分布相似。</p><p><img src="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片20.PNG" alt="幻灯片20"></p><p>如何保证这个式子成立呢？若对于所有的<script type="math/tex">s_t</script>存在<script type="math/tex">|\pi_{\theta'}(a_t|s_t)-\pi_\theta(a_t|s_t)| \le \epsilon</script>，则能证明<script type="math/tex">\theta</script>下的目标函数是<script type="math/tex">\theta'</script>下的目标函数的一个下界，且<script type="math/tex">\epsilon</script>值越小，这个下界越严格。上图证明过程中的<script type="math/tex">p_{mistake}</script>是相对于<script type="math/tex">p_{\theta}</script>来说的，也就是<script type="math/tex">p_{\theta'}</script>以<script type="math/tex">1-\epsilon</script>的概率满足<script type="math/tex">p_\theta</script>分布，以<script type="math/tex">\epsilon</script>的概率满足另一个分布<script type="math/tex">p_{mistake}</script>。</p><h3 id="信任域"><a href="#信任域" class="headerlink" title="信任域"></a>信任域</h3><p>如何保证对于所有的<script type="math/tex">s_t</script>存在<script type="math/tex">|\pi_{\theta'}(a_t|s_t)-\pi_\theta(a_t|s_t)| \le \epsilon</script>？通过推导我们终于引出了信任域，我们要保证在某个信任域下的<script type="math/tex">\theta'</script>能够满足上述限制。</p><p>这个信任域该如何取呢？</p><p>PG中的方法很简单，限制梯度更新的步长，它的信任域为<script type="math/tex">\theta</script>为圆心，步长<script type="math/tex">\alpha</script>为半径的一个圆。这是一种对<script type="math/tex">\theta'</script>的简单限制。</p><p>TRPO中利用分布间的KL距离作为限制，由于不同参数对于目标函数的敏感度不同，TRPO通过Fisher矩阵将信任域变为一个基于不同参数敏感度的椭圆。</p><p>PPO中则利用clip限制参数的更新范围，从而限制<script type="math/tex">\theta'</script>。</p><p>这就是策略梯度方法共有的信任域选取问题，与他们不同的解决方式。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前几天为了组会重新读了一下CS285中信任域的推理部分，重新做了一版PPT，但很遗憾最后没有时间讲，于是整理一下形成文章。&lt;/p&gt;
+&lt;h2 id=&quot;策略梯度回顾&quot;&gt;&lt;a href=&quot;#策略梯度回顾&quot; class=&quot;headerlink&quot; title=&quot;策略梯度回顾&quot;&gt;&lt;/a&gt;策略梯度回顾&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/blog\myblog\source\_posts\从PG到PPO\幻灯片13.PNG&quot; alt=&quot;幻灯片13&quot;&gt;&lt;/p&gt;
+&lt;p&gt;强化学习的过程为：智能体做出&lt;strong&gt;决策&lt;/strong&gt;与环境交互，环境为智能体返回&lt;strong&gt;状态（观测）&lt;/strong&gt;与&lt;strong&gt;奖励&lt;/strong&gt;，智能体通过交互不断形成数据，从经验中进行学习。策略梯度方法对策略进行建模，并通过&lt;strong&gt;目标函数&lt;/strong&gt;对策略模型进行梯度更新。目标函数即我们希望最大化的值，在强化学习任务下，这个值即为轨迹回报的期望。期望即以概率为权重积分，策略&lt;script type=&quot;math/tex&quot;&gt;\pi&lt;/script&gt;就包含在轨迹概率中。也就是说对于策略不同参数值，由这个策略做决策得到的轨迹概率分布&lt;script type=&quot;math/tex&quot;&gt;p_\theta(\tau)&lt;/script&gt;也不同，我们希望改变&lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;使得高回报的轨迹概率升高（上图中第一组公式）。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="学习" scheme="https://www.aoshuqiu.top/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="机器学习" scheme="https://www.aoshuqiu.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="强化学习" scheme="https://www.aoshuqiu.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="TRPO" scheme="https://www.aoshuqiu.top/tags/TRPO/"/>
+    
+      <category term="信任域" scheme="https://www.aoshuqiu.top/tags/%E4%BF%A1%E4%BB%BB%E5%9F%9F/"/>
+    
+      <category term="PPO" scheme="https://www.aoshuqiu.top/tags/PPO/"/>
+    
+  </entry>
   
   <entry>
     <title>NCE阅读笔记</title>
