@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+
+<meta name="google-site-verification" content="dbpwuLYVFXbb0TpPpFAzrQzI57R9GIkTP6KlpmuCExU" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ss.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ss.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="集群  集群 一、负载均衡 负载均衡算法 1. 轮询（Round Robin） 2. 加权轮询（Weighted Round Robbin） 3. 最少连接（least Connections） 4. 加权最少连接（Weighted Least Connection） 5. 随机算法（Random） 6. 源地址哈希法 (IP Hash)   转发实现 1. HTTP 重定向 2. DNS 域名解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集群">
+<meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="3号列车">
+<meta property="og:description" content="集群  集群 一、负载均衡 负载均衡算法 1. 轮询（Round Robin） 2. 加权轮询（Weighted Round Robbin） 3. 最少连接（least Connections） 4. 加权最少连接（Weighted Least Connection） 5. 随机算法（Random） 6. 源地址哈希法 (IP Hash)   转发实现 1. HTTP 重定向 2. DNS 域名解">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/9daa3616-00a4-48c4-9146-792dc8499be3.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/bfea8772-d01b-4a51-8adc-edfd7d3dce84.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/4ab87717-e264-4232-825d-8aaf08f14e8b.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/e98deb5a-d5d4-4294-aa9b-9220d4483403.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/43d323ac-9f07-4e4a-a315-4eaf8c38766c.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/a42ad3a7-3574-4c48-a783-ed3d08a0688a.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/0f399a9f-1351-4b2d-b8a4-2ebe82b1a703.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/02a1fbfd-7a9d-4114-95df-ca2445587a1f.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/d2c072cc-8b17-480c-813e-18cdb3b4b51f.jpg">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1623f524-b011-40c8-b83f-eab38d538f76.png">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/40c6570d-c1d7-4c38-843e-ba991b2328c2.png">
+<meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/fdc45a09-f838-4348-8959-d2c793727788.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/课件/CS-Notes/notes/集群/image-20220416174125946.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/课件/CS-Notes/notes/集群/image-20220416174240956.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/课件/CS-Notes/notes/集群/image-20220416174304268.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/课件/CS-Notes/notes/集群/image-20220416180838143.png">
+<meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-18T12:51:35.650Z">
+<meta property="article:author" content="三儿">
+<meta property="article:tag" content="计算机系统">
+<meta property="article:tag" content="复习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/9daa3616-00a4-48c4-9146-792dc8499be3.jpg">
+
+<link rel="canonical" href="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>集群 | 3号列车</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="3号列车" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <script src="https://cdn.jsdelivr.net/gh/aoshuqiu/live2d-widget@latest/autoload.js"></script>
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">3号列车</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E9%9B%86%E7%BE%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          集群
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-18 20:51:35" itemprop="dateModified" datetime="2022-09-18T20:51:35+08:00">2022-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#集群">集群</a><ul>
+<li><a href="#一负载均衡">一、负载均衡</a><ul>
+<li><a href="#负载均衡算法">负载均衡算法</a><ul>
+<li><a href="#1-轮询round-robin">1. 轮询（Round Robin）</a></li>
+<li><a href="#2-加权轮询weighted-round-robbin">2. 加权轮询（Weighted Round Robbin）</a></li>
+<li><a href="#3-最少连接least-connections">3. 最少连接（least Connections）</a></li>
+<li><a href="#4-加权最少连接weighted-least-connection">4. 加权最少连接（Weighted Least Connection）</a></li>
+<li><a href="#5-随机算法random">5. 随机算法（Random）</a></li>
+<li><a href="#6-源地址哈希法-ip-hash">6. 源地址哈希法 (IP Hash)</a></li>
+</ul>
+</li>
+<li><a href="#转发实现">转发实现</a><ul>
+<li><a href="#1-http-重定向">1. HTTP 重定向</a></li>
+<li><a href="#2-dns-域名解析">2. DNS 域名解析</a></li>
+<li><a href="#3-反向代理服务器">3. 反向代理服务器</a></li>
+<li><a href="#4-网络层">4. 网络层</a></li>
+<li><a href="#5-链路层">5. 链路层</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#二集群下的-session-管理">二、集群下的 Session 管理</a><ul>
+<li><a href="#sticky-session">Sticky Session</a></li>
+<li><a href="#session-replication">Session Replication</a></li>
+<li><a href="#session-server">Session Server</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="一、负载均衡"><a href="#一、负载均衡" class="headerlink" title="一、负载均衡"></a>一、负载均衡</h2><p>集群中的应用服务器（节点）通常被设计成无状态，用户可以请求任何一个节点。</p>
+<p>负载均衡器会根据集群中每个节点的负载情况，将用户请求转发到合适的节点上。</p>
+<p>负载均衡器可以用来实现高可用以及伸缩性：</p>
+<ul>
+<li>高可用：当某个节点故障时，负载均衡器会将用户请求转发到另外的节点上，从而保证所有服务持续可用；</li>
+<li>伸缩性：根据系统整体负载情况，可以很容易地添加或移除节点。</li>
+</ul>
+<p>负载均衡器运行过程包含两个部分：</p>
+<ol>
+<li>根据负载均衡算法得到转发的节点；</li>
+<li>进行转发。</li>
+</ol>
+<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><h4 id="1-轮询（Round-Robin）"><a href="#1-轮询（Round-Robin）" class="headerlink" title="1. 轮询（Round Robin）"></a>1. 轮询（Round Robin）</h4><p>轮询算法把每个请求轮流发送到每个服务器上。</p>
+<p>下图中，一共有 6 个客户端产生了 6 个请求，这 6 个请求按 (1, 2, 3, 4, 5, 6) 的顺序发送。(1, 3, 5) 的请求会被发送到服务器 1，(2, 4, 6) 的请求会被发送到服务器 2。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/9daa3616-00a4-48c4-9146-792dc8499be3.jpg" width="500px"> </div><br></p>
+<p>该算法比较适合每个服务器的性能差不多的场景，如果有性能存在差异的情况下，那么性能较差的服务器可能无法承担过大的负载（下图的 Server 2）。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/bfea8772-d01b-4a51-8adc-edfd7d3dce84.jpg" width="500px"> </div><br></p>
+<h4 id="2-加权轮询（Weighted-Round-Robbin）"><a href="#2-加权轮询（Weighted-Round-Robbin）" class="headerlink" title="2. 加权轮询（Weighted Round Robbin）"></a>2. 加权轮询（Weighted Round Robbin）</h4><p>加权轮询是在轮询的基础上，根据服务器的性能差异，为服务器赋予一定的权值，性能高的服务器分配更高的权值。</p>
+<p>例如下图中，服务器 1 被赋予的权值为 5，服务器 2 被赋予的权值为 1，那么 (1, 2, 3, 4, 5) 请求会被发送到服务器 1，(6) 请求会被发送到服务器 2。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/4ab87717-e264-4232-825d-8aaf08f14e8b.jpg" width="500px"> </div><br></p>
+<h4 id="3-最少连接（least-Connections）"><a href="#3-最少连接（least-Connections）" class="headerlink" title="3. 最少连接（least Connections）"></a>3. 最少连接（least Connections）</h4><p>由于每个请求的连接时间不一样，使用轮询或者加权轮询算法的话，可能会让一台服务器当前连接数过大，而另一台服务器的连接过小，造成负载不均衡。</p>
+<p>例如下图中，(1, 3, 5) 请求会被发送到服务器 1，但是 (1, 3) 很快就断开连接，此时只有 (5) 请求连接服务器 1；(2, 4, 6) 请求被发送到服务器 2，只有 (2) 的连接断开，此时 (6, 4) 请求连接服务器 2。该系统继续运行时，服务器 2 会承担过大的负载。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/e98deb5a-d5d4-4294-aa9b-9220d4483403.jpg" width="500px"> </div><br></p>
+<p>最少连接算法就是将请求发送给当前最少连接数的服务器上。</p>
+<p>例如下图中，服务器 1 当前连接数最小，那么新到来的请求 6 就会被发送到服务器 1 上。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/43d323ac-9f07-4e4a-a315-4eaf8c38766c.jpg" width="500px"> </div><br></p>
+<h4 id="4-加权最少连接（Weighted-Least-Connection）"><a href="#4-加权最少连接（Weighted-Least-Connection）" class="headerlink" title="4. 加权最少连接（Weighted Least Connection）"></a>4. 加权最少连接（Weighted Least Connection）</h4><p>在最少连接的基础上，根据服务器的性能为每台服务器分配权重，再根据权重计算出每台服务器能处理的连接数。</p>
+<h4 id="5-随机算法（Random）"><a href="#5-随机算法（Random）" class="headerlink" title="5. 随机算法（Random）"></a>5. 随机算法（Random）</h4><p>把请求随机发送到服务器上。</p>
+<p>和轮询算法类似，该算法比较适合服务器性能差不多的场景。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/a42ad3a7-3574-4c48-a783-ed3d08a0688a.jpg" width="500px"> </div><br></p>
+<h4 id="6-源地址哈希法-IP-Hash"><a href="#6-源地址哈希法-IP-Hash" class="headerlink" title="6. 源地址哈希法 (IP Hash)"></a>6. 源地址哈希法 (IP Hash)</h4><p>源地址哈希通过对客户端 IP 计算哈希值之后，再对服务器数量取模得到目标服务器的序号。</p>
+<p>可以保证同一 IP 的客户端的请求会转发到同一台服务器上，用来实现会话粘滞（Sticky Session）</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/0f399a9f-1351-4b2d-b8a4-2ebe82b1a703.jpg" width="500px"> </div><br></p>
+<h3 id="转发实现"><a href="#转发实现" class="headerlink" title="转发实现"></a>转发实现</h3><h4 id="1-HTTP-重定向"><a href="#1-HTTP-重定向" class="headerlink" title="1. HTTP 重定向"></a>1. HTTP 重定向</h4><p>HTTP 重定向负载均衡服务器使用某种负载均衡算法计算得到服务器的 IP 地址之后，将该地址写入 HTTP 重定向报文中，状态码为 302。客户端收到重定向报文之后，需要重新向服务器发起请求。</p>
+<p>缺点：</p>
+<ul>
+<li>需要两次请求，因此访问延迟比较高；</li>
+<li>HTTP 负载均衡器处理能力有限，会限制集群的规模。</li>
+</ul>
+<p>该负载均衡转发的缺点比较明显，实际场景中很少使用它。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/02a1fbfd-7a9d-4114-95df-ca2445587a1f.jpg" width="500px"> </div><br></p>
+<h4 id="2-DNS-域名解析"><a href="#2-DNS-域名解析" class="headerlink" title="2. DNS 域名解析"></a>2. DNS 域名解析</h4><p>在 DNS 解析域名的同时使用负载均衡算法计算服务器 IP 地址。</p>
+<p>优点：</p>
+<ul>
+<li>DNS 能够根据地理位置进行域名解析，返回离用户最近的服务器 IP 地址。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>由于 DNS 具有多级结构，每一级的域名记录都可能被缓存，当下线一台服务器需要修改 DNS 记录时，需要过很长一段时间才能生效。</li>
+</ul>
+<p>大型网站基本使用了 DNS 做为第一级负载均衡手段，然后在内部使用其它方式做第二级负载均衡。也就是说，域名解析的结果为内部的负载均衡服务器 IP 地址。</p>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/d2c072cc-8b17-480c-813e-18cdb3b4b51f.jpg" width="500px"> </div><br></p>
+<h4 id="3-反向代理服务器"><a href="#3-反向代理服务器" class="headerlink" title="3. 反向代理服务器"></a>3. 反向代理服务器</h4><p>反向代理服务器位于源服务器前面，用户的请求需要先经过反向代理服务器才能到达源服务器。反向代理可以用来进行缓存、日志记录等，同时也可以用来做为负载均衡服务器。</p>
+<p>在这种负载均衡转发方式下，客户端不直接请求源服务器，因此源服务器不需要外部 IP 地址，而反向代理需要配置内部和外部两套 IP 地址。</p>
+<p>优点：</p>
+<ul>
+<li>与其它功能集成在一起，部署简单。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>所有请求和响应都需要经过反向代理服务器，它可能会成为性能瓶颈。</li>
+</ul>
+<h4 id="4-网络层"><a href="#4-网络层" class="headerlink" title="4. 网络层"></a>4. 网络层</h4><p>在操作系统内核进程获取网络数据包，根据负载均衡算法计算源服务器的 IP 地址，并修改请求数据包的目的 IP 地址，最后进行转发。</p>
+<p>源服务器返回的响应也需要经过负载均衡服务器，通常是让负载均衡服务器同时作为集群的网关服务器来实现。</p>
+<p>优点：</p>
+<ul>
+<li>在内核进程中进行处理，性能比较高。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>和反向代理一样，所有的请求和响应都经过负载均衡服务器，会成为性能瓶颈。</li>
+</ul>
+<h4 id="5-链路层"><a href="#5-链路层" class="headerlink" title="5. 链路层"></a>5. 链路层</h4><p>在链路层根据负载均衡算法计算源服务器的 MAC 地址，并修改请求数据包的目的 MAC 地址，并进行转发。</p>
+<p>通过配置源服务器的虚拟 IP 地址和负载均衡服务器的 IP 地址一致，从而不需要修改 IP 地址就可以进行转发。也正因为 IP 地址一样，所以源服务器的响应不需要转发回负载均衡服务器，可以直接转发给客户端，避免了负载均衡服务器的成为瓶颈。</p>
+<p>这是一种三角传输模式，被称为直接路由。对于提供下载和视频服务的网站来说，直接路由避免了大量的网络传输数据经过负载均衡服务器。</p>
+<p>这是目前大型网站使用最广负载均衡转发方式，在 Linux 平台可以使用的负载均衡服务器为 LVS（Linux Virtual Server）。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.jscape.com/blog/load-balancing-algorithms">Comparing Load Balancing Algorithms</a></li>
+<li><a target="_blank" rel="noopener" href="http://slideplayer.com/slide/6599069/#">Redirection and Load Balancing</a></li>
+</ul>
+<h2 id="二、集群下的-Session-管理"><a href="#二、集群下的-Session-管理" class="headerlink" title="二、集群下的 Session 管理"></a>二、集群下的 Session 管理</h2><p>一个用户的 Session 信息如果存储在一个服务器上，那么当负载均衡器把用户的下一个请求转发到另一个服务器，由于服务器没有用户的 Session 信息，那么该用户就需要重新进行登录等操作。</p>
+<h3 id="Sticky-Session"><a href="#Sticky-Session" class="headerlink" title="Sticky Session"></a>Sticky Session</h3><p>需要配置负载均衡器，使得一个用户的所有请求都路由到同一个服务器，这样就可以把用户的 Session 存放在该服务器中。</p>
+<p>缺点：</p>
+<ul>
+<li>当服务器宕机时，将丢失该服务器上的所有 Session。</li>
+</ul>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1623f524-b011-40c8-b83f-eab38d538f76.png" width="400px"> </div><br></p>
+<h3 id="Session-Replication"><a href="#Session-Replication" class="headerlink" title="Session Replication"></a>Session Replication</h3><p>在服务器之间进行 Session 同步操作，每个服务器都有所有用户的 Session 信息，因此用户可以向任何一个服务器进行请求。</p>
+<p>缺点：</p>
+<ul>
+<li>占用过多内存；</li>
+<li>同步过程占用网络带宽以及服务器处理器时间。</li>
+</ul>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/40c6570d-c1d7-4c38-843e-ba991b2328c2.png" width="400px"> </div><br></p>
+<h3 id="Session-Server"><a href="#Session-Server" class="headerlink" title="Session Server"></a>Session Server</h3><p>使用一个单独的服务器存储 Session 数据，可以使用传统的 MySQL，也使用 Redis 或者 Memcached 这种内存型数据库。</p>
+<p>优点：</p>
+<ul>
+<li>为了使得大型网站具有伸缩性，集群中的应用服务器通常需要保持无状态，那么应用服务器不能存储用户的会话信息。Session Server 将用户的会话信息单独进行存储，从而保证了应用服务器的无状态。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>需要去实现存取 Session 的代码。</li>
+</ul>
+<p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/fdc45a09-f838-4348-8959-d2c793727788.png" width="600px"> </div><br></p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://sivalabs.in/2018/02/session-management-using-spring-session-jdbc-datastore/">Session Management using Spring Session with JDBC DataStore</a></li>
+</ul>
+<p>限制字符长度，生成二维码</p>
+<p>可以拿到分享数据信息</p>
+<p>没有必要复用分享短链</p>
+<p><img src="/2022/09/01/%E9%9B%86%E7%BE%A4/课件\CS-Notes\notes\集群\image-20220416174125946.png" alt="image-20220416174125946"></p>
+<p><img src="/2022/09/01/%E9%9B%86%E7%BE%A4/课件\CS-Notes\notes\集群\image-20220416174240956.png" alt="image-20220416174240956"></p>
+<p><img src="/2022/09/01/%E9%9B%86%E7%BE%A4/课件\CS-Notes\notes\集群\image-20220416174304268.png" alt="image-20220416174304268"></p>
+<p>永久重定向，会默认链接不超时，浏览器直接找缓存中的url</p>
+<p><img src="/2022/09/01/%E9%9B%86%E7%BE%A4/课件\CS-Notes\notes\集群\image-20220416180838143.png" alt="image-20220416180838143"></p>
+<p>一次调用50ms</p>
+<p>广域请求 80ms</p>
+<p>请求延迟通常200ms</p>
+<p>用户信息可以用消息中间件改成离线</p>
+<p>长短链接可以互为kv（如果支持用户自定义短链接）</p>
+<p>10ms的话最好将短长链接映射放在本地server中</p>
+<p>可以用布隆过滤器查询长链接是否被分配过。</p>
+<p>可靠性： 冗余备份</p>
+<p>安全性：不用自增用hash</p>
+<p>Server 需要写redis 与 mysql 需要三次网络调用其延迟 至少100ms以上,同时考虑短域名系统的全球化,跨越过远的广域网络请求,延迟再增加80ms以上,因此预估一次请求延迟在200ms。</p>
+<ol>
+<li>过期后将失效</li>
+<li>短域名是唯一的</li>
+<li>支持自定义短域名,长度在7个字符(不含域名长度),由[0-9,a-z,A-Z]等字符组成</li>
+<li>QPS <ol>
+<li>写 DAU = 100M  -&gt; QPS = 100M * 0.1/ 86400 = 1K -&gt; 峰值 2k -&gt; 预估值 = 4K</li>
+<li>读 DAU = 100M  -&gt; QPS = 100M * 10 / 86400 = 115k -&gt; 峰值230k-&gt; 预估值460k</li>
+<li>这是一个读多写少的系统</li>
+</ol>
+</li>
+<li>延迟 = 10ms以内</li>
+<li>存储 = 128+7 = 100 bytes/条 <em> 1500 </em> 60 <em> 60 </em> 24 * 365 = 20T/年</li>
+<li>可靠性: 5个9(可运维性, 可扩展性,迭代效率)</li>
+<li>安全性: 防止被人爬取,盗用数据</li>
+</ol>
+<p><strong>存储层</strong></p>
+<ol>
+<li><strong>存储介质</strong> 数据表的业务逻辑非常简单,没必要使用关系型数据库,可以更换为持久化kv引擎 比如rocksDB,如果考虑数据分析的需求,则可以将数据构建离线的ELK导入数仓。</li>
+<li><strong>构建索引</strong> 写入时要判断长域名是否存在,因此要对长域名建立索引,读取时要根据短域名查询长域名因此也要在redis中维护短域名到长域名的倒排索引。</li>
+<li>为了应对极高的写入QPS,必须使用<strong>分片技术</strong>, 使用短域名7位62进制的特性,进行一致性哈希,来计算写入分片位置,读取时也用相同的哈希算法。</li>
+</ol>
+<p><strong>缓存层</strong></p>
+<ol>
+<li><strong>读多写少</strong> 的系统中,可以使用缓存技术来降低延迟, 尽量保证所有请求在缓存中完成</li>
+<li>对于判断长域名是否存储过,以及短域名是否被分配过可以构建<strong>布隆过滤器</strong>。</li>
+<li>如果对延迟非常苛刻,完全可以使用<strong>本地缓存,</strong> 在本地维护一个LRU缓存来存储长短域名映射</li>
+<li>短域名数据的变化非常缓慢,可以考虑<strong>静态化</strong>技术,把数据发送给服务节点以文件的方式同步</li>
+</ol>
+<p><strong>业务层</strong></p>
+<ol>
+<li>通过<strong>尾号分片</strong>将ID生成器分布式化,基于<strong>预处理</strong>的思路可以分段缓存一部分未分配的短域名</li>
+<li>分布式ID生成需要使用zk等组件处理<strong>数据一致性</strong>的问题</li>
+<li>使用lua脚本降低对redis的<strong>减少网络调用次数</strong></li>
+</ol>
+<p><strong>拓扑层</strong></p>
+<ol>
+<li>利用地理位置的局部性,将同一地区的请求都路由到最近的机房访问,<strong>降低广域延迟</strong></li>
+<li>可以支持跨机房全球化的<strong>多重分片</strong>,来应对同一地区QPS过高问题,使用7位数字中的首位进行一致性哈希(其哈希空间为62),后6位进行本机房内的rocksDB 节点的分片。</li>
+</ol>
+<h2 id="系统设计问题"><a href="#系统设计问题" class="headerlink" title="系统设计问题"></a>系统设计问题</h2><h3 id="需求约束"><a href="#需求约束" class="headerlink" title="需求约束"></a>需求约束</h3><p>输入 输出</p>
+<h3 id="非需求约束"><a href="#非需求约束" class="headerlink" title="非需求约束"></a>非需求约束</h3><p><strong>可用性</strong>：当某个节点故障时，负载均衡器会将用户请求转发到另外的节点上，从而保证所有服务持续可用。</p>
+<p><strong>延迟</strong>：一般都是100ms-200ms</p>
+<p><strong>一致性</strong>：一般指读写一致性，读的时候一定读最新的写则是高一致性</p>
+<p><strong>可靠性</strong>：数据不能丢失，需要主从复制与冗余备份</p>
+<h3 id="数据库模式"><a href="#数据库模式" class="headerlink" title="数据库模式"></a>数据库模式</h3><p><strong>NOSQL VS SQL</strong></p>
+<p>SQL模式固定不灵活 适合垂直扩展，也就是换更强的cpu 更大的内存等等，但水平扩展很麻烦</p>
+<p>NOSQL  模式灵活，水平扩展更简便</p>
+<p>SQL 坚决符合ACID特性，而NoSQL为了更好的性能和扩展性会牺牲一部分</p>
+<p><strong>用SQL的理由</strong></p>
+<p>ACID特性</p>
+<p>数据结构固定，不需要大量增长</p>
+<p><strong>用NoSQL的理由</strong></p>
+<p>不必预先定义类型</p>
+<p>需要利用云计算，要好扩展性的系统</p>
+<p>开发迅速，可以慢慢扩展</p>
+<p><strong>数据库可以体现可靠性</strong>：NoSQL会维持一定数量的备份以保证可靠性</p>
+<h3 id="组件设计"><a href="#组件设计" class="headerlink" title="组件设计"></a>组件设计</h3><p>一般都是读写分离，有专门的读服务器与写服务器</p>
+<ul>
+<li><strong>QPS</strong>： Queries per second ，每秒查询量， 可以通过日活推断<ul>
+<li>日活数量如果为1亿（100M），写请求，猜测每个用户平均每天写请求为0.1次， QPS = 100M*0.1/86400 =1K，1K是一个平均值，推断峰值为2K/s，因为系统的用户量可能一直在增长，因此要预估一个1.5倍-2倍的QPS也就是4K/s。</li>
+<li>猜测读请求每天10次，大概预估值为460K</li>
+<li>一般都是读多写少</li>
+<li>通过集群进行优化，读写分离，复制，分片</li>
+</ul>
+</li>
+<li><p><strong>延迟</strong> : 一般都是100ms-200ms</p>
+<ul>
+<li>使用缓存</li>
+<li>直接发送给服务节点本地存储</li>
+<li>使用布隆过滤器</li>
+</ul>
+</li>
+<li><p><strong>存储</strong> ：每秒请求数 <em> 请求大小 </em> 60 <em> 60 </em> 24 * 365 </p>
+</li>
+<li><strong>可靠性</strong> ：可扩展性，可运维性 主从复制，冗余备份</li>
+<li><strong>安全性</strong> ： 防止被人爬取，盗用数据 不要让别人得到规律</li>
+</ul>
+<p>缓存服务器CDN</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag"># 计算机系统</a>
+              <a href="/tags/%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 复习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/23/%E4%BB%8EPG%E5%88%B0PPO/" rel="prev" title="从PG理解信任域(推导)">
+      <i class="fa fa-chevron-left"></i> 从PG理解信任域(推导)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%20-%20%E9%93%BE%E8%B7%AF%E5%B1%82/" rel="next" title="计算机网络 - 链路层">
+      计算机网络 - 链路层 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4"><span class="nav-text">集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">一、负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-text">负载均衡算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%BD%AE%E8%AF%A2%EF%BC%88Round-Robin%EF%BC%89"><span class="nav-text">1. 轮询（Round Robin）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8A%A0%E6%9D%83%E8%BD%AE%E8%AF%A2%EF%BC%88Weighted-Round-Robbin%EF%BC%89"><span class="nav-text">2. 加权轮询（Weighted Round Robbin）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%9C%80%E5%B0%91%E8%BF%9E%E6%8E%A5%EF%BC%88least-Connections%EF%BC%89"><span class="nav-text">3. 最少连接（least Connections）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%8A%A0%E6%9D%83%E6%9C%80%E5%B0%91%E8%BF%9E%E6%8E%A5%EF%BC%88Weighted-Least-Connection%EF%BC%89"><span class="nav-text">4. 加权最少连接（Weighted Least Connection）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95%EF%BC%88Random%EF%BC%89"><span class="nav-text">5. 随机算法（Random）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E6%BA%90%E5%9C%B0%E5%9D%80%E5%93%88%E5%B8%8C%E6%B3%95-IP-Hash"><span class="nav-text">6. 源地址哈希法 (IP Hash)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8F%91%E5%AE%9E%E7%8E%B0"><span class="nav-text">转发实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-HTTP-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">1. HTTP 重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-DNS-%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="nav-text">2. DNS 域名解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-text">3. 反向代理服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-text">4. 网络层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-text">5. 链路层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84-Session-%E7%AE%A1%E7%90%86"><span class="nav-text">二、集群下的 Session 管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sticky-Session"><span class="nav-text">Sticky Session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Replication"><span class="nav-text">Session Replication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Server"><span class="nav-text">Session Server</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E9%97%AE%E9%A2%98"><span class="nav-text">系统设计问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E7%BA%A6%E6%9D%9F"><span class="nav-text">需求约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%9C%80%E6%B1%82%E7%BA%A6%E6%9D%9F"><span class="nav-text">非需求约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%BC%8F"><span class="nav-text">数据库模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="nav-text">组件设计</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="三儿"
+      src="/images/afei.png">
+  <p class="site-author-name" itemprop="name">三儿</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aoshuqiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aoshuqiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/3255787703" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;3255787703" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://music.163.com/#/user/home?id=119020305" title="网易云音乐 → https:&#x2F;&#x2F;music.163.com&#x2F;#&#x2F;user&#x2F;home?id&#x3D;119020305" rel="noopener" target="_blank"><i class="fa fa-music fa-fw"></i>网易云音乐</a>
+      </span>
+  </div>
+
+
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=399222&auto=1&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三儿</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

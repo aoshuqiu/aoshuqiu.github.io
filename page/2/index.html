@@ -164,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/13/GCPN/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -178,7 +178,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/01/13/GCPN/" class="post-title-link" itemprop="url">GCPN 图卷积策略网络分子生成</a>
+            <a href="/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/" class="post-title-link" itemprop="url">Java 并发</a>
         </h2>
 
         <div class="post-meta">
@@ -188,14 +188,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-01-13 14:23:10" itemprop="dateCreated datePublished" datetime="2021-01-13T14:23:10+08:00">2021-01-13</time>
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-03 14:03:41" itemprop="dateModified" datetime="2021-02-03T14:03:41+08:00">2021-02-03</time>
+                <time title="修改时间：2022-09-18 20:39:54" itemprop="dateModified" datetime="2022-09-18T20:39:54+08:00">2022-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,18 +218,110 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>《Graph Convolutional Policy Network for Goal-Directed Molecular Graph Generation》</p>
-<h2 id="GCPN"><a href="#GCPN" class="headerlink" title="GCPN"></a>GCPN</h2><h3 id="应用目标导向"><a href="#应用目标导向" class="headerlink" title="应用目标导向"></a>应用目标导向</h3><ol>
-<li>分子空间大：$10^{60}$</li>
-<li>化学空间离散，分子性质对微小的结构改变也很敏感</li>
-</ol>
-<h2 id="GCPN-1"><a href="#GCPN-1" class="headerlink" title="GCPN"></a>GCPN</h2><ol>
-<li>图卷积策略网络，引导生成特定期望目标同时用基本化学规则限制输出空间</li>
-<li>图表示+强化学习+对抗训练</li>
-</ol>
+          <h1 id="Java-并发"><a href="#Java-并发" class="headerlink" title="Java 并发"></a>Java 并发</h1><!-- GFM-TOC -->
+<ul>
+<li><p><a href="#java-并发">Java 并发</a></p>
+<ul>
+<li><p><a href="#一使用线程">一、使用线程</a></p>
+<ul>
+<li><a href="#实现-runnable-接口">实现 Runnable 接口</a></li>
+<li><a href="#实现-callable-接口">实现 Callable 接口</a></li>
+<li><a href="#继承-thread-类">继承 Thread 类</a></li>
+<li><a href="#实现接口-vs-继承-thread">实现接口 VS 继承 Thread</a></li>
+</ul>
+</li>
+<li><p><a href="#二基础线程机制">二、基础线程机制</a></p>
+<ul>
+<li><a href="#executor">Executor</a></li>
+<li><a href="#daemon">Daemon</a></li>
+<li><a href="#sleep">sleep()</a></li>
+<li><a href="#yield">yield()</a></li>
+</ul>
+</li>
+<li><p><a href="#三中断">三、中断</a></p>
+<ul>
+<li><a href="#interruptedexception">InterruptedException</a></li>
+<li><a href="#interrupted">interrupted()</a></li>
+<li><a href="#executor-的中断操作">Executor 的中断操作</a></li>
+</ul>
+</li>
+<li><p><a href="#四互斥同步">四、互斥同步</a></p>
+<ul>
+<li><a href="#synchronized">synchronized</a></li>
+<li><a href="#reentrantlock">ReentrantLock</a></li>
+<li><a href="#比较">比较</a></li>
+<li><a href="#使用选择">使用选择</a></li>
+</ul>
+</li>
+<li><p><a href="#五线程之间的协作">五、线程之间的协作</a></p>
+<ul>
+<li><a href="#join">join()</a></li>
+<li><a href="#wait-notify-notifyall">wait() notify() notifyAll()</a></li>
+<li><a href="#await-signal-signalall">await() signal() signalAll()</a></li>
+</ul>
+</li>
+<li><p><a href="#六线程状态">六、线程状态</a></p>
+<ul>
+<li><a href="#新建new">新建（NEW）</a></li>
+<li><a href="#可运行runable">可运行（RUNABLE）</a></li>
+<li><a href="#阻塞blocked">阻塞（BLOCKED）</a></li>
+<li><a href="#无限期等待waiting">无限期等待（WAITING）</a></li>
+<li><a href="#限期等待timed_waiting">限期等待（TIMED_WAITING）</a></li>
+<li><a href="#死亡terminated">死亡（TERMINATED）</a></li>
+</ul>
+</li>
+<li><p><a href="#七juc---aqs">七、J.U.C - AQS</a></p>
+<ul>
+<li><a href="#countdownlatch">CountDownLatch</a></li>
+<li><a href="#cyclicbarrier">CyclicBarrier</a></li>
+<li><a href="#semaphore">Semaphore</a></li>
+</ul>
+</li>
+<li><p><a href="#八juc---其它组件">八、J.U.C - 其它组件</a></p>
+<ul>
+<li><a href="#futuretask">FutureTask</a></li>
+<li><a href="#blockingqueue">BlockingQueue</a></li>
+<li><a href="#forkjoin">ForkJoin</a></li>
+</ul>
+</li>
+<li><p><a href="#九线程不安全示例">九、线程不安全示例</a></p>
+</li>
+<li><p><a href="#十java-内存模型">十、Java 内存模型</a></p>
+<ul>
+<li><a href="#主内存与工作内存">主内存与工作内存</a></li>
+<li><a href="#内存间交互操作">内存间交互操作</a></li>
+<li><a href="#内存模型三大特性">内存模型三大特性</a></li>
+<li><a href="#先行发生原则">先行发生原则</a></li>
+</ul>
+</li>
+<li><p><a href="#十一线程安全">十一、线程安全</a></p>
+<ul>
+<li><a href="#不可变">不可变</a></li>
+<li><a href="#互斥同步">互斥同步</a></li>
+<li><a href="#非阻塞同步">非阻塞同步</a></li>
+<li><a href="#无同步方案">无同步方案</a></li>
+</ul>
+</li>
+<li><p><a href="#十二锁优化">十二、锁优化</a></p>
+<ul>
+<li><a href="#自旋锁">自旋锁</a></li>
+<li><a href="#锁消除">锁消除</a></li>
+<li><a href="#锁粗化">锁粗化</a></li>
+<li><a href="#轻量级锁">轻量级锁</a></li>
+<li><a href="#偏向锁">偏向锁</a></li>
+</ul>
+</li>
+<li><p><a href="#十三多线程开发良好的实践">十三、多线程开发良好的实践</a></p>
+</li>
+<li><p><a href="#参考资料">参考资料</a></p>
+<!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/01/13/GCPN/#more" rel="contents">
+              <a class="btn" href="/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -253,7 +345,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/13/policy%20gradient/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/Socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -267,7 +359,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/01/13/policy%20gradient/" class="post-title-link" itemprop="url">策略梯度方法推导</a>
+            <a href="/2022/09/01/Socket/" class="post-title-link" itemprop="url">Socket</a>
         </h2>
 
         <div class="post-meta">
@@ -277,14 +369,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-01-13 14:20:10" itemprop="dateCreated datePublished" datetime="2021-01-13T14:20:10+08:00">2021-01-13</time>
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-18 17:37:16" itemprop="dateModified" datetime="2021-01-18T17:37:16+08:00">2021-01-18</time>
+                <time title="修改时间：2022-09-18 20:44:31" itemprop="dateModified" datetime="2022-09-18T20:44:31+08:00">2022-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -307,14 +399,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="策略梯度方法推导"><a href="#策略梯度方法推导" class="headerlink" title="策略梯度方法推导"></a>策略梯度方法推导</h2><p>轨迹$\tau = (s_{0},a_{0},…,s_{h},a_{h})$</p>
-<p><strong>目标：找到最优神经网络参数$\theta^{*}$最大化收益关于轨迹分布的期望</strong></p>
-<p>$\theta^{*}=\mathop{\arg\max}\limits_{\theta} \mathbb{E}_{\tau \sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_{t},a_{t})\bigg]$</p>
-<p>目标函数 $J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}\bigg[\sum\limits_{t}r(s_t,a_t)\bigg]$</p>
-<p>定义轨迹收益$r(\tau)=\sum\limits_t r(s_t,a_t)$，目标函数变成$J(\theta)=\mathbb{E}_{\tau\sim p_{\theta}(\tau)}[r(\tau)]$</p>
+          <h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#socket">Socket</a><ul>
+<li><a href="#一io-模型">一、I/O 模型</a><ul>
+<li><a href="#阻塞式-io">阻塞式 I/O</a></li>
+<li><a href="#非阻塞式-io">非阻塞式 I/O</a></li>
+<li><a href="#io-复用">I/O 复用</a></li>
+<li><a href="#信号驱动-io">信号驱动 I/O</a></li>
+<li><a href="#异步-io">异步 I/O</a></li>
+<li><a href="#五大-io-模型比较">五大 I/O 模型比较</a></li>
+</ul>
+</li>
+<li><a href="#二io-复用">二、I/O 复用</a><ul>
+<li><a href="#select">select</a></li>
+<li><a href="#poll">poll</a></li>
+<li><a href="#比较">比较</a></li>
+<li><a href="#epoll">epoll</a></li>
+<li><a href="#工作模式">工作模式</a></li>
+<li><a href="#应用场景">应用场景</a></li>
+</ul>
+</li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/01/13/policy%20gradient/#more" rel="contents">
+              <a class="btn" href="/2022/09/01/Socket/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -338,7 +451,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/08/leetcode-99/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/Thrift/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -352,85 +465,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/08/08/leetcode-99/" class="post-title-link" itemprop="url">二叉树遍历-Morris中序遍历</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-08 17:42:36 / 修改时间：21:08:55" itemprop="dateCreated datePublished" datetime="2020-08-08T17:42:36+08:00">2020-08-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Morris中序遍历"><a href="#Morris中序遍历" class="headerlink" title="Morris中序遍历"></a>Morris中序遍历</h2><h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>二叉树的中序(inorder)遍历，也就是二叉树最平常的遍历算法。对于树中每个节点，递归遍历左子树，之后遍历本节点，最后遍历右子树。其中分为迭代与递归两种等价写法，迭代实现需要手动维护一个节点栈。</p>
-<p>这个遍历算法的时间复杂度为$O(N)$，其中N为二叉树的节点数，空间复杂度为$O(N)$(若用数组存储遍历序列),或$O(H)$,$H$为二叉树高度（用迭代实现，栈中存储结点）。</p>
-<p>然而，存在一个<strong>常数空间</strong>算法来解决这个问题：</p>
-<h3 id="Morris-遍历"><a href="#Morris-遍历" class="headerlink" title="Morris 遍历"></a>Morris 遍历</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/08/leetcode-99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/06/leetcode-336/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/06/leetcode-336/" class="post-title-link" itemprop="url">leetcode 336 回文对</a>
+            <a href="/2022/09/01/Thrift/" class="post-title-link" itemprop="url">Thrift</a>
         </h2>
 
         <div class="post-meta">
@@ -440,14 +475,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-08-06 20:26:17" itemprop="dateCreated datePublished" datetime="2020-08-06T20:26:17+08:00">2020-08-06</time>
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-08 21:09:03" itemprop="dateModified" datetime="2020-08-08T21:09:03+08:00">2020-08-08</time>
+                <time title="修改时间：2022-09-18 20:47:36" itemprop="dateModified" datetime="2022-09-18T20:47:36+08:00">2022-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -470,16 +505,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="回文对问题"><a href="#回文对问题" class="headerlink" title="回文对问题"></a>回文对问题</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
-<h4 id><a href="#" class="headerlink" title=" "></a> </h4><p>给定一组 <strong>互不相同</strong> 的单词， 找出所有<strong>不同</strong> 的索引对<code>(i, j)</code>，使得列表中的两个单词， <code>words[i] + words[j]</code> ，可拼接成回文串。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[&quot;abcd&quot;,&quot;dcba&quot;,&quot;lls&quot;,&quot;s&quot;,&quot;sssll&quot;]</span><br><span class="line">&gt;输出：[[0,1],[1,0],[3,2],[2,4]] </span><br><span class="line">&gt;解释：可拼接成的回文串为 [&quot;dcbaabcd&quot;,&quot;abcddcba&quot;,&quot;slls&quot;,&quot;llssssll&quot;]</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;输入：[&quot;bat&quot;,&quot;tab&quot;,&quot;cat&quot;]</span><br><span class="line">&gt;输出：[[0,1],[1,0]] </span><br><span class="line">&gt;解释：可拼接成的回文串为 [&quot;battab&quot;,&quot;tabbat&quot;]</span><br></pre></td></tr></table></figure>
-</blockquote>
+          <h2 id="一、什么是Thrift？"><a href="#一、什么是Thrift？" class="headerlink" title="一、什么是Thrift？"></a>一、什么是Thrift？</h2><ul>
+<li>thrift是一种描述语言和二进制通讯协议，它被用来定义和创建跨语言的服务。它被当作一个远程过程调用框架来使用，是由Facebook为“大规模语言服务开发”而开发的。</li>
+<li>它通过一个代码生成引擎联合了一个软件栈，来创建不同程度的、无缝的跨平台高效服务，可以使用C#、C++（基于POSIX兼容系统）、Cappuccino、Cocoa、Delphi、Erlang、Go、Haskell、Java、Node.js、OCaml、Perl、PHP、Python、Ruby和Smalltalk。</li>
+<li>虽然之前是由Facebook开发的，但它现在是Apache软件基金会的开源项目了。</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/08/06/leetcode-336/#more" rel="contents">
+              <a class="btn" href="/2022/09/01/Thrift/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -503,7 +536,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/SQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/afei.png">
@@ -517,85 +550,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/" class="post-title-link" itemprop="url">课程表问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-06 11:36:47 / 修改时间：13:16:25" itemprop="dateCreated datePublished" datetime="2020-08-06T11:36:47+08:00">2020-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="leetcode-207-课程表"><a href="#leetcode-207-课程表" class="headerlink" title="leetcode 207 课程表"></a>leetcode 207 课程表</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
-<p>你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
-<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
-<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p></blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/06/%E5%9B%BE%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/04/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/04/hello-world/" class="post-title-link" itemprop="url">闲唠唠嗑</a>
+            <a href="/2022/09/01/SQL/" class="post-title-link" itemprop="url">SQL</a>
         </h2>
 
         <div class="post-meta">
@@ -605,84 +560,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-08-04 16:40:10" itemprop="dateCreated datePublished" datetime="2020-08-04T16:40:10+08:00">2020-08-04</time>
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-05 15:03:05" itemprop="dateModified" datetime="2022-01-05T15:03:05+08:00">2022-01-05</time>
+                <time title="修改时间：2022-09-18 20:46:55" itemprop="dateModified" datetime="2022-09-18T20:46:55+08:00">2022-09-18</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%97%B2%E5%97%91/" itemprop="url" rel="index"><span itemprop="name">闲嗑</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>博客终于配置得差不多，就随便写一些测试一下</p>
-<p>最近有些闲下来了，为了防止自己报复性娱乐，开个博客提醒着。提醒自己弄弄专业，提醒自己多做事少想事。这段时间应该会多写点东西，毕竟还有个新鲜劲。不管以后还会不会有兴趣、精力，现在做事总是好的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2020/08/04/cs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/afei.png">
-      <meta itemprop="name" content="三儿">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="3号列车">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/04/cs/" class="post-title-link" itemprop="url">计算机系统大作业——Hello的一生</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-04 12:42:24 / 修改时间：15:22:53" itemprop="dateCreated datePublished" datetime="2020-08-04T12:42:24+08:00">2020-08-04</time>
-            </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -704,12 +590,695 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="计算机系统大作业——Hello的一生"><a href="#计算机系统大作业——Hello的一生" class="headerlink" title="计算机系统大作业——Hello的一生"></a>计算机系统大作业——Hello的一生</h1><p><strong>摘 要</strong></p>
-<p>  本文以hello.c为例，探寻程序由代码一步步经过预处理、编译、链接、之后成为进程，并被系统进行管理的过程。从而窥探程序由出生到死去的过程中，计算机系统各个部分是如何协调工作的，随着hello.c的一步步变化逐渐理解机器的运行机制。</p>
-<p><strong>关键词：</strong>计算机系统；P2P；程序运行全过程；             </p>
+          <!-- GFM-TOC -->
+<ul>
+<li><a href="#一基础">一、基础</a></li>
+<li><a href="#二创建表">二、创建表</a></li>
+<li><a href="#三修改表">三、修改表</a></li>
+<li><a href="#四插入">四、插入</a></li>
+<li><a href="#五更新">五、更新</a></li>
+<li><a href="#六删除">六、删除</a></li>
+<li><a href="#七查询">七、查询</a><ul>
+<li><a href="#distinct">DISTINCT</a></li>
+<li><a href="#limit">LIMIT</a></li>
+</ul>
+</li>
+<li><a href="#八排序">八、排序</a></li>
+<li><a href="#九过滤">九、过滤</a></li>
+<li><a href="#十通配符">十、通配符</a></li>
+<li><a href="#十一计算字段">十一、计算字段</a></li>
+<li><a href="#十二函数">十二、函数</a><ul>
+<li><a href="#汇总">汇总</a></li>
+<li><a href="#文本处理">文本处理</a></li>
+<li><a href="#日期和时间处理">日期和时间处理</a></li>
+<li><a href="#数值处理">数值处理</a></li>
+</ul>
+</li>
+<li><a href="#十三分组">十三、分组</a></li>
+<li><a href="#十四子查询">十四、子查询</a></li>
+<li><a href="#十五连接">十五、连接</a><ul>
+<li><a href="#内连接">内连接</a></li>
+<li><a href="#自连接">自连接</a></li>
+<li><a href="#自然连接">自然连接</a></li>
+<li><a href="#外连接">外连接</a></li>
+</ul>
+</li>
+<li><a href="#十六组合查询">十六、组合查询</a></li>
+<li><a href="#十七视图">十七、视图</a></li>
+<li><a href="#十八存储过程">十八、存储过程</a></li>
+<li><a href="#十九游标">十九、游标</a></li>
+<li><a href="#二十触发器">二十、触发器</a></li>
+<li><a href="#二十一事务管理">二十一、事务管理</a></li>
+<li><a href="#二十二字符集">二十二、字符集</a></li>
+<li><a href="#二十三权限管理">二十三、权限管理</a></li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/08/04/cs/#more" rel="contents">
+              <a class="btn" href="/2022/09/01/SQL/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/spring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/spring/" class="post-title-link" itemprop="url">Spring</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-18 20:45:26" itemprop="dateModified" datetime="2022-09-18T20:45:26+08:00">2022-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h1><h2 id="IOC容器"><a href="#IOC容器" class="headerlink" title="IOC容器"></a>IOC容器</h2><p>org.springframework.context.ApplicationContext接口代表IOC容器，负责实例化，配置和组装Bean。</p>
+<p>ClassPathXmlApplicationContext通过xml定义配置文件，是ApplicationContext的一种接口实现。</p>
+<p>IOC可以帮助实例化对象，这是一个工厂模式。</p>
+<p>本质上是一个BeanFactory</p>
+<h3 id="配置元数据"><a href="#配置元数据" class="headerlink" title="配置元数据"></a>配置元数据</h3><p>在xml中的<beans>标签中配置，<bean>中定义id与class类全限定名</bean></beans></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/spring/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">攻击技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-18 20:48:35" itemprop="dateModified" datetime="2022-09-18T20:48:35+08:00">2022-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="攻击技术"><a href="#攻击技术" class="headerlink" title="攻击技术"></a>攻击技术</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#攻击技术">攻击技术</a><ul>
+<li><a href="#一跨站脚本攻击">一、跨站脚本攻击</a></li>
+<li><a href="#二跨站请求伪造">二、跨站请求伪造</a></li>
+<li><a href="#三sql-注入攻击">三、SQL 注入攻击</a></li>
+<li><a href="#四拒绝服务攻击">四、拒绝服务攻击</a></li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E5%88%86%E5%B8%83%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-title-link" itemprop="url">分布式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-18 20:48:08" itemprop="dateModified" datetime="2022-09-18T20:48:08+08:00">2022-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#分布式">分布式</a><ul>
+<li><a href="#一分布式锁">一、分布式锁</a><ul>
+<li><a href="#数据库的唯一索引">数据库的唯一索引</a></li>
+<li><a href="#redis-的-setnx-指令">Redis 的 SETNX 指令</a></li>
+<li><a href="#redis-的-redlock-算法">Redis 的 RedLock 算法</a></li>
+<li><a href="#zookeeper-的有序节点">Zookeeper 的有序节点</a></li>
+</ul>
+</li>
+<li><a href="#二分布式事务">二、分布式事务</a><ul>
+<li><a href="#2pc">2PC</a></li>
+<li><a href="#本地消息表">本地消息表</a></li>
+</ul>
+</li>
+<li><a href="#三cap">三、CAP</a><ul>
+<li><a href="#一致性">一致性</a></li>
+<li><a href="#可用性">可用性</a></li>
+<li><a href="#分区容忍性">分区容忍性</a></li>
+<li><a href="#权衡">权衡</a></li>
+</ul>
+</li>
+<li><a href="#四base">四、BASE</a><ul>
+<li><a href="#基本可用">基本可用</a></li>
+<li><a href="#软状态">软状态</a></li>
+<li><a href="#最终一致性">最终一致性</a></li>
+</ul>
+</li>
+<li><a href="#五paxos">五、Paxos</a><ul>
+<li><a href="#执行过程">执行过程</a></li>
+<li><a href="#约束条件">约束条件</a></li>
+</ul>
+</li>
+<li><a href="#六raft">六、Raft</a><ul>
+<li><a href="#单个-candidate-的竞选">单个 Candidate 的竞选</a></li>
+<li><a href="#多个-candidate-竞选">多个 Candidate 竞选</a></li>
+<li><a href="#数据同步">数据同步</a></li>
+</ul>
+</li>
+<li><a href="#参考">参考</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/%E5%88%86%E5%B8%83%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">缓存</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-18 20:51:06" itemprop="dateModified" datetime="2022-09-18T20:51:06+08:00">2022-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#缓存">缓存</a><ul>
+<li><a href="#一缓存特征">一、缓存特征</a></li>
+<li><a href="#二缓存位置">二、缓存位置</a></li>
+<li><a href="#三cdn">三、CDN</a></li>
+<li><a href="#四缓存问题">四、缓存问题</a></li>
+<li><a href="#五数据分布">五、数据分布</a></li>
+<li><a href="#六一致性哈希">六、一致性哈希</a></li>
+<li><a href="#七lru">七、LRU</a></li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/%E7%BC%93%E5%AD%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-title-link" itemprop="url">计算机网络 - 传输层</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-19 00:25:17" itemprop="dateModified" datetime="2022-09-19T00:25:17+08:00">2022-09-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#消息队列">消息队列</a><ul>
+<li><a href="#一消息模型">一、消息模型</a><ul>
+<li><a href="#点对点">点对点</a></li>
+<li><a href="#发布订阅">发布/订阅</a></li>
+</ul>
+</li>
+<li><a href="#二使用场景">二、使用场景</a><ul>
+<li><a href="#异步处理">异步处理</a></li>
+<li><a href="#流量削锋">流量削锋</a></li>
+<li><a href="#应用解耦">应用解耦</a></li>
+</ul>
+</li>
+<li><a href="#三可靠性">三、可靠性</a><ul>
+<li><a href="#发送端的可靠性">发送端的可靠性</a></li>
+<li><a href="#接收端的可靠性">接收端的可靠性</a></li>
+</ul>
+</li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2022/09/01/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/09/01/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">数据库系统原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-01 12:00:00" itemprop="dateCreated datePublished" datetime="2022-09-01T12:00:00+08:00">2022-09-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-19 00:24:54" itemprop="dateModified" datetime="2022-09-19T00:24:54+08:00">2022-09-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数据库系统原理"><a href="#数据库系统原理" class="headerlink" title="数据库系统原理"></a>数据库系统原理</h1><!-- GFM-TOC -->
+<ul>
+<li><a href="#数据库系统原理">数据库系统原理</a><ul>
+<li><a href="#一事务">一、事务</a><ul>
+<li><a href="#概念">概念</a></li>
+<li><a href="#acid">ACID</a></li>
+<li><a href="#autocommit">AUTOCOMMIT</a></li>
+</ul>
+</li>
+<li><a href="#二并发一致性问题">二、并发一致性问题</a><ul>
+<li><a href="#丢失修改">丢失修改</a></li>
+<li><a href="#读脏数据">读脏数据</a></li>
+<li><a href="#不可重复读">不可重复读</a></li>
+<li><a href="#幻影读">幻影读</a></li>
+</ul>
+</li>
+<li><a href="#三封锁">三、封锁</a><ul>
+<li><a href="#封锁粒度">封锁粒度</a></li>
+<li><a href="#封锁类型">封锁类型</a></li>
+<li><a href="#封锁协议">封锁协议</a></li>
+<li><a href="#mysql-隐式与显式锁定">MySQL 隐式与显式锁定</a></li>
+</ul>
+</li>
+<li><a href="#四隔离级别">四、隔离级别</a><ul>
+<li><a href="#未提交读read-uncommitted">未提交读（READ UNCOMMITTED）</a></li>
+<li><a href="#提交读read-committed">提交读（READ COMMITTED）</a></li>
+<li><a href="#可重复读repeatable-read">可重复读（REPEATABLE READ）</a></li>
+<li><a href="#可串行化serializable">可串行化（SERIALIZABLE）</a></li>
+</ul>
+</li>
+<li><a href="#五多版本并发控制">五、多版本并发控制</a><ul>
+<li><a href="#基本思想">基本思想</a></li>
+<li><a href="#版本号">版本号</a></li>
+<li><a href="#undo-日志">Undo 日志</a></li>
+<li><a href="#readview">ReadView</a></li>
+<li><a href="#快照读与当前读">快照读与当前读</a></li>
+</ul>
+</li>
+<li><a href="#六next-key-locks">六、Next-Key Locks</a><ul>
+<li><a href="#record-locks">Record Locks</a></li>
+<li><a href="#gap-locks">Gap Locks</a></li>
+<li><a href="#next-key-locks">Next-Key Locks</a></li>
+</ul>
+</li>
+<li><a href="#七关系数据库设计理论">七、关系数据库设计理论</a><ul>
+<li><a href="#函数依赖">函数依赖</a></li>
+<li><a href="#异常">异常</a></li>
+<li><a href="#范式">范式</a></li>
+</ul>
+</li>
+<li><a href="#八er-图">八、ER 图</a><ul>
+<li><a href="#实体的三种联系">实体的三种联系</a></li>
+<li><a href="#表示出现多次的关系">表示出现多次的关系</a></li>
+<li><a href="#联系的多向性">联系的多向性</a></li>
+<li><a href="#表示子类">表示子类</a></li>
+</ul>
+</li>
+<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/01/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -732,7 +1301,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -800,7 +1369,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -813,7 +1382,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
