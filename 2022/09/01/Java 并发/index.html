@@ -45,12 +45,12 @@
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/233f8d89-31d7-413f-9c02-042f19c46ba1.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/6782674c-1bfe-4879-af39-e9d722a95d39.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/bb6a49be-00f2-4f27-a0ce-4ed764bc605c.png">
-<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/课件/CS-Notes/notes/Java%20并发/image-20220607184531108.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/image-20220607184531108.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/051e436c-0e46-4c59-8f67-52d89d656182.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/baaa681f-7c52-4198-a5ae-303b9386cf47.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/390c913b-5f31-444f-bbdb-2b88b688e7ce.jpg">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-20T03:49:17.847Z">
+<meta property="article:modified_time" content="2022-09-20T04:04:18.618Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="java">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-20 11:49:17" itemprop="dateModified" datetime="2022-09-20T11:49:17+08:00">2022-09-20</time>
+                <time title="修改时间：2022-09-20 12:04:18" itemprop="dateModified" datetime="2022-09-20T12:04:18+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -722,7 +722,7 @@
 <p>在对象头写一个标识</p>
 <p>以下是 HotSpot 虚拟机对象头的内存布局，这些数据被称为 Mark Word。其中 tag bits 对应了五个状态，这些状态在右侧的 state 表格中给出。除了 marked for gc 状态，其它四个状态已经在前面介绍过了。</p>
 <p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/bb6a49be-00f2-4f27-a0ce-4ed764bc605c.png" width="500"> </div><br></p>
-<p><img src="/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/课件\CS-Notes\notes\Java 并发\image-20220607184531108.png" alt="image-20220607184531108"></p>
+<p><img src="/2022/09/01/Java%20%E5%B9%B6%E5%8F%91/image-20220607184531108.png" alt="image-20220607184531108"></p>
 <p>下图左侧是一个线程的虚拟机栈，其中有一部分称为 Lock Record 的区域，这是在轻量级锁运行过程创建的，用于存放锁对象的 Mark Word。而右侧就是一个锁对象，包含了 Mark Word 和其它信息。</p>
 <p><div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/051e436c-0e46-4c59-8f67-52d89d656182.png" width="500"> </div><br></p>
 <p>轻量级锁是相对于传统的重量级锁而言，它使用 CAS 操作来避免重量级锁使用互斥量的开销。对于绝大部分的锁，在整个同步周期内都是不存在竞争的，因此也就不需要都使用互斥量进行同步，可以先采用 CAS 操作进行同步，如果 CAS 失败了再改用互斥量进行同步。</p>
