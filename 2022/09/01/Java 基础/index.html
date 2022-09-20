@@ -22,18 +22,18 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Java 基础  Java 基础 一、数据类型 基本类型 包装类型 缓存池   二、String 概览 不可变的好处 String, StringBuffer and StringBuilder     String Pool new String(“abc”)   三、运算 参数传递 float 与 double 隐式类型转换 switch   四、关键字 final static   五、Ob">
+  <meta name="description" content="Java 基础一、数据类型基本类型 byte&#x2F;8 char&#x2F;16 short&#x2F;16 int&#x2F;32 float&#x2F;32 long&#x2F;64 double&#x2F;64 boolean&#x2F;~  boolean 只有两个值：true、false，可以使用 1 bit 来存储，但是具体大小没有明确规定。JVM 会在编译时期将 boolean 类型的数据转换为 int，使用 1 来表示 true，0 表示 false。JV">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 基础">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/Java%20%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="Java 基础  Java 基础 一、数据类型 基本类型 包装类型 缓存池   二、String 概览 不可变的好处 String, StringBuffer and StringBuilder     String Pool new String(“abc”)   三、运算 参数传递 float 与 double 隐式类型转换 switch   四、关键字 final static   五、Ob">
+<meta property="og:description" content="Java 基础一、数据类型基本类型 byte&#x2F;8 char&#x2F;16 short&#x2F;16 int&#x2F;32 float&#x2F;32 long&#x2F;64 double&#x2F;64 boolean&#x2F;~  boolean 只有两个值：true、false，可以使用 1 bit 来存储，但是具体大小没有明确规定。JVM 会在编译时期将 boolean 类型的数据转换为 int，使用 1 来表示 true，0 表示 false。JV">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/image-20191210004132894.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/PPjwP.png">
 <meta property="og:image" content="https://img.jbzj.com/file_images/article/202107/2021729123806499.png?2021629123813">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-18T12:39:43.881Z">
+<meta property="article:modified_time" content="2022-09-20T03:49:30.536Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="java">
@@ -205,7 +205,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-18 20:39:43" itemprop="dateModified" datetime="2022-09-18T20:39:43+08:00">2022-09-18</time>
+                <time title="修改时间：2022-09-20 11:49:30" itemprop="dateModified" datetime="2022-09-20T11:49:30+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -228,67 +228,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h1><!-- GFM-TOC -->
-<ul>
-<li><a href="#java-基础">Java 基础</a><ul>
-<li><a href="#一数据类型">一、数据类型</a><ul>
-<li><a href="#基本类型">基本类型</a></li>
-<li><a href="#包装类型">包装类型</a></li>
-<li><a href="#缓存池">缓存池</a></li>
-</ul>
-</li>
-<li><a href="#二string">二、String</a><ul>
-<li><a href="#概览">概览</a></li>
-<li><a href="#不可变的好处">不可变的好处</a></li>
-<li><a href="#string-stringbuffer-and-stringbuilder">String, StringBuffer and StringBuilder    </a></li>
-<li><a href="#string-pool">String Pool</a></li>
-<li><a href="#new-stringabc">new String(“abc”)</a></li>
-</ul>
-</li>
-<li><a href="#三运算">三、运算</a><ul>
-<li><a href="#参数传递">参数传递</a></li>
-<li><a href="#float-与-double">float 与 double</a></li>
-<li><a href="#隐式类型转换">隐式类型转换</a></li>
-<li><a href="#switch">switch</a></li>
-</ul>
-</li>
-<li><a href="#四关键字">四、关键字</a><ul>
-<li><a href="#final">final</a></li>
-<li><a href="#static">static</a></li>
-</ul>
-</li>
-<li><a href="#五object-通用方法">五、Object 通用方法</a><ul>
-<li><a href="#概览">概览</a></li>
-<li><a href="#equals">equals()</a></li>
-<li><a href="#hashcode">hashCode()</a></li>
-<li><a href="#tostring">toString()</a></li>
-<li><a href="#clone">clone()</a></li>
-</ul>
-</li>
-<li><a href="#六继承">六、继承</a><ul>
-<li><a href="#访问权限">访问权限</a></li>
-<li><a href="#抽象类与接口">抽象类与接口</a></li>
-<li><a href="#super">super</a></li>
-<li><a href="#重写与重载">重写与重载</a></li>
-</ul>
-</li>
-<li><a href="#七反射">七、反射</a></li>
-<li><a href="#八异常">八、异常</a></li>
-<li><a href="#九泛型">九、泛型</a></li>
-<li><a href="#十注解">十、注解</a></li>
-<li><a href="#十一特性">十一、特性</a><ul>
-<li><a href="#java-各版本的新特性">Java 各版本的新特性</a></li>
-<li><a href="#java-与-c-的区别">Java 与 C++ 的区别</a></li>
-<li><a href="#jre-or-jdk">JRE or JDK</a></li>
-</ul>
-</li>
-<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
-</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="一、数据类型"><a href="#一、数据类型" class="headerlink" title="一、数据类型"></a>一、数据类型</h2><h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><ul>
+        <h1 id="Java-基础"><a href="#Java-基础" class="headerlink" title="Java 基础"></a>Java 基础</h1><h2 id="一、数据类型"><a href="#一、数据类型" class="headerlink" title="一、数据类型"></a>一、数据类型</h2><h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><ul>
 <li>byte/8</li>
 <li>char/16</li>
 <li>short/16</li>
@@ -299,6 +239,7 @@
 <li>boolean/~</li>
 </ul>
 <p>boolean 只有两个值：true、false，可以使用 1 bit 来存储，但是具体大小没有明确规定。JVM 会在编译时期将 boolean 类型的数据转换为 int，使用 1 来表示 true，0 表示 false。JVM 支持 boolean 数组，但是是通过读写 byte 数组来实现的。</p>
+<a id="more"></a>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html">Primitive Data Types</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf">The Java® Virtual Machine Specification</a></li>
@@ -753,12 +694,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/01/MySQL/" rel="prev" title="Mysql">
-      <i class="fa fa-chevron-left"></i> Mysql
+    <a href="/2022/09/01/HTTP/" rel="prev" title="HTTP">
+      <i class="fa fa-chevron-left"></i> HTTP
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/Redis/" rel="next" title="Redis">
-      Redis <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/Java%20IO/" rel="next" title="Java IO">
+      Java IO <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

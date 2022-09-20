@@ -22,21 +22,21 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="缓存  缓存 一、缓存特征 二、缓存位置 三、CDN 四、缓存问题 五、数据分布 六、一致性哈希 七、LRU 参考资料">
+  <meta name="description" content="缓存一、缓存特征命中率当某个请求能够通过访问缓存而得到响应时，称为缓存命中。 缓存命中率越高，缓存的利用率也就越高。 最大空间缓存通常位于内存中，内存的空间通常比磁盘空间小的多，因此缓存的最大空间不可能非常大。 当缓存存放的数据量超过最大空间时，就需要淘汰部分数据来存放新到达的数据。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="缓存">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/%E7%BC%93%E5%AD%98/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="缓存  缓存 一、缓存特征 二、缓存位置 三、CDN 四、缓存问题 五、数据分布 六、一致性哈希 七、LRU 参考资料">
+<meta property="og:description" content="缓存一、缓存特征命中率当某个请求能够通过访问缓存而得到响应时，称为缓存命中。 缓存命中率越高，缓存的利用率也就越高。 最大空间缓存通常位于内存中，内存的空间通常比磁盘空间小的多，因此缓存的最大空间不可能非常大。 当缓存存放的数据量超过最大空间时，就需要淘汰部分数据来存放新到达的数据。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/15313ed8-a520-4799-a300-2b6b36be314f.jpg">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/68b110b9-76c6-4ee2-b541-4145e65adb3e.jpg">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/66402828-fb2b-418f-83f6-82153491bcfe.jpg">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-18T12:51:06.945Z">
+<meta property="article:modified_time" content="2022-09-20T03:52:08.592Z">
 <meta property="article:author" content="三儿">
-<meta property="article:tag" content="计算机系统">
 <meta property="article:tag" content="复习笔记">
+<meta property="article:tag" content="计算机系统">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/15313ed8-a520-4799-a300-2b6b36be314f.jpg">
 
@@ -205,7 +205,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-18 20:51:06" itemprop="dateModified" datetime="2022-09-18T20:51:06+08:00">2022-09-18</time>
+                <time title="修改时间：2022-09-20 11:52:08" itemprop="dateModified" datetime="2022-09-20T11:52:08+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -228,26 +228,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><!-- GFM-TOC -->
-<ul>
-<li><a href="#缓存">缓存</a><ul>
-<li><a href="#一缓存特征">一、缓存特征</a></li>
-<li><a href="#二缓存位置">二、缓存位置</a></li>
-<li><a href="#三cdn">三、CDN</a></li>
-<li><a href="#四缓存问题">四、缓存问题</a></li>
-<li><a href="#五数据分布">五、数据分布</a></li>
-<li><a href="#六一致性哈希">六、一致性哈希</a></li>
-<li><a href="#七lru">七、LRU</a></li>
-<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
-</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="一、缓存特征"><a href="#一、缓存特征" class="headerlink" title="一、缓存特征"></a>一、缓存特征</h2><h3 id="命中率"><a href="#命中率" class="headerlink" title="命中率"></a>命中率</h3><p>当某个请求能够通过访问缓存而得到响应时，称为缓存命中。</p>
+        <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="一、缓存特征"><a href="#一、缓存特征" class="headerlink" title="一、缓存特征"></a>一、缓存特征</h2><h3 id="命中率"><a href="#命中率" class="headerlink" title="命中率"></a>命中率</h3><p>当某个请求能够通过访问缓存而得到响应时，称为缓存命中。</p>
 <p>缓存命中率越高，缓存的利用率也就越高。</p>
 <h3 id="最大空间"><a href="#最大空间" class="headerlink" title="最大空间"></a>最大空间</h3><p>缓存通常位于内存中，内存的空间通常比磁盘空间小的多，因此缓存的最大空间不可能非常大。</p>
 <p>当缓存存放的数据量超过最大空间时，就需要淘汰部分数据来存放新到达的数据。</p>
+<a id="more"></a>
 <h3 id="淘汰策略"><a href="#淘汰策略" class="headerlink" title="淘汰策略"></a>淘汰策略</h3><ul>
 <li><p>FIFO（First In First Out）：先进先出策略，在实时性的场景下，需要经常访问最新的数据，那么就可以使用 FIFO，使得最先进入的数据（最晚的数据）被淘汰。</p>
 </li>
@@ -359,8 +344,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag"># 计算机系统</a>
               <a href="/tags/%E5%A4%8D%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 复习笔记</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag"># 计算机系统</a>
           </div>
 
         
@@ -369,12 +354,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="prev" title="计算机网络 - 传输层">
-      <i class="fa fa-chevron-left"></i> 计算机网络 - 传输层
+    <a href="/2022/09/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%20-%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="prev" title="计算机操作系统 - 内存管理">
+      <i class="fa fa-chevron-left"></i> 计算机操作系统 - 内存管理
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="next" title="分布式">
-      分布式 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="next" title="计算机网络 - 传输层">
+      计算机网络 - 传输层 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

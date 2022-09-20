@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Redis  Redis 一、概述 二、数据类型 STRING LIST SET HASH ZSET   三、数据结构 字典 跳跃表   四、使用场景 计数器 缓存 查找表 消息队列 会话缓存 分布式锁实现 其它   五、Redis 与 Memcached 数据类型 数据持久化 分布式 内存管理机制   六、键的过期时间 七、数据淘汰策略 八、持久化 RDB 持久化 AOF 持久化   九、事务">
+  <meta name="description" content="Redis一、概述Redis 是速度非常快的非关系型（NoSQL）内存键值数据库，可以存储键和五种不同类型的值之间的映射。 键的类型只能为字符串，值支持五种数据类型：字符串、列表、集合、散列表、有序集合。 Redis 支持很多特性，例如将内存中的数据持久化到硬盘中，使用复制来扩展读性能，使用分片来扩展写性能。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/Redis/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="Redis  Redis 一、概述 二、数据类型 STRING LIST SET HASH ZSET   三、数据结构 字典 跳跃表   四、使用场景 计数器 缓存 查找表 消息队列 会话缓存 分布式锁实现 其它   五、Redis 与 Memcached 数据类型 数据持久化 分布式 内存管理机制   六、键的过期时间 七、数据淘汰策略 八、持久化 RDB 持久化 AOF 持久化   九、事务">
+<meta property="og:description" content="Redis一、概述Redis 是速度非常快的非关系型（NoSQL）内存键值数据库，可以存储键和五种不同类型的值之间的映射。 键的类型只能为字符串，值支持五种数据类型：字符串、列表、集合、散列表、有序集合。 Redis 支持很多特性，例如将内存中的数据持久化到硬盘中，使用复制来扩展读性能，使用分片来扩展写性能。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/6019b2db-bc3e-4408-b6d8-96025f4481d6.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/fb327611-7e2b-4f2f-9f5b-38592d408f07.png">
@@ -44,7 +44,7 @@
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/485fdf34-ccf8-4185-97c6-17374ee719a0.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/f7d170a3-e446-4a64-ac2d-cb95028f81a8.png">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-18T12:43:46.435Z">
+<meta property="article:modified_time" content="2022-09-20T03:50:49.162Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="数据库">
@@ -217,7 +217,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-18 20:43:46" itemprop="dateModified" datetime="2022-09-18T20:43:46+08:00">2022-09-18</time>
+                <time title="修改时间：2022-09-20 11:50:49" itemprop="dateModified" datetime="2022-09-20T11:50:49+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,76 +240,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><!-- GFM-TOC -->
-<ul>
-<li><a href="#redis">Redis</a><ul>
-<li><a href="#一概述">一、概述</a></li>
-<li><a href="#二数据类型">二、数据类型</a><ul>
-<li><a href="#string">STRING</a></li>
-<li><a href="#list">LIST</a></li>
-<li><a href="#set">SET</a></li>
-<li><a href="#hash">HASH</a></li>
-<li><a href="#zset">ZSET</a></li>
-</ul>
-</li>
-<li><a href="#三数据结构">三、数据结构</a><ul>
-<li><a href="#字典">字典</a></li>
-<li><a href="#跳跃表">跳跃表</a></li>
-</ul>
-</li>
-<li><a href="#四使用场景">四、使用场景</a><ul>
-<li><a href="#计数器">计数器</a></li>
-<li><a href="#缓存">缓存</a></li>
-<li><a href="#查找表">查找表</a></li>
-<li><a href="#消息队列">消息队列</a></li>
-<li><a href="#会话缓存">会话缓存</a></li>
-<li><a href="#分布式锁实现">分布式锁实现</a></li>
-<li><a href="#其它">其它</a></li>
-</ul>
-</li>
-<li><a href="#五redis-与-memcached">五、Redis 与 Memcached</a><ul>
-<li><a href="#数据类型">数据类型</a></li>
-<li><a href="#数据持久化">数据持久化</a></li>
-<li><a href="#分布式">分布式</a></li>
-<li><a href="#内存管理机制">内存管理机制</a></li>
-</ul>
-</li>
-<li><a href="#六键的过期时间">六、键的过期时间</a></li>
-<li><a href="#七数据淘汰策略">七、数据淘汰策略</a></li>
-<li><a href="#八持久化">八、持久化</a><ul>
-<li><a href="#rdb-持久化">RDB 持久化</a></li>
-<li><a href="#aof-持久化">AOF 持久化</a></li>
-</ul>
-</li>
-<li><a href="#九事务">九、事务</a></li>
-<li><a href="#十事件">十、事件</a><ul>
-<li><a href="#文件事件">文件事件</a></li>
-<li><a href="#时间事件">时间事件</a></li>
-<li><a href="#事件的调度与执行">事件的调度与执行</a></li>
-</ul>
-</li>
-<li><a href="#十一复制">十一、复制</a><ul>
-<li><a href="#连接过程">连接过程</a></li>
-<li><a href="#主从链">主从链</a></li>
-</ul>
-</li>
-<li><a href="#十二sentinel">十二、Sentinel</a></li>
-<li><a href="#十三分片">十三、分片</a></li>
-<li><a href="#十四一个简单的论坛系统分析">十四、一个简单的论坛系统分析</a><ul>
-<li><a href="#文章信息">文章信息</a></li>
-<li><a href="#点赞功能">点赞功能</a></li>
-<li><a href="#对文章进行排序">对文章进行排序</a></li>
-</ul>
-</li>
-<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
-</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Redis 是速度非常快的非关系型（NoSQL）内存键值数据库，可以存储键和五种不同类型的值之间的映射。</p>
+        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Redis 是速度非常快的非关系型（NoSQL）内存键值数据库，可以存储键和五种不同类型的值之间的映射。</p>
 <p>键的类型只能为字符串，值支持五种数据类型：字符串、列表、集合、散列表、有序集合。</p>
 <p>Redis 支持很多特性，例如将内存中的数据持久化到硬盘中，使用复制来扩展读性能，使用分片来扩展写性能。</p>
+<a id="more"></a>
 <h2 id="二、数据类型"><a href="#二、数据类型" class="headerlink" title="二、数据类型"></a>二、数据类型</h2><div class="table-container">
 <table>
 <thead>
@@ -600,12 +534,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/01/Java%20%E5%9F%BA%E7%A1%80/" rel="prev" title="Java 基础">
-      <i class="fa fa-chevron-left"></i> Java 基础
+    <a href="/2022/09/01/SQL%20%E8%AF%AD%E6%B3%95/" rel="prev" title="SQL语法">
+      <i class="fa fa-chevron-left"></i> SQL语法
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/SQL%20%E8%AF%AD%E6%B3%95/" rel="next" title="SQL语法">
-      SQL语法 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/MySQL/" rel="next" title="Mysql">
+      Mysql <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

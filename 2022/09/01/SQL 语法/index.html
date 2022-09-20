@@ -22,15 +22,15 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="SQL 语法  SQL 语法 一、基础 二、创建表 三、修改表 四、插入 五、更新 六、删除 七、查询 DISTINCT LIMIT   八、排序 九、过滤 十、通配符 十一、计算字段 十二、函数 汇总 文本处理 日期和时间处理 数值处理   十三、分组 十四、子查询 十五、连接 内连接 自连接 自然连接 外连接   十六、组合查询 十七、视图 十八、存储过程 十九、游标 二十、触发器 二十一、事">
+  <meta name="description" content="SQL 语法一、基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL语法">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/SQL%20%E8%AF%AD%E6%B3%95/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="SQL 语法  SQL 语法 一、基础 二、创建表 三、修改表 四、插入 五、更新 六、删除 七、查询 DISTINCT LIMIT   八、排序 九、过滤 十、通配符 十一、计算字段 十二、函数 汇总 文本处理 日期和时间处理 数值处理   十三、分组 十四、子查询 十五、连接 内连接 自连接 自然连接 外连接   十六、组合查询 十七、视图 十八、存储过程 十九、游标 二十、触发器 二十一、事">
+<meta property="og:description" content="SQL 语法一、基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-18T12:46:04.330Z">
+<meta property="article:modified_time" content="2022-09-20T03:51:15.215Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="数据库">
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-18 20:46:04" itemprop="dateModified" datetime="2022-09-18T20:46:04+08:00">2022-09-18</time>
+                <time title="修改时间：2022-09-20 11:51:15" itemprop="dateModified" datetime="2022-09-20T11:51:15+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,58 +225,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="SQL-语法"><a href="#SQL-语法" class="headerlink" title="SQL 语法"></a>SQL 语法</h1><!-- GFM-TOC -->
-<ul>
-<li><a href="#sql-语法">SQL 语法</a><ul>
-<li><a href="#一基础">一、基础</a></li>
-<li><a href="#二创建表">二、创建表</a></li>
-<li><a href="#三修改表">三、修改表</a></li>
-<li><a href="#四插入">四、插入</a></li>
-<li><a href="#五更新">五、更新</a></li>
-<li><a href="#六删除">六、删除</a></li>
-<li><a href="#七查询">七、查询</a><ul>
-<li><a href="#distinct">DISTINCT</a></li>
-<li><a href="#limit">LIMIT</a></li>
-</ul>
-</li>
-<li><a href="#八排序">八、排序</a></li>
-<li><a href="#九过滤">九、过滤</a></li>
-<li><a href="#十通配符">十、通配符</a></li>
-<li><a href="#十一计算字段">十一、计算字段</a></li>
-<li><a href="#十二函数">十二、函数</a><ul>
-<li><a href="#汇总">汇总</a></li>
-<li><a href="#文本处理">文本处理</a></li>
-<li><a href="#日期和时间处理">日期和时间处理</a></li>
-<li><a href="#数值处理">数值处理</a></li>
-</ul>
-</li>
-<li><a href="#十三分组">十三、分组</a></li>
-<li><a href="#十四子查询">十四、子查询</a></li>
-<li><a href="#十五连接">十五、连接</a><ul>
-<li><a href="#内连接">内连接</a></li>
-<li><a href="#自连接">自连接</a></li>
-<li><a href="#自然连接">自然连接</a></li>
-<li><a href="#外连接">外连接</a></li>
-</ul>
-</li>
-<li><a href="#十六组合查询">十六、组合查询</a></li>
-<li><a href="#十七视图">十七、视图</a></li>
-<li><a href="#十八存储过程">十八、存储过程</a></li>
-<li><a href="#十九游标">十九、游标</a></li>
-<li><a href="#二十触发器">二十、触发器</a></li>
-<li><a href="#二十一事务管理">二十一、事务管理</a></li>
-<li><a href="#二十二字符集">二十二、字符集</a></li>
-<li><a href="#二十三权限管理">二十三、权限管理</a></li>
-<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
-</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="一、基础"><a href="#一、基础" class="headerlink" title="一、基础"></a>一、基础</h2><p>模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。</p>
+        <h1 id="SQL-语法"><a href="#SQL-语法" class="headerlink" title="SQL 语法"></a>SQL 语法</h1><h2 id="一、基础"><a href="#一、基础" class="headerlink" title="一、基础"></a>一、基础</h2><p>模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。</p>
 <p>主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。</p>
 <p>SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL/SQL、Transact-SQL 等。</p>
 <p>SQL 语句不区分大小写，但是数据库表名、列名和值是否区分依赖于具体的 DBMS 以及配置。</p>
+<a id="more"></a>
 <p>SQL 支持以下三种注释：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 注释</span></span><br><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> mytable; <span class="comment">-- 注释</span></span><br><span class="line"><span class="comment">/* 注释1</span></span><br><span class="line"><span class="comment">   注释2 */</span></span><br></pre></td></tr></table></figure>
 <p>数据库创建与使用：</p>
@@ -865,12 +818,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/01/Redis/" rel="prev" title="Redis">
-      <i class="fa fa-chevron-left"></i> Redis
+    <a href="/2022/09/01/SQL/" rel="prev" title="SQL">
+      <i class="fa fa-chevron-left"></i> SQL
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/Java%20%E5%AE%B9%E5%99%A8/" rel="next" title="Java 容器">
-      Java 容器 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/Redis/" rel="next" title="Redis">
+      Redis <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

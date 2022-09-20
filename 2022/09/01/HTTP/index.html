@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="HTTP  HTTP 一 、基础概念 请求和响应报文 URL   二、HTTP 方法 GET HEAD POST PUT PATCH DELETE OPTIONS CONNECT TRACE   三、HTTP 状态码 1XX 信息 2XX 成功 3XX 重定向 4XX 客户端错误 5XX 服务器错误   四、HTTP 首部 通用首部字段 请求首部字段 响应首部字段 实体首部字段   五、具体应用">
+  <meta name="description" content="HTTP一 、基础概念请求和响应报文客户端发送一个请求报文给服务器，服务器根据请求报文中的信息进行处理，并将处理结果放入响应报文中返回给客户端。 请求报文结构：  第一行是包含了请求方法、URL、协议版本； 接下来的多行都是请求首部 Header，每个首部都有一个首部名称，以及对应的值。 一个空行用来分隔首部和内容主体 Body 最后是请求的内容主体">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/HTTP/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="HTTP  HTTP 一 、基础概念 请求和响应报文 URL   二、HTTP 方法 GET HEAD POST PUT PATCH DELETE OPTIONS CONNECT TRACE   三、HTTP 状态码 1XX 信息 2XX 成功 3XX 重定向 4XX 客户端错误 5XX 服务器错误   四、HTTP 首部 通用首部字段 请求首部字段 响应首部字段 实体首部字段   五、具体应用">
+<meta property="og:description" content="HTTP一 、基础概念请求和响应报文客户端发送一个请求报文给服务器，服务器根据请求报文中的信息进行处理，并将处理结果放入响应报文中返回给客户端。 请求报文结构：  第一行是包含了请求方法、URL、协议版本； 接下来的多行都是请求首部 Header，每个首部都有一个首部名称，以及对应的值。 一个空行用来分隔首部和内容主体 Body 最后是请求的内容主体">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/8441b2c4-dca7-4d6b-8efb-f22efccaf331.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/dc00f70e-c5c8-4d20-baf1-2d70014a97e3.jpg">
@@ -44,7 +44,7 @@
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/e3f1657c-80fc-4dfa-9643-bf51abd201c6.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/_u4E0B_u8F7D.png">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-18T12:40:08.706Z">
+<meta property="article:modified_time" content="2022-09-20T03:48:48.762Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="HTTP">
@@ -217,7 +217,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-18 20:40:08" itemprop="dateModified" datetime="2022-09-18T20:40:08+08:00">2022-09-18</time>
+                <time title="修改时间：2022-09-20 11:48:48" itemprop="dateModified" datetime="2022-09-20T11:48:48+08:00">2022-09-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,85 +240,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><!-- GFM-TOC -->
-<ul>
-<li><a href="#http">HTTP</a><ul>
-<li><a href="#一-基础概念">一 、基础概念</a><ul>
-<li><a href="#请求和响应报文">请求和响应报文</a></li>
-<li><a href="#url">URL</a></li>
-</ul>
-</li>
-<li><a href="#二http-方法">二、HTTP 方法</a><ul>
-<li><a href="#get">GET</a></li>
-<li><a href="#head">HEAD</a></li>
-<li><a href="#post">POST</a></li>
-<li><a href="#put">PUT</a></li>
-<li><a href="#patch">PATCH</a></li>
-<li><a href="#delete">DELETE</a></li>
-<li><a href="#options">OPTIONS</a></li>
-<li><a href="#connect">CONNECT</a></li>
-<li><a href="#trace">TRACE</a></li>
-</ul>
-</li>
-<li><a href="#三http-状态码">三、HTTP 状态码</a><ul>
-<li><a href="#1xx-信息">1XX 信息</a></li>
-<li><a href="#2xx-成功">2XX 成功</a></li>
-<li><a href="#3xx-重定向">3XX 重定向</a></li>
-<li><a href="#4xx-客户端错误">4XX 客户端错误</a></li>
-<li><a href="#5xx-服务器错误">5XX 服务器错误</a></li>
-</ul>
-</li>
-<li><a href="#四http-首部">四、HTTP 首部</a><ul>
-<li><a href="#通用首部字段">通用首部字段</a></li>
-<li><a href="#请求首部字段">请求首部字段</a></li>
-<li><a href="#响应首部字段">响应首部字段</a></li>
-<li><a href="#实体首部字段">实体首部字段</a></li>
-</ul>
-</li>
-<li><a href="#五具体应用">五、具体应用</a><ul>
-<li><a href="#连接管理">连接管理</a></li>
-<li><a href="#cookie">Cookie</a></li>
-<li><a href="#缓存">缓存</a></li>
-<li><a href="#内容协商">内容协商</a></li>
-<li><a href="#内容编码">内容编码</a></li>
-<li><a href="#范围请求">范围请求</a></li>
-<li><a href="#分块传输编码">分块传输编码</a></li>
-<li><a href="#多部分对象集合">多部分对象集合</a></li>
-<li><a href="#虚拟主机">虚拟主机</a></li>
-<li><a href="#通信数据转发">通信数据转发</a></li>
-</ul>
-</li>
-<li><a href="#六https">六、HTTPS</a><ul>
-<li><a href="#加密">加密</a></li>
-<li><a href="#认证">认证</a></li>
-<li><a href="#完整性保护">完整性保护</a></li>
-<li><a href="#https-的缺点">HTTPS 的缺点</a></li>
-</ul>
-</li>
-<li><a href="#七http20">七、HTTP/2.0</a><ul>
-<li><a href="#http1x-缺陷">HTTP/1.x 缺陷</a></li>
-<li><a href="#二进制分帧层">二进制分帧层</a></li>
-<li><a href="#服务端推送">服务端推送</a></li>
-<li><a href="#首部压缩">首部压缩</a></li>
-</ul>
-</li>
-<li><a href="#八http11-新特性">八、HTTP/1.1 新特性</a></li>
-<li><a href="#九get-和-post-比较">九、GET 和 POST 比较</a><ul>
-<li><a href="#作用">作用</a></li>
-<li><a href="#参数">参数</a></li>
-<li><a href="#安全">安全</a></li>
-<li><a href="#幂等性">幂等性</a></li>
-<li><a href="#可缓存">可缓存</a></li>
-<li><a href="#xmlhttprequest">XMLHttpRequest</a></li>
-</ul>
-</li>
-<li><a href="#参考资料">参考资料</a><!-- GFM-TOC -->
-</li>
-</ul>
-</li>
-</ul>
-<a id="more"></a>
-<h2 id="一-、基础概念"><a href="#一-、基础概念" class="headerlink" title="一 、基础概念"></a>一 、基础概念</h2><h3 id="请求和响应报文"><a href="#请求和响应报文" class="headerlink" title="请求和响应报文"></a>请求和响应报文</h3><p>客户端发送一个请求报文给服务器，服务器根据请求报文中的信息进行处理，并将处理结果放入响应报文中返回给客户端。</p>
+        <h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><h2 id="一-、基础概念"><a href="#一-、基础概念" class="headerlink" title="一 、基础概念"></a>一 、基础概念</h2><h3 id="请求和响应报文"><a href="#请求和响应报文" class="headerlink" title="请求和响应报文"></a>请求和响应报文</h3><p>客户端发送一个请求报文给服务器，服务器根据请求报文中的信息进行处理，并将处理结果放入响应报文中返回给客户端。</p>
 <p>请求报文结构：</p>
 <ul>
 <li>第一行是包含了请求方法、URL、协议版本；</li>
@@ -326,6 +248,7 @@
 <li>一个空行用来分隔首部和内容主体 Body</li>
 <li>最后是请求的内容主体</li>
 </ul>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET http:&#x2F;&#x2F;www.example.com&#x2F; HTTP&#x2F;1.1</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line">Host: www.example.com</span><br><span class="line">If-Modified-Since: Thu, 17 Oct 2019 07:18:26 GMT</span><br><span class="line">If-None-Match: &quot;3147526947+gzip&quot;</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 xxx</span><br><span class="line"></span><br><span class="line">param1&#x3D;1&amp;param2&#x3D;2</span><br></pre></td></tr></table></figure>
 <p>响应报文结构：</p>
 <ul>
@@ -1042,12 +965,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/09/01/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="prev" title="Java 虚拟机">
-      <i class="fa fa-chevron-left"></i> Java 虚拟机
+    <a href="/2022/09/01/Java%20%E5%AE%B9%E5%99%A8/" rel="prev" title="Java 容器">
+      <i class="fa fa-chevron-left"></i> Java 容器
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/Git/" rel="next" title="Git">
-      Git <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/Java%20%E5%9F%BA%E7%A1%80/" rel="next" title="Java 基础">
+      Java 基础 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
