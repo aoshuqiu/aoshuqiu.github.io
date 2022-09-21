@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-09-21 17:42:00 / 修改时间：17:43:06" itemprop="dateCreated datePublished" datetime="2022-09-21T17:42:00+08:00">2022-09-21</time>
+              <time title="创建时间：2022-09-21 17:42:00 / 修改时间：17:44:38" itemprop="dateCreated datePublished" datetime="2022-09-21T17:42:00+08:00">2022-09-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,51 +217,15 @@
 <li>语法相关缩进用4个空格</li>
 <li>每行不超过79个字符</li>
 <li>长表达式多余行要缩进4个空格</li>
-<li>函数与类之间两个空行隔开</li>
-<li>同一类中方法之间一个空行隔开</li>
-<li>字典冒号后加空格</li>
-<li>赋值符号左右一个空格</li>
-<li>注解变量名与冒号连接，类型信息前加空格</li>
 </ul>
-<h3 id="命名相关"><a href="#命名相关" class="headerlink" title="命名相关"></a>命名相关</h3><ul>
-<li>函数变量属性：小写字母+下划线 eg：lowercase_underscore</li>
-<li>受保护实例属性：下划线开头 eg：_leading_underscore</li>
-<li>私有实例属性：两个下划线开头 eg：__double_leading_underscore</li>
-<li>类（异常），驼峰 eg：CapitalizedWord</li>
-<li>模块级别常量：全大写 eg：ALL_CAPS</li>
-<li>类中实例第一个参数self</li>
-<li>类方法中第一个参数命名cls</li>
-</ul>
-<h3 id="表达式和语句"><a href="#表达式和语句" class="headerlink" title="表达式和语句"></a>表达式和语句</h3><ul>
-<li>行内否定 not放在值前而不是表达式前</li>
-<li>直接用if判断长度为空</li>
-<li>if for while except用多行写</li>
-<li>多行表达式用括号括起来，不用\</li>
-</ul>
-<h3 id="引入相关"><a href="#引入相关" class="headerlink" title="引入相关"></a>引入相关</h3><ul>
-<li>import放在文件开头</li>
-<li>写完整 from import </li>
-<li>顺序：标准库-&gt;第三方-&gt;自定义</li>
-</ul>
-<h2 id="2-bytes与str"><a href="#2-bytes与str" class="headerlink" title="2. bytes与str"></a>2. bytes与str</h2><p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921171548153.png" alt="image-20220921171548153"></p>
-<h2 id="3-字符串格式化"><a href="#3-字符串格式化" class="headerlink" title="3 字符串格式化"></a>3 字符串格式化</h2><p>使用f-string进行格式化</p>
-<p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921171649775.png" alt="image-20220921171649775"></p>
-<p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921171709696.png" alt="image-20220921171709696"></p>
-<p>{}中直接可以写表达式，照其他方法都要优秀。</p>
-<h2 id="4-辅助函数取代复杂表达式"><a href="#4-辅助函数取代复杂表达式" class="headerlink" title="4. 辅助函数取代复杂表达式"></a>4. 辅助函数取代复杂表达式</h2><p>没什么说的，嵌套表达式直接拆成辅助函数避免重复代码</p>
-<h2 id="5-使用unpacking代替下标"><a href="#5-使用unpacking代替下标" class="headerlink" title="5. 使用unpacking代替下标"></a>5. 使用unpacking代替下标</h2><p>原地交换原理使用unpacking</p>
-<p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921172938385.png" alt="image-20220921172938385"></p>
-<p>简洁清晰</p>
-<h2 id="6-用enumerate替换下表"><a href="#6-用enumerate替换下表" class="headerlink" title="6. 用enumerate替换下表"></a>6. 用enumerate替换下表</h2><p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921173123944.png" alt="image-20220921173123944"></p>
-<p>enumerate也可以拿到位置信息</p>
-<h2 id="7-用zip进行多列表遍历"><a href="#7-用zip进行多列表遍历" class="headerlink" title="7. 用zip进行多列表遍历"></a>7. 用zip进行多列表遍历</h2><p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921173319087.png" alt="image-20220921173319087"></p>
-<p>会在较短的列表结束时停止</p>
-<h2 id="8-不要在for后面加else"><a href="#8-不要在for后面加else" class="headerlink" title="8. 不要在for后面加else"></a>8. 不要在for后面加else</h2><p>这个特性不提都不清楚</p>
-<p>主要是只有for全遍历后才会执行else后面的语句。</p>
-<h2 id="9-用赋值表达式（海象操作符-）减少重复代码"><a href="#9-用赋值表达式（海象操作符-）减少重复代码" class="headerlink" title="9. 用赋值表达式（海象操作符:=）减少重复代码"></a>9. 用赋值表达式（海象操作符:=）减少重复代码</h2><p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921174136767.png" alt="image-20220921174136767"></p>
-<p>VS</p>
-<p><img src="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/image-20220921174123000.png" alt="image-20220921174123000"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%B8%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
