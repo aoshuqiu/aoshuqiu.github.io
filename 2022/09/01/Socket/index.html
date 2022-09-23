@@ -22,13 +22,16 @@
     var CONFIG = {"hostname":"www.aoshuqiu.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Socket一、I&#x2F;O 模型一个输入操作通常包括两个阶段：  等待数据准备好 从内核向进程复制数据  对于一个套接字上的输入操作，第一步通常涉及等待数据从网络中到达。当所等待数据到达时，它被复制到内核中的某个缓冲区。第二步就是把数据从内核缓冲区复制到应用进程缓冲区。">
+  <meta name="description" content="Socket负责进行端到端通信，屏蔽网络层传输层细节，进行编程。 网络层需要指定是IPv4还是IPv6，分别对应AF_INET和AF_INET6。 传输层需要指定是TCP还是UDP。TCP基于数据流因此是SOCK_STREAM，UDP基于数据报因此是SOCK_DGRAM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Socket">
 <meta property="og:url" content="https://www.aoshuqiu.top/2022/09/01/Socket/index.html">
 <meta property="og:site_name" content="3号列车">
-<meta property="og:description" content="Socket一、I&#x2F;O 模型一个输入操作通常包括两个阶段：  等待数据准备好 从内核向进程复制数据  对于一个套接字上的输入操作，第一步通常涉及等待数据从网络中到达。当所等待数据到达时，它被复制到内核中的某个缓冲区。第二步就是把数据从内核缓冲区复制到应用进程缓冲区。">
+<meta property="og:description" content="Socket负责进行端到端通信，屏蔽网络层传输层细节，进行编程。 网络层需要指定是IPv4还是IPv6，分别对应AF_INET和AF_INET6。 传输层需要指定是TCP还是UDP。TCP基于数据流因此是SOCK_STREAM，UDP基于数据报因此是SOCK_DGRAM">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/Socket/image-20220922213438582.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/Socket/image-20220923165255128.png">
+<meta property="og:image" content="https://www.aoshuqiu.top/2022/09/01/Socket/image-20220923165601759.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492928416812_4.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492929000361_5.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492929444818_6.png">
@@ -36,13 +39,13 @@
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492930243286_8.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492928105791_3.png">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-20T03:51:00.701Z">
+<meta property="article:modified_time" content="2022-09-23T08:58:03.593Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="Socket">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/1492928416812_4.png">
+<meta name="twitter:image" content="https://www.aoshuqiu.top/2022/09/01/Socket/image-20220922213438582.png">
 
 <link rel="canonical" href="https://www.aoshuqiu.top/2022/09/01/Socket/">
 
@@ -209,7 +212,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-20 11:51:00" itemprop="dateModified" datetime="2022-09-20T11:51:00+08:00">2022-09-20</time>
+                <time title="修改时间：2022-09-23 16:58:03" itemprop="dateModified" datetime="2022-09-23T16:58:03+08:00">2022-09-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,13 +235,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><h2 id="一、I-O-模型"><a href="#一、I-O-模型" class="headerlink" title="一、I/O 模型"></a>一、I/O 模型</h2><p>一个输入操作通常包括两个阶段：</p>
+        <h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><p>负责进行端到端通信，屏蔽网络层传输层细节，进行编程。</p>
+<p>网络层需要指定是IPv4还是IPv6，分别对应AF_INET和AF_INET6。</p>
+<p>传输层需要指定是TCP还是UDP。TCP基于数据流因此是SOCK_STREAM，UDP基于数据报因此是SOCK_DGRAM</p>
+<a id="more"></a>
+<h2 id="socket程序函数调用过程"><a href="#socket程序函数调用过程" class="headerlink" title="socket程序函数调用过程"></a>socket程序函数调用过程</h2><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p>两端创建了Socket之后，</p>
+<ul>
+<li>TCP的服务端首先要监听一个端口，调用<strong>bind</strong>函数，给服务端socket赋予一个IP地址和端口。ip地址（选择监听机器的哪个网卡），端口（写的是应用程序需要保证TCP头可以通过端口号找到对应的应用程序）。</li>
+<li>有了IP和端口号后，调用<strong>listen</strong>函数进行监听。此时客户段可以发起连接了。</li>
+<li>客户端通过<strong>connect</strong>函数发起连接。在参数中指明IP地址和端口号，发起三次握手。内核给客户端分配一个临时端口。</li>
+<li>服务端调用<strong>accept</strong>想要拿出一个完成的连接进行处理，如果没有完成的就要继续等待（阻塞）。处理成功会返回一个已连接的Socket，这个socket是服务端真正用来传输数据的，而之前进行accept的ServerSocket只负责连接。</li>
+<li>连接简历成功后通过<strong>read</strong>和<strong>write</strong>读写数据，就像在文件流里写东西一样。</li>
+</ul>
+<p><img src="/2022/09/01/Socket/image-20220922213438582.png" alt="image-20220922213438582"></p>
+<p>TCP的Socket就是一个文件流。Socket在Linux中就是以文件形式存在的，读入与写出都是通过文件描述符。</p>
+<p>在内核中，Socket是一个<strong>文件</strong>，那对应就有文件描述符。每一个进程都有一个数据结构task_struct,里面指向一个<strong>文件描述符数组</strong>，来列出进程打开的所有文件的文件描述符。 文件描述符是一个整数，是这个数组的下标。数组内容是<strong>指针</strong>，指向内核中所有<strong>打开文件</strong>的列表。Socket对应的inode不像文件系统一样保存在硬盘上，而是保存在内存中。在这个inode中，指向Socket在<strong>内核</strong>中的Socket结构。</p>
+<p>Socket结构中主要的是两个队列，发送队列与接收队列。两个队列中保存的是缓存sk_buff。这个缓存里面可以看到完整的包结构。</p>
+<p><img src="/2022/09/01/Socket/image-20220923165255128.png" alt="image-20220923165255128"></p>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><p>UDP是没有连接的不需要三次握手也不需要调用listen和connect，但UDP的交互仍然需要IP和端口号，因而也需要bind。UDP是没有维护连接状态的，因此不需要每对连接建立一组Socket，只要服务端有一个Socket，就能和多个客户端进行通信。也正是因为没有连接状态，每次通信的时候，都调用sendto和recvfrom，都可以传入IP地址和端口。</p>
+<p><img src="/2022/09/01/Socket/image-20220923165601759.png" alt="image-20220923165601759"></p>
+<h2 id="一、I-O-模型"><a href="#一、I-O-模型" class="headerlink" title="一、I/O 模型"></a>一、I/O 模型</h2><p>一个输入操作通常包括两个阶段：</p>
 <ul>
 <li>等待数据准备好</li>
 <li>从内核向进程复制数据</li>
 </ul>
 <p>对于一个套接字上的输入操作，第一步通常涉及等待数据从网络中到达。当所等待数据到达时，它被复制到内核中的某个缓冲区。第二步就是把数据从内核缓冲区复制到应用进程缓冲区。</p>
-<a id="more"></a>
 <p>Unix 有五种 I/O 模型：</p>
 <ul>
 <li>阻塞式 I/O</li>
@@ -433,7 +454,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81I-O-%E6%A8%A1%E5%9E%8B"><span class="nav-text">一、I&#x2F;O 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E5%BC%8F-I-O"><span class="nav-text">阻塞式 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F-I-O"><span class="nav-text">非阻塞式 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O-%E5%A4%8D%E7%94%A8"><span class="nav-text">I&#x2F;O 复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-I-O"><span class="nav-text">信号驱动 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5-I-O"><span class="nav-text">异步 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E5%A4%A7-I-O-%E6%A8%A1%E5%9E%8B%E6%AF%94%E8%BE%83"><span class="nav-text">五大 I&#x2F;O 模型比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81I-O-%E5%A4%8D%E7%94%A8"><span class="nav-text">二、I&#x2F;O 复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-text">比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8A%9F%E8%83%BD"><span class="nav-text">1. 功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%80%9F%E5%BA%A6"><span class="nav-text">2. 速度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%80%A7"><span class="nav-text">3. 可移植性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-text">工作模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-LT-%E6%A8%A1%E5%BC%8F"><span class="nav-text">1. LT 模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ET-%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. ET 模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-select-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">1. select 应用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-poll-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">2. poll 应用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-epoll-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">3. epoll 应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Socket"><span class="nav-text">Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#socket%E7%A8%8B%E5%BA%8F%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="nav-text">socket程序函数调用过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81I-O-%E6%A8%A1%E5%9E%8B"><span class="nav-text">一、I&#x2F;O 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BB%E5%A1%9E%E5%BC%8F-I-O"><span class="nav-text">阻塞式 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F-I-O"><span class="nav-text">非阻塞式 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O-%E5%A4%8D%E7%94%A8"><span class="nav-text">I&#x2F;O 复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-I-O"><span class="nav-text">信号驱动 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5-I-O"><span class="nav-text">异步 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E5%A4%A7-I-O-%E6%A8%A1%E5%9E%8B%E6%AF%94%E8%BE%83"><span class="nav-text">五大 I&#x2F;O 模型比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81I-O-%E5%A4%8D%E7%94%A8"><span class="nav-text">二、I&#x2F;O 复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#poll"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83"><span class="nav-text">比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8A%9F%E8%83%BD"><span class="nav-text">1. 功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%80%9F%E5%BA%A6"><span class="nav-text">2. 速度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%80%A7"><span class="nav-text">3. 可移植性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll"><span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-text">工作模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-LT-%E6%A8%A1%E5%BC%8F"><span class="nav-text">1. LT 模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ET-%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. ET 模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-select-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">1. select 应用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-poll-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">2. poll 应用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-epoll-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">3. epoll 应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -449,7 +470,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
