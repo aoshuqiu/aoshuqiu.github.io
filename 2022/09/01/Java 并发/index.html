@@ -50,7 +50,7 @@
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/baaa681f-7c52-4198-a5ae-303b9386cf47.png">
 <meta property="og:image" content="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/390c913b-5f31-444f-bbdb-2b88b688e7ce.jpg">
 <meta property="article:published_time" content="2022-09-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-20T04:04:18.618Z">
+<meta property="article:modified_time" content="2022-09-27T06:51:02.978Z">
 <meta property="article:author" content="三儿">
 <meta property="article:tag" content="复习笔记">
 <meta property="article:tag" content="java">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-20 12:04:18" itemprop="dateModified" datetime="2022-09-20T12:04:18+08:00">2022-09-20</time>
+                <time title="修改时间：2022-09-27 14:51:02" itemprop="dateModified" datetime="2022-09-27T14:51:02+08:00">2022-09-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -300,8 +300,7 @@
 <p>corePoolSize :核心线程数量</p>
 <p>maximumPoolSize : 线程最大线程数</p>
 <p>workQueue: 阻塞队列，存储等待执行的任务，很重要，会对线程运行过程产生重大影响</p>
-<p>2)具体说一下以上3个主要参数的关系：如果运行的线程数少于 corePooSize，直接创建新线程来处理任务，即使线程池中的其他线程是空闲的；如果线程池中的线程数量大于等于corePooSize，</p>
-<p>且小于maximumPoolSize的时候，则只有当workQueue满了的时候，才会创建新的执行线程去处理任务。如果我们设置的corePooSize和maximumPoolSize的数量相同的话，那么由于线程池的大小是固定的，这时候如果有新任务提交，如果里面的workQueue还没满的时候，就会把请求放入到workQueue里面，等待有空闲的线程，去workQueue里面去取出来进行处理。</p>
+<p>2)具体说一下以上3个主要参数的关系：如果运行的线程数少于 corePooSize，直接创建新线程来处理任务，即使线程池中的其他线程是空闲的；如果线程池中的线程数量大于等于corePooSize，且小于maximumPoolSize的时候，则只有当workQueue满了的时候，才会创建新的执行线程去处理任务。如果我们设置的corePooSize和maximumPoolSize的数量相同的话，那么由于线程池的大小是固定的，这时候如果有新任务提交，如果里面的workQueue还没满的时候，就会把请求放入到workQueue里面，等待有空闲的线程，去workQueue里面去取出来进行处理。</p>
 <p>如果当前运行的线程数量大于等于maximumPoolSize时，如果此时workQueue也满了，那么就会通过拒绝策略 指定策略去处理任务。</p>
 <p>所以，在任务提交时，它的顺序主要有三个，先判断是否小于corePooSize，如果小于它，就直接创建新线程来调用任务；然后再接着判断workQueue，最后再判断与maximumPoolSize的比较结果。</p>
 <p>3)关于workQueue : 它是保存等待执行任务的阻塞队列。当提交一个新的任务到线程池以后，线程池会根据当前线程池中正在运行的线程数量来决定该任务的处理方式。</p>
@@ -322,7 +321,7 @@
 <p>如果线程池中的workQueue 满了，这时候还继续提交任务，我们就需要采取一种策略来处理这个任务。</p>
 <p>线程池总共提供了四种策略：</p>
 <p>第一种是直接抛出异常，这也是默认的策略；默认是直接抛出异常；</p>
-<p>第二种是用调用者所在的线程来执行任务；</p>
+<p>第二种是用调用者所在的线程来执行任务（交由提交任务的线程执行）；</p>
 <p>第三种是丢弃队列中最靠前的任务并执行当前任务；</p>
 <p>最后一种策略是直接丢弃这个任务。</p>
 <h3 id="Daemon"><a href="#Daemon" class="headerlink" title="Daemon"></a>Daemon</h3><p>守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。</p>
