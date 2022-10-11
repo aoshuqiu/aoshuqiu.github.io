@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.aoshuqiu.top/2022/10/11/kafka/</loc>
+    <lastmod>2022-10-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.aoshuqiu.top/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</loc>
+    <lastmod>2022-10-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.aoshuqiu.top/2022/09/01/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/</loc>
+    <lastmod>2022-10-11</lastmod>
+  </url>
+  <url>
+    <loc>https://www.aoshuqiu.top/2022/10/09/Effective-java-1/</loc>
+    <lastmod>2022-10-09</lastmod>
+  </url>
+  <url>
     <loc>https://www.aoshuqiu.top/2022/09/21/Effective%20python%E7%AC%94%E8%AE%B0%E4%BA%8C/</loc>
     <lastmod>2022-10-07</lastmod>
   </url>
@@ -22,10 +38,6 @@
   </url>
   <url>
     <loc>https://www.aoshuqiu.top/2022/09/01/Java%20%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2022-09-20</lastmod>
-  </url>
-  <url>
-    <loc>https://www.aoshuqiu.top/2022/09/01/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA/</loc>
     <lastmod>2022-09-20</lastmod>
   </url>
   <url>
@@ -54,10 +66,6 @@
   </url>
   <url>
     <loc>https://www.aoshuqiu.top/2022/09/01/Java%20IO/</loc>
-    <lastmod>2022-09-20</lastmod>
-  </url>
-  <url>
-    <loc>https://www.aoshuqiu.top/2022/09/01/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</loc>
     <lastmod>2022-09-20</lastmod>
   </url>
   <url>
