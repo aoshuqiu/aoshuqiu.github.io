@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.aoshuqiu.top/"/>
-  <updated>2022-10-11T14:43:25.723Z</updated>
+  <updated>2022-10-19T08:20:08.705Z</updated>
   <id>https://www.aoshuqiu.top/</id>
   
   <author>
@@ -21,16 +21,20 @@
     <link href="https://www.aoshuqiu.top/2022/10/11/kafka/"/>
     <id>https://www.aoshuqiu.top/2022/10/11/kafka/</id>
     <published>2022-10-11T14:43:00.000Z</published>
-    <updated>2022-10-11T14:43:25.723Z</updated>
+    <updated>2022-10-19T08:20:08.705Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><p><img src="/2022/10/11/kafka/cfa79b30e57548c894fa06ed0bdf3c03.jpg" alt="cfa79b30e57548c894fa06ed0bdf3c03"></p><p>三个组成元素：</p><ul><li>生产者</li><li>Kafka集群</li><li>消费者</li></ul><h2 id="分区分配"><a href="#分区分配" class="headerlink" title="分区分配"></a>分区分配</h2><p>一个Consumer Group中有多个Consumer，一个Topic有多个Partition。不同组内消费者相互独立，相同组内进行协作。一个分区只能对应一个消费者，为了尽量确保消息的有序执行，消费者数量不能超过分区数量。当组内消费者发生变化时，会触发分区分配策略。</p><p>分配策略：range，按范围</p><p>​                    RoundRobin，按Hash</p><p>​                    Sticky，尽量保持原映射，改变</p><h2 id="如何保证可靠性"><a href="#如何保证可靠性" class="headerlink" title="如何保证可靠性"></a>如何保证可靠性</h2><h3 id="broker的可靠性"><a href="#broker的可靠性" class="headerlink" title="broker的可靠性"></a>broker的可靠性</h3><p>多主多从架构，需要多机房</p><p>同步双写，异步刷盘</p><p>机器断电重启：异步刷盘，消息丢失；同步刷盘消息不丢失</p><p>硬件故障：可能存在丢失</p><h3 id="producer发送的可靠性，producer到broker的可靠性"><a href="#producer发送的可靠性，producer到broker的可靠性" class="headerlink" title="producer发送的可靠性，producer到broker的可靠性"></a>producer发送的可靠性，producer到broker的可靠性</h3><p><strong>ACK机制</strong></p><p><img src="/2022/10/11/kafka/9715111fbe814854b01de917a3c4632d.jpg" alt="9715111fbe814854b01de917a3c4632d"></p><p>producer端设置request.required.acks=0；只要请求已发送出去，就算是发送完了，不关心有没有写成功。性能很好，如果是对一些日志进行分析，可以承受丢数据的情况，用这个参数，性能会很好。<br>request.required.acks=1；发送一条消息，当leader partition写入成功以后，才算写入成功。不过这种方式也有丢数据的可能。<br>request.required.acks=-1；需要ISR列表里面，所有副本都写完以后，这条消息才算写入成功。<br>设计一个不丢数据的方案：</p><p>数据不丢失的方案：</p><ul><li>分区副本 &gt;=2 </li><li>acks = -1 </li><li>min.insync.replicas &gt;=2。</li></ul><p><img src="/2022/10/11/kafka/5ee45a5558bd4528a47a5a3b82749828.jpg" alt="5ee45a5558bd4528a47a5a3b82749828"></p><p>Leader维护了⼀个动态的 in-sync replica set（ISR）：和 Leader 保持同步的 Follower 集合。当 ISR 集合中的 Follower 完成数据的同步之后，Leader 就会给 Follower 发送 ACK。如果 Follower ⻓时间未向 Leader 同步数据，则该 Follower 将被踢出 ISR 集合，该时间阈值由replica.lag.time.max.ms 参数设定。Leader 发⽣故障后，就会从 ISR 中选举出新的 Leader。<br>kafka服务端中min.insync.replicas。 如果我们不设置的话，默认这个值是1。一个leader partition会维护一个ISR列表，这个值就是限制ISR列表里面 至少得有几个副本，比如这个值是2，那么当ISR列表里面只有一个副本的时候，往这个分区插入数据的时候会报错。</p><h3 id="消费者保证可靠性"><a href="#消费者保证可靠性" class="headerlink" title="消费者保证可靠性"></a>消费者保证可靠性</h3><p>消费者也存在ack机制，只有消费者明确表示消费成功，队列才会认为消息消费成功，中途断电、抛出异常等都不会认为成功——都会进行重新投递，每次确保处理完这个消息后，再代码里调用ack，告诉消息队列消费成功。</p><p>消费端要做好幂等性处理</p><p>消费端要保留日志，即消息的元数据和消息体</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><p><img src="/2022/10/11/kafka/cfa79b30e57548c894fa06ed0bdf3c03.jpg" alt="cfa79b30e57548c894fa06ed0bdf3c03"></p><p>三个组成元素：</p><ul><li>生产者</li><li>Kafka集群</li><li>消费者</li></ul><h2 id="分区分配"><a href="#分区分配" class="headerlink" title="分区分配"></a>分区分配</h2><p>一个Consumer Group中有多个Consumer，一个Topic有多个Partition。不同组内消费者相互独立，相同组内进行协作。一个分区只能对应一个消费者，为了尽量确保消息的有序执行，消费者数量不能超过分区数量。当组内消费者发生变化时，会触发分区分配策略。</p><a id="more"></a><p>分配策略：range，按范围</p><p>​                    RoundRobin，按Hash</p><p>​                    Sticky，尽量保持原映射，改变</p><h2 id="如何保证可靠性"><a href="#如何保证可靠性" class="headerlink" title="如何保证可靠性"></a>如何保证可靠性</h2><h3 id="broker的可靠性"><a href="#broker的可靠性" class="headerlink" title="broker的可靠性"></a>broker的可靠性</h3><p>多主多从架构，需要多机房</p><p>同步双写，异步刷盘</p><p>机器断电重启：异步刷盘，消息丢失；同步刷盘消息不丢失</p><p>硬件故障：可能存在丢失</p><h3 id="producer发送的可靠性，producer到broker的可靠性"><a href="#producer发送的可靠性，producer到broker的可靠性" class="headerlink" title="producer发送的可靠性，producer到broker的可靠性"></a>producer发送的可靠性，producer到broker的可靠性</h3><p><strong>ACK机制</strong></p><p><img src="/2022/10/11/kafka/9715111fbe814854b01de917a3c4632d.jpg" alt="9715111fbe814854b01de917a3c4632d"></p><p>producer端设置request.required.acks=0；只要请求已发送出去，就算是发送完了，不关心有没有写成功。性能很好，如果是对一些日志进行分析，可以承受丢数据的情况，用这个参数，性能会很好。<br>request.required.acks=1；发送一条消息，当leader partition写入成功以后，才算写入成功。不过这种方式也有丢数据的可能。<br>request.required.acks=-1；需要ISR列表里面，所有副本都写完以后，这条消息才算写入成功。<br>设计一个不丢数据的方案：</p><p>数据不丢失的方案：</p><ul><li>分区副本 &gt;=2 </li><li>acks = -1 </li><li>min.insync.replicas &gt;=2。</li></ul><p><img src="/2022/10/11/kafka/5ee45a5558bd4528a47a5a3b82749828.jpg" alt="5ee45a5558bd4528a47a5a3b82749828"></p><p>Leader维护了⼀个动态的 in-sync replica set（ISR）：和 Leader 保持同步的 Follower 集合。当 ISR 集合中的 Follower 完成数据的同步之后，Leader 就会给 Follower 发送 ACK。如果 Follower ⻓时间未向 Leader 同步数据，则该 Follower 将被踢出 ISR 集合，该时间阈值由replica.lag.time.max.ms 参数设定。Leader 发⽣故障后，就会从 ISR 中选举出新的 Leader。<br>kafka服务端中min.insync.replicas。 如果我们不设置的话，默认这个值是1。一个leader partition会维护一个ISR列表，这个值就是限制ISR列表里面 至少得有几个副本，比如这个值是2，那么当ISR列表里面只有一个副本的时候，往这个分区插入数据的时候会报错。</p><h3 id="消费者保证可靠性"><a href="#消费者保证可靠性" class="headerlink" title="消费者保证可靠性"></a>消费者保证可靠性</h3><p>消费者也存在ack机制，只有消费者明确表示消费成功，队列才会认为消息消费成功，中途断电、抛出异常等都不会认为成功——都会进行重新投递，每次确保处理完这个消息后，再代码里调用ack，告诉消息队列消费成功。</p><p>消费端要做好幂等性处理</p><p>消费端要保留日志，即消息的元数据和消息体</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h1 id=&quot;Kafka&quot;&gt;&lt;a href=&quot;#Kafka&quot; class=&quot;headerlink&quot; title=&quot;Kafka&quot;&gt;&lt;/a&gt;Kafka&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/11/kafka/cfa79b30e57548c894fa06ed0bdf3c
-      
+      &lt;h1 id=&quot;Kafka&quot;&gt;&lt;a href=&quot;#Kafka&quot; class=&quot;headerlink&quot; title=&quot;Kafka&quot;&gt;&lt;/a&gt;Kafka&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/11/kafka/cfa79b30e57548c894fa06ed0bdf3c03.jpg&quot; alt=&quot;cfa79b30e57548c894fa06ed0bdf3c03&quot;&gt;&lt;/p&gt;
+&lt;p&gt;三个组成元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生产者&lt;/li&gt;
+&lt;li&gt;Kafka集群&lt;/li&gt;
+&lt;li&gt;消费者&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;分区分配&quot;&gt;&lt;a href=&quot;#分区分配&quot; class=&quot;headerlink&quot; title=&quot;分区分配&quot;&gt;&lt;/a&gt;分区分配&lt;/h2&gt;&lt;p&gt;一个Consumer Group中有多个Consumer，一个Topic有多个Partition。不同组内消费者相互独立，相同组内进行协作。一个分区只能对应一个消费者，为了尽量确保消息的有序执行，消费者数量不能超过分区数量。当组内消费者发生变化时，会触发分区分配策略。&lt;/p&gt;
     
     </summary>
     
@@ -43,21 +47,6 @@
       <category term="消息队列" scheme="https://www.aoshuqiu.top/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
     
       <category term="Kafka" scheme="https://www.aoshuqiu.top/tags/Kafka/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://www.aoshuqiu.top/2022/10/09/Effective-java-1/"/>
-    <id>https://www.aoshuqiu.top/2022/10/09/Effective-java-1/</id>
-    <published>2022-10-09T07:35:41.671Z</published>
-    <updated>2022-10-09T07:35:41.671Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
     
   </entry>
   
@@ -108,6 +97,25 @@
 &lt;li&gt;&lt;p&gt;-1 代表最后一个元素&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;从头省略0，至尾省略len(list)&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="学习" scheme="https://www.aoshuqiu.top/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="python" scheme="https://www.aoshuqiu.top/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Effective python笔记三</title>
+    <link href="https://www.aoshuqiu.top/2022/09/21/Effective-python%E7%AC%94%E8%AE%B0%E4%B8%89/"/>
+    <id>https://www.aoshuqiu.top/2022/09/21/Effective-python%E7%AC%94%E8%AE%B0%E4%B8%89/</id>
+    <published>2022-09-21T09:42:00.000Z</published>
+    <updated>2022-10-19T08:20:45.849Z</updated>
+    
+    <summary type="html">
     
     </summary>
     
