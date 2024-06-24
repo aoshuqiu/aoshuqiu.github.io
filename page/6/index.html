@@ -165,6 +165,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/19/PPO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/afei.png">
+      <meta itemprop="name" content="三儿">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="3号列车">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/19/PPO/" class="post-title-link" itemprop="url">PPO</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-19 16:50:21 / 修改时间：18:25:39" itemprop="dateCreated datePublished" datetime="2021-01-19T16:50:21+08:00">2021-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="PPO"><a href="#PPO" class="headerlink" title="PPO"></a>PPO</h1><p>TRPO的最终替代函数为：</p>
+<script type="math/tex; mode=display">L^{CPI}(\theta)=\mathbb{E}_t\bigg[ \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }A_t\bigg]</script><p>因为用到了重要性采样，保留了之前策略的动作与状态分布，CPI（Conservation Policy Iteration）保留策略迭代。</p>
+<p>记概率比值$r_t(\theta) = \frac{\tilde\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t) }$，得到$L^{CPI}(\theta)=\mathbb{E}_t\big[ r_t(\theta)A_t\big]$</p>
+<p><strong>问题</strong></p>
+<p>没有约束条件的话，最大化$L^{CPI}$会导致大幅度的策略更新，因此要想办法通过改变目标函数，来对那些$r_t(\theta)$项离1很远的情况进行惩罚。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/19/PPO/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://www.aoshuqiu.top/2021/01/16/TRPO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -892,7 +971,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -905,7 +984,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -943,7 +1022,7 @@
 <div class="copyright">
   
   &copy; 2020 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
